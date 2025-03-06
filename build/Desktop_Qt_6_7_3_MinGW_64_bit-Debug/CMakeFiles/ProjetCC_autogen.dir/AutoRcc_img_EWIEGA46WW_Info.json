@@ -1,0 +1,38 @@
+{
+	"BUILD_DIR" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/ProjetCC_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC",
+	"CMAKE_SOURCE_DIR" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Ninja",
+	"INCLUDE_DIR" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/ProjetCC_autogen/include",
+	"INPUTS" : 
+	[
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/refresh.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/equipe.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/batiment-educatif.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/mail.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/plus-moins.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/notif.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/rechercher-des-personnes.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/candidat.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/settings.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/logo.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/recherche.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/examen.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/close.png",
+		"C:/Users/bessa/OneDrive/Desktop/ProjetCC/img/livreur.png"
+	],
+	"LOCK_FILE" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/ProjetCC_autogen.dir/AutoRcc_img_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "--no-zstd", "-name", "img" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_img.cpp",
+	"RCC_EXECUTABLE" : "C:/Qt/6.7.3/mingw_64/bin/rcc.exe",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/ProjetCC_autogen.dir/AutoRcc_img_EWIEGA46WW_Used.txt",
+	"SOURCE" : "C:/Users/bessa/OneDrive/Desktop/ProjetCC/img.qrc",
+	"USE_BETTER_GRAPH" : false,
+	"VERBOSITY" : 0
+}
