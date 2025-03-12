@@ -1449,6 +1449,50 @@ QPushButton#PhotoSuper:pressed {
          </rect>
         </property>
        </widget>
+       <widget class="QPushButton" name="SaveMod">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>470</y>
+          <width>51</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton#SaveMod {
+    background-color: #3A7BD5; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px; /* Uniformiser le padding */
+    border-radius: 20px;
+    /*border: 2px dashed #3A7BD5;*/
+    text-align: center; /* Alignement horizontal */
+    qproperty-alignment: 'AlignCenter'; /* Alignement Qt */
+}
+
+QPushButton#SaveMod:hover {
+    background-color: #A0C4FF; 
+  
+    color: #F9F9F9; 
+}
+
+QPushButton#SaveMod:pressed {
+    background-color: #A8D5BA; 
+   
+}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::DocumentPrintPreview"/>
+        </property>
+       </widget>
       </widget>
       <widget class="QPushButton" name="Ajbtn">
        <property name="geometry">

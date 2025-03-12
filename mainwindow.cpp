@@ -10,6 +10,8 @@
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QSqlError>  // Ajoute cette ligne pour inclure QSqlError
+#include <QInputDialog>
+#include <QTimer>
 
 //#include <QMouseEvent>
 
@@ -20,7 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     //ui->tableView1->setModel(Etmp.afficher()); // Remplace tableWidget1 par tableView
-    // Affichage direct du tableau au démarrage
+    // Affichage direct du tableView1 au démarrage
+    //SSupprimer
+    connect(ui->BinSuperbtn, &QPushButton::clicked, this, &MainWindow::on_BinSuperbtn_clicked);
 
     ui->lineEdit1->setPlaceholderText("Rechercher...");
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
@@ -44,7 +48,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete model;
 }
-// Charger les données existantes dans le tableau
+// Charger les données existantes dans le tableView1
 
 //Start showNotif
 /*void MainWindow::showNotifications()
@@ -263,7 +267,7 @@ void MainWindow::on_Ajbtn_clicked()
     if (S.ajouter())
     {
         QMessageBox::information(this, "Succès", "Superviseur ajouté avec succès !");
-// Mettre à jour le tableau après l'ajout
+// Mettre à jour le tableView1 après l'ajout
         // Met à jour l'affichage après l'ajout
         ui->tableView1->setModel(S.afficher());
     }
@@ -272,43 +276,107 @@ void MainWindow::on_Ajbtn_clicked()
         QMessageBox::critical(this, "Erreur", "Échec de l'ajout du superviseur.");
     }
 }
-// Sauvegarde les modifications en base de données
-void MainWindow::on_Modbtn_clicked() {
-    if (model) {
-        if (model->submitAll()) {
-            qDebug() << "Modifications enregistrées avec succès.";
-        } else {
-            qDebug() << "Erreur lors de l'enregistrement:" << model->lastError().text();
-        }
+//Fonction Supprimer
+
+void MainWindow::on_BinSuperbtn_clicked() {
+    QModelIndex index = ui->tableView1->selectionModel()->currentIndex();
+    qDebug() << "Index avant suppression valide ? " << index.isValid();
+
+    if (!index.isValid()) {
+        QMessageBox::warning(this, "Suppression", "Veuillez sélectionner un superviseur à supprimer.");
+        return;
+    }
+
+    QString id = ui->tableView1->model()->data(index).toString();
+    qDebug() << "ID récupéré : " << id;
+
+    if (id.isEmpty()) {
+        QMessageBox::critical(this, "Erreur", "ID invalide.");
+        return;
+    }
+
+    if (S.supprimer(id)) {
+        QMessageBox::information(this, "Succès", "Superviseur supprimé avec succès !");
+
+        // ✅ Désactiver temporairement la sélection pour éviter un état incohérent
+        ui->tableView1->selectionModel()->clearSelection();
+
+        // ✅ Attendre une courte durée avant de recharger le modèle (évite les erreurs de mise à jour)
+        QTimer::singleShot(100, this, [=]() {
+            QAbstractItemModel *newModel = S.afficher();
+            if (newModel) {
+                ui->tableView1->setModel(newModel);
+                qDebug() << "Table mise à jour après suppression.";
+            } else {
+                QMessageBox::critical(this, "Erreur", "Impossible d'afficher les données.");
+            }
+        });
+
     } else {
-        qDebug() << "Erreur : Le modèle est nul.";
+        QMessageBox::critical(this, "Erreur", "Échec de la suppression.");
     }
 }
 
 
-// Initialiser le modèle dans le constructeur de la fenêtre
-// mainwindow.cpp
 
-void MainWindow::initialiserTableView()
-{
-    // Initialisation du modèle QSqlTableModel
-    model = new QSqlTableModel(this);
-    model->setTable("Superviseurs");
-    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model->select();
 
-    // Configuration du QTableView
-    // Configuration du QTableView
-    ui->tableView1->setModel(model);
-    ui->tableView1->setSelectionBehavior(QAbstractItemView::SelectItems);
-    ui->tableView1->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    // Connexion du signal clicked du QTableView
-   // connect(ui->tableView1, &QTableView::clicked, this, &MainWindow::onTableViewClicked);
 
-    // Connexion du bouton "Modbtn" au slot de sauvegarde
-    connect(ui->Modbtn, &QPushButton::clicked, this, &MainWindow::on_Modbtn_clicked);
+
+
+// Fonction du bouton Modifier
+void MainWindow::on_Modbtn_clicked() {
+    // Vérifier si une ligne est sélectionnée
+    QModelIndex index = ui->tableView1->selectionModel()->currentIndex();
+    if (!index.isValid()) {
+        QMessageBox::warning(this, tr("Modification"), tr("Veuillez sélectionner un superviseur à modifier."));
+        return;
+    }
+
+    // Récupérer les valeurs actuelles du superviseur sélectionné
+    currentId = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 0)).toString();
+    currentCin = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 1)).toInt();
+    currentStatut = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 2)).toString();
+    currentPoste = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 3)).toString();
+    currentPrenom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 4)).toString();
+    currentNom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 5)).toString();
+    currentnumTel = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 6)).toInt();
+    currentEmail = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 7)).toString();
+
+    // Afficher les valeurs dans les champs du formulaire
+    ui->CINLineEdit->setText(QString::number(currentCin));
+    ui->StatutlineEdit->setText(currentStatut);
+    ui->PostLineEdit->setText(currentPoste);
+    ui->PrenLineEdit->setText(currentPrenom);
+    ui->NomLineEdit->setText(currentNom);
+    ui->TlfLineEdit->setText(QString::number(currentnumTel));
+    ui->EmailLineEdit->setText(currentEmail);
 }
-/*void MainWindow::onTableViewClicked(const QModelIndex &index)
-{
-    ui->tableView1->edit(index);
-}*/
+
+// Fonction du bouton Enregistrer
+void MainWindow::on_SaveMod_clicked() {
+    // Récupérer les nouvelles valeurs du formulaire
+    int newCin = ui->CINLineEdit->text().toInt();
+    QString newStatut = ui->StatutlineEdit->text();
+    QString newPoste = ui->PostLineEdit->text();
+    QString newPrenom = ui->PrenLineEdit->text();
+    QString newNom = ui->NomLineEdit->text();
+    int newNumTel = ui->TlfLineEdit->text().toInt();
+    QString newEmail = ui->EmailLineEdit->text();
+
+    // Vérification des champs vides
+    if (newStatut.isEmpty() || newPoste.isEmpty() || newPrenom.isEmpty() || newNom.isEmpty() || newEmail.isEmpty()) {
+        QMessageBox::warning(this, "Modification", "Tous les champs doivent être remplis.");
+        return;
+    }
+
+    // Créer un objet superviseur avec les nouvelles valeurs
+    Superviseur s(currentId, newCin, newStatut, newPoste, newPrenom, newNom, newNumTel, newEmail);
+
+    // Modifier l'entrée dans la base de données
+    if (s.modifier()) {
+        QMessageBox::information(this, "Modification", "Superviseur modifié avec succès !");
+        ui->tableView1->setModel(s.afficher()); // Rafraîchir la table
+    } else {
+        QMessageBox::critical(this, "Erreur", "La modification a échoué.");
+    }
+}

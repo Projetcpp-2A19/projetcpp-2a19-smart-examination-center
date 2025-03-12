@@ -2,6 +2,7 @@
 #include <QSqlQuery>
 #include <QVariant>
 #include <QSqlQueryModel>
+#include <QSqlError>
 
 // Constructeurs
 Superviseur::Superviseur() {}
@@ -65,4 +66,41 @@ QSqlQueryModel * Superviseur::afficher()
 
     return model;
 }
+//Fonction Supprimer
+bool Superviseur::supprimer(QString id) {
+    QSqlQuery query;
+    query.prepare("DELETE FROM SUPERVISEURS WHERE ID_SUPERVISEUR = :id");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur SQL lors de la suppression :" << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+//fonction Modifier
+bool Superviseur::modifier() {
+    QSqlQuery query;
+    query.prepare("UPDATE SUPERVISEURS SET STATUT_SUPERVISEUR = :statut, POSTE = :poste, "
+                  "PRENOM_SUPERVISEUR = :prenom, NOM_SUPERVISEUR = :nom, "
+                  "NUMTEL_SUPERVISEUR = :numTel, EMAIL_SUPERVISEUR = :email "
+                  "WHERE ID_SUPERVISEUR = :id");
+
+    query.bindValue(":id", id_superviseur);
+    query.bindValue(":statut", statut_superviseur);
+    query.bindValue(":poste", poste);
+    query.bindValue(":prenom", prenom_superviseur);
+    query.bindValue(":nom", nom_superviseur);
+    query.bindValue(":numTel", numtel_superviseur);
+    query.bindValue(":email", email_superviseur);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur SQL lors de la modification :" << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+
 

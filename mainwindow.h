@@ -76,6 +76,11 @@ private slots:
 
     void on_notifBtn_clicked();
 
+    void on_BinSuperbtn_clicked();//supp
+
+    void on_Modbtn_clicked();//modifier
+
+
 
 
 public :
@@ -88,9 +93,8 @@ private:
 private slots:
     void on_Ajbtn_clicked();
 
-//Modification
-private slots:
-    void on_Modbtn_clicked() ;
+
+
 
    // void onTableViewClicked(const QModelIndex &index);
 
@@ -98,7 +102,22 @@ private:
     Ui::MainWindow *ui;
     Superviseur S;
     QSqlTableModel *model;
-    void initialiserTableView();
+
+//Modifier
+    bool modificationInProgress = false; // Track if modification has started
+    void on_btnModifier_clicked();
+    void on_btnConfirmerModifier_clicked();
+    void on_SaveMod_clicked();
+
+private:
+    QString currentId;
+    int currentCin;
+    QString currentStatut;
+    QString currentPoste;
+    QString currentPrenom;
+    QString currentNom;
+    int currentnumTel;
+    QString currentEmail;
 
 };
 #endif // MAINWINDOW_H

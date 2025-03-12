@@ -38,6 +38,8 @@ public:
 
     bool ajouter();
     QSqlQueryModel* afficher();
+    bool supprimer (QString id);
+    bool modifier();
 };
 
 #endif // SUPERVISEUR_H
