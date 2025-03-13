@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlTableModel>
+#include "Etablissement.h"  // Inclure la classe Etablissement
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,71 +19,40 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void updateTableView();  // Fonction pour mettre à jour le tableau
+
 private slots:
-    void on_examBtn_clicked();
-
-    void on_supBtn_clicked();
-
-    void on_eqBtn_clicked();
-
-    void on_fourBtn_clicked();
-
-    void on_candBtn_clicked();
-
-    void on_etaBtn_clicked();
-
+    // Slots pour les boutons de navigation
     void on_examButton_clicked();
-
     void on_supButton_clicked();
-
     void on_eqButton_clicked();
-
     void on_FourButton_clicked();
-
     void on_candButton_clicked();
-
     void on_etaButton_clicked();
-
-
     void on_homeBtn_clicked();
 
-    void on_pushButton_3_clicked();
+    // Slots pour les actions CRUD
+    void on_Ajbtn_clicked();  // Ajouter un établissement
+    void on_BinSuperbtn_clicked();  // Supprimer un établissement
+    void on_Modbtn_clicked();  // Modifier un établissement
+    void on_SaveMod_clicked();  // Sauvegarder les modifications
 
-    void on_pushButton_4_clicked();
-
-    void on_AffButton_clicked();
-
-    void on_AjButton_clicked();
-
-    void on_ModButton_clicked();
-
-    void on_AffButton_2_clicked();
-
-    void on_AjButton_2_clicked();
-
-    void on_ModButton_2_clicked();
-
-    void on_SuppButton_2_clicked();
-
-    void on_SuppButton_clicked();
-
-    void on_AffButton_3_clicked();
-
-    void on_AjButton_3_clicked();
-
-    void on_ModButton_3_clicked();
-
-    void on_SuppButton_3_clicked();
-
-    void on_AffButton_4_clicked();
-
-    void on_AjButton_4_clicked();
-
-    void on_ModButton_4_clicked();
-
-    void on_SuppButton_4_clicked();
+    // Slots pour les notifications et autres fonctionnalités
+    void on_notifBtn_clicked();
+    void on_EvalAssist_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui;  // Interface utilisateur générée par Qt
+    Etablissement E;  // Objet pour gérer les établissements
+    QSqlTableModel *model;  // Modèle pour afficher les données dans le tableau
+
+    // Variables pour stocker les données en cours de modification
+    QString currentId;
+    QString currentVille;
+    QString currentType;
+    QString currentDirecteur;
+    QString currentNom;
+    int currentNbS;
 };
+
 #endif // MAINWINDOW_H

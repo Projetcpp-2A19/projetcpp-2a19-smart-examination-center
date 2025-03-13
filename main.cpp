@@ -8,8 +8,21 @@ int main(int argc, char *argv[])
     MainWindow w;
     Connection c;
     bool test=c.createconnect();
+    if (test)
+    {
+        QMessageBox::information(nullptr, QObject::tr("Database is open"),
+                                 QObject::tr("Connection successful.\n"
+                                             "Click Cancel to exit."),
+                                 QMessageBox::Cancel);
+
+        w.show();
+
+        QSqlQueryModel * afficher();// Appeler afficher() immédiatement après show()
+        w.updateTableView();
+    }
     if(test)
-    {w.show();
+    {
+        w.show();
         QMessageBox::information(nullptr, QObject::tr("database is open"),
                                  QObject::tr("connection successful.\n"
                                              "Click Cancel to exit."), QMessageBox::Cancel);
@@ -24,3 +37,4 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+
