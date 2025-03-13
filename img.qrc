@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>img/batiment-educatif.png</file>
+        <file>img/candidat.png</file>
+        <file>img/close.png</file>
+        <file>img/equipe.png</file>
+        <file>img/examen.png</file>
+        <file>img/livreur.png</file>
+        <file>img/logo.png</file>
+        <file>img/mail.png</file>
+        <file>img/notif.png</file>
+        <file>img/plus-moins.png</file>
+        <file>img/recherche.png</file>
+        <file>img/rechercher-des-personnes.png</file>
+        <file>img/refresh.png</file>
+        <file>img/settings.png</file>
+        <file>img/pdf.png</file>
+        <file>img/supprimer.png</file>
+        <file>img/home.png</file>
+        <file>img/images-removebg-preview.png</file>
+        <file>img/en-arriere.png</file>
+        <file>img/analytics.png</file>
+    </qresource>
+</RCC>
