@@ -64,6 +64,7 @@ QSqlQueryModel * Superviseur::afficher()
     model->setHeaderData(6, Qt::Horizontal, QObject::tr("NumTel"));
     model->setHeaderData(7, Qt::Horizontal, QObject::tr("Email"));
 
+
     return model;
 }
 //Fonction Supprimer
@@ -79,28 +80,41 @@ bool Superviseur::supprimer(QString id) {
 
     return true;
 }
+//affichage tableau
+
 //fonction Modifier
-bool Superviseur::modifier() {
+bool Superviseur::modifier(QString id) {
     QSqlQuery query;
-    query.prepare("UPDATE SUPERVISEURS SET STATUT_SUPERVISEUR = :statut, POSTE = :poste, "
-                  "PRENOM_SUPERVISEUR = :prenom, NOM_SUPERVISEUR = :nom, "
-                  "NUMTEL_SUPERVISEUR = :numTel, EMAIL_SUPERVISEUR = :email "
-                  "WHERE ID_SUPERVISEUR = :id");
 
-    query.bindValue(":id", id_superviseur);
-    query.bindValue(":statut", statut_superviseur);
-    query.bindValue(":poste", poste);
-    query.bindValue(":prenom", prenom_superviseur);
-    query.bindValue(":nom", nom_superviseur);
-    query.bindValue(":numTel", numtel_superviseur);
-    query.bindValue(":email", email_superviseur);
-
-    if (!query.exec()) {
-        qDebug() << "Erreur SQL lors de la modification :" << query.lastError().text();
+    if (!QSqlDatabase::database().isOpen()) {
+        qDebug() << "Erreur: La base de données n'est pas connectée.";
         return false;
     }
 
-    return true;
-}
+    query.prepare("UPDATE SUPERVISEURS SET CIN_SUPERVISEUR = :cin, STATUT_SUPERVISEUR = :statut, POSTE = :poste, "
+                  "PRENOM_SUPERVISEUR = :prenom, NOM_SUPERVISEUR = :nom, NUMTEL_SUPERVISEUR = :numtel, EMAIL_SUPERVISEUR = :email "
+                  "WHERE ID_SUPERVISEUR = :id");
 
+    query.bindValue(":id", id);
+    query.bindValue(":cin", cin_superviseur);
+    query.bindValue(":statut", statut_superviseur);
+    query.bindValue(":poste", poste);
+    query.bindValue(":prenom",  prenom_superviseur);
+    query.bindValue(":nom", nom_superviseur);
+    query.bindValue(":numtel", numtel_superviseur);
+    query.bindValue(":email", email_superviseur);
+
+    // Afficher les valeurs pour vérifier
+    qDebug() << "Requête SQL : " << query.lastQuery();
+    qDebug() << "Valeurs liées : " << id << cin_superviseur << statut_superviseur << poste
+             << prenom_superviseur << nom_superviseur << numtel_superviseur << email_superviseur;
+
+    if (query.exec()) {
+        qDebug() << "Mise à jour réussie";
+        return true;
+    } else {
+        qDebug() << "Erreur SQL lors de la mise à jour : " << query.lastError().text();
+        return false;
+    }
+}
 

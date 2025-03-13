@@ -12,7 +12,7 @@
 #include <QSqlError>  // Ajoute cette ligne pour inclure QSqlError
 #include <QInputDialog>
 #include <QTimer>
-
+#include <QString>
 //#include <QMouseEvent>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Affichage direct du tableView1 au démarrage
     //SSupprimer
     connect(ui->BinSuperbtn, &QPushButton::clicked, this, &MainWindow::on_BinSuperbtn_clicked);
+    connect(ui->SaveMod, &QPushButton::clicked, this, &MainWindow::on_SaveMod_clicked);
+
 
     ui->lineEdit1->setPlaceholderText("Rechercher...");
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
@@ -246,36 +248,75 @@ void MainWindow::on_EvalAssist_clicked()
 {
      ui->stackedWidget->setCurrentIndex(5);
 }
+
 void MainWindow::updateTableView()
 {
     ui->tableView1->setModel(S.afficher());
+    actualiserTableView();
 }
+void MainWindow::actualiserTableView()
+{
+    // Mettre à jour le modèle de tableView1 avec les nouvelles données
+    ui->tableView1->setModel(S.afficher());
 
+    // Ajuster la largeur des colonnes pour occuper tout l'espace disponible
+    ui->tableView1->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Ajuster la hauteur des lignes automatiquement
+    ui->tableView1->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+}
+//AJOUTER
 void MainWindow::on_Ajbtn_clicked()
 {
-    QString id = ui->IDLineEdit->text();
-    int cin = ui->CINLineEdit->text().toInt();
-    QString statut = ui->StatutlineEdit->text();
-    QString poste = ui->PostLineEdit->text();
-    QString prenom = ui->PrenLineEdit->text();
-    QString nom = ui->NomLineEdit->text();
-    int numTel = ui->TlfLineEdit->text().toInt();
-    QString email = ui->EmailLineEdit->text();
+    QString id = ui->IDLineEdit->text().trimmed();
+    QString cinStr = ui->CINLineEdit->text().trimmed();
+    QString statut = ui->StatutlineEdit->text().trimmed();
+    QString poste = ui->PostLineEdit->text().trimmed();
+    QString prenom = ui->PrenLineEdit->text().trimmed();
+    QString nom = ui->NomLineEdit->text().trimmed();
+    QString numTelStr = ui->TlfLineEdit->text().trimmed();
+    QString email = ui->EmailLineEdit->text().trimmed();
 
-    Superviseur S(id, cin, statut, poste, prenom, nom, numTel, email);
-
-    if (S.ajouter())
-    {
-        QMessageBox::information(this, "Succès", "Superviseur ajouté avec succès !");
-// Mettre à jour le tableView1 après l'ajout
-        // Met à jour l'affichage après l'ajout
-        ui->tableView1->setModel(S.afficher());
+    // Vérification des champs obligatoires
+    if (id.isEmpty() || cinStr.isEmpty() || statut.isEmpty() || poste.isEmpty() ||
+        prenom.isEmpty() || nom.isEmpty() || numTelStr.isEmpty() || email.isEmpty()) {
+        QMessageBox::warning(this, "Champs vides", "Tous les champs sont obligatoires !");
+        return;
     }
-    else
-    {
+
+    // Vérification que CIN et Numéro de téléphone sont des nombres de 8 chiffres
+    QRegularExpression regex("\\d{8}");
+    if (!regex.match(cinStr).hasMatch()) {
+        QMessageBox::warning(this, "Erreur de saisie", "Le CIN doit contenir exactement 8 chiffres !");
+        return;
+    }
+    if (!regex.match(numTelStr).hasMatch()) {
+        QMessageBox::warning(this, "Erreur de saisie", "Le numéro de téléphone doit contenir exactement 8 chiffres !");
+        return;
+    }
+
+    // Vérification de l'email avec une regex
+    QRegularExpression emailRegex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+    if (!emailRegex.match(email).hasMatch()) {
+        QMessageBox::warning(this, "Erreur de saisie", "Adresse email invalide !");
+        return;
+    }
+
+    // Conversion après validation
+    int cin = cinStr.toInt();
+    int numTel = numTelStr.toInt();
+
+    // Création et ajout du superviseur
+    Superviseur S(id, cin, statut, poste, prenom, nom, numTel, email);
+    if (S.ajouter()) {
+        QMessageBox::information(this, "Succès", "Superviseur ajouté avec succès !");
+        ui->tableView1->setModel(S.afficher()); // Rafraîchir l'affichage
+        actualiserTableView(); // Si nécessaire
+    } else {
         QMessageBox::critical(this, "Erreur", "Échec de l'ajout du superviseur.");
     }
 }
+
 //Fonction Supprimer
 
 void MainWindow::on_BinSuperbtn_clicked() {
@@ -334,27 +375,33 @@ void MainWindow::on_Modbtn_clicked() {
 
     // Récupérer les valeurs actuelles du superviseur sélectionné
     currentId = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 0)).toString();
-    currentCin = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 1)).toInt();
-    currentStatut = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 2)).toString();
-    currentPoste = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 3)).toString();
-    currentPrenom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 4)).toString();
-    currentNom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 5)).toString();
-    currentnumTel = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 6)).toInt();
-    currentEmail = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 7)).toString();
+    originalCin = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 1)).toInt();
+    originalStatut = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 2)).toString();
+    originalPoste = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 3)).toString();
+    originalPrenom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 4)).toString();
+    originalNom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 5)).toString();
+    originalTel = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 6)).toInt();
+    originalEmail = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 7)).toString();
 
     // Afficher les valeurs dans les champs du formulaire
-    ui->CINLineEdit->setText(QString::number(currentCin));
-    ui->StatutlineEdit->setText(currentStatut);
-    ui->PostLineEdit->setText(currentPoste);
-    ui->PrenLineEdit->setText(currentPrenom);
-    ui->NomLineEdit->setText(currentNom);
-    ui->TlfLineEdit->setText(QString::number(currentnumTel));
-    ui->EmailLineEdit->setText(currentEmail);
+    ui->CINLineEdit->setText(QString::number(originalCin));
+    ui->StatutlineEdit->setText(originalStatut);
+    ui->PostLineEdit->setText(originalPoste);
+    ui->PrenLineEdit->setText(originalPrenom);
+    ui->NomLineEdit->setText(originalNom);
+    ui->TlfLineEdit->setText(QString::number(originalTel));
+    ui->EmailLineEdit->setText(originalEmail);
+
+    modificationInProgress = true; // Définir le flag quand la modification commence
 }
 
-// Fonction du bouton Enregistrer
 void MainWindow::on_SaveMod_clicked() {
-    // Récupérer les nouvelles valeurs du formulaire
+    if (!modificationInProgress) {
+        QMessageBox::warning(this, tr("Erreur"), tr("Veuillez d'abord sélectionner un superviseur à modifier en cliquant sur 'Modifier'."));
+        return;
+    }
+
+    //QString newId = currentId; // Utiliser l'ID du superviseur sélectionné
     int newCin = ui->CINLineEdit->text().toInt();
     QString newStatut = ui->StatutlineEdit->text();
     QString newPoste = ui->PostLineEdit->text();
@@ -362,20 +409,46 @@ void MainWindow::on_SaveMod_clicked() {
     QString newNom = ui->NomLineEdit->text();
     int newNumTel = ui->TlfLineEdit->text().toInt();
     QString newEmail = ui->EmailLineEdit->text();
+    //verifier si aucaun changment efectue
+    if (newCin == originalCin && newStatut == originalStatut &&
+        newPoste == originalPoste && newPrenom == originalPrenom &&
+        newNom == originalNom && newNumTel == originalTel &&
+        newEmail == originalEmail){
+        QMessageBox::information(this, tr("Modification"), tr("Aucune modification apportée."));
+        return;
+    }
 
     // Vérification des champs vides
-    if (newStatut.isEmpty() || newPoste.isEmpty() || newPrenom.isEmpty() || newNom.isEmpty() || newEmail.isEmpty()) {
+    if (newStatut.isEmpty() || newPoste.isEmpty() || newPrenom.isEmpty() ||
+        newNom.isEmpty() || newEmail.isEmpty()) {
         QMessageBox::warning(this, "Modification", "Tous les champs doivent être remplis.");
         return;
     }
 
-    // Créer un objet superviseur avec les nouvelles valeurs
-    Superviseur s(currentId, newCin, newStatut, newPoste, newPrenom, newNom, newNumTel, newEmail);
+    // Vérification de la validité du CIN et du numéro de téléphone
+    if (QString::number(newCin).length() != 8) {
+        QMessageBox::warning(this, "Erreur", "Le CIN doit contenir exactement 8 chiffres.");
+        return;
+    }
+    if (QString::number(newNumTel).length() != 8) {
+        QMessageBox::warning(this, "Erreur", "Le numéro de téléphone doit contenir exactement 8 chiffres.");
+        return;
+    }
+
+    // Vérification du format de l'email
+    if (!newEmail.contains("@") || !newEmail.contains(".")) {
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer un email valide.");
+        return;
+    }
+
+    // Création de l'objet Superviseur avec les nouvelles valeurs
+    Superviseur s(currentId, newCin, newStatut, newPoste, newPrenom, newNom, newNumTel, newEmail );
 
     // Modifier l'entrée dans la base de données
-    if (s.modifier()) {
+    if (s.modifier(currentId)) {
         QMessageBox::information(this, "Modification", "Superviseur modifié avec succès !");
-        ui->tableView1->setModel(s.afficher()); // Rafraîchir la table
+        ui->tableView1->setModel(s.afficher());
+        modificationInProgress = false;
     } else {
         QMessageBox::critical(this, "Erreur", "La modification a échoué.");
     }

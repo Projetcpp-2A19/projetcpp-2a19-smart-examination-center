@@ -39,7 +39,7 @@ public:
     bool ajouter();
     QSqlQueryModel* afficher();
     bool supprimer (QString id);
-    bool modifier();
+    bool modifier(QString id);
 };
 
 #endif // SUPERVISEUR_H

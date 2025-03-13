@@ -6,6 +6,7 @@
 #include <QWidget>  // For the popup widget
 #include <QPushButton>  // For the button
 #include <QSqlTableModel>
+#include <QSignalBlocker>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -80,6 +81,10 @@ private slots:
 
     void on_Modbtn_clicked();//modifier
 
+    void on_SaveMod_clicked();
+    void actualiserTableView();
+
+
 
 
 
@@ -103,21 +108,19 @@ private:
     Superviseur S;
     QSqlTableModel *model;
 
+
 //Modifier
     bool modificationInProgress = false; // Track if modification has started
-    void on_btnModifier_clicked();
-    void on_btnConfirmerModifier_clicked();
-    void on_SaveMod_clicked();
 
 private:
     QString currentId;
-    int currentCin;
-    QString currentStatut;
-    QString currentPoste;
-    QString currentPrenom;
-    QString currentNom;
-    int currentnumTel;
-    QString currentEmail;
+    int originalCin;
+    QString originalStatut;
+    QString originalPoste;
+    QString originalPrenom;
+    QString originalNom;
+    int originalTel;
+    QString originalEmail;
 
 };
 #endif // MAINWINDOW_H
