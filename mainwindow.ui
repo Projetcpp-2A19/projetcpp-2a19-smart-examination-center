@@ -612,93 +612,6 @@ background-color: rgb(74, 144, 226);</string>
       <string>Statistiques</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="TableExams">
-     <property name="geometry">
-      <rect>
-       <x>-10</x>
-       <y>810</y>
-       <width>61</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">#TableExams {
-    border: 2px solid #A0B9D9; /* Bordure bleue */
-    border-radius: 7px; /* Coins arrondis */
-    background-color: #F0F4F8; /* Fond légèrement gris-bleu */
-    gridline-color: rgb(61, 61, 61); /* Couleur des lignes du tableau */
-    selection-background-color: #4A90E2; /* Couleur de sélection */
-    selection-color: white; /* Texte blanc lors de la sélection */
-}
-
-#TableExams::item {
-    padding: 8px; /* Espacement entre le texte et la cellule */
-    color: #2C3E50; /* Texte bleu foncé */
-}
-
-#TableExams::item:selected {
-    background-color: #4A90E2; /* Fond bleu lors de la sélection */
-    color: white; /* Texte blanc */
-}
-
-#TableExams QHeaderView::section {
-    background-color: #A0B9D9; /* En-tête avec une teinte bleu-gris */
-    color: #2C3E50; /* Texte des en-têtes en bleu foncé */
-    padding: 6px;
-    border: 1px solid rgb(61, 61, 61); /* Bordure des en-têtes */
-    font-weight: bold;
-}
-
-#TableExams QTableCornerButton::section {
-    background-color: rgb(61, 61, 61); /* Coin supérieur gauche */
-    border: 1px solid #4A90E2;
-}
-</string>
-     </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>true</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>ID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Matière</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Niveau</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Date</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Durée</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Enoncé</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Statut</string>
-      </property>
-     </column>
-    </widget>
     <zorder>examButton</zorder>
     <zorder>etaButton</zorder>
     <zorder>candButton</zorder>
@@ -715,7 +628,6 @@ background-color: rgb(74, 144, 226);</string>
     <zorder>label_4</zorder>
     <zorder>statButton</zorder>
     <zorder>label_10</zorder>
-    <zorder>TableExams</zorder>
    </widget>
    <widget class="QWidget" name="Menu" native="true">
     <property name="geometry">
@@ -1176,7 +1088,7 @@ QPushButton#InsertExamPdf_3:pressed {
          <iconset theme="document-print-preview"/>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="MatiereSpeech">
         <property name="geometry">
          <rect>
           <x>210</x>
@@ -1202,7 +1114,7 @@ QPushButton#InsertExamPdf_3:pressed {
          </size>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="DureeSpeech">
         <property name="geometry">
          <rect>
           <x>532</x>
@@ -1228,37 +1140,11 @@ QPushButton#InsertExamPdf_3:pressed {
          </size>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_5">
+       <widget class="QPushButton" name="NiveauSpeech">
         <property name="geometry">
          <rect>
           <x>533</x>
           <y>175</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border:none;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="img.qrc">
-          <normaloff>:/img/mic.png</normaloff>:/img/mic.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>28</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_6">
-        <property name="geometry">
-         <rect>
-          <x>532</x>
-          <y>63</y>
           <width>31</width>
           <height>31</height>
          </rect>
@@ -1417,7 +1303,7 @@ QPushButton#RechExam :pressed {
          <normaloff>:/img/recherche.png</normaloff>:/img/recherche.png</iconset>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lineEdit_2">
+      <widget class="QLineEdit" name="SearchBarExamen">
        <property name="geometry">
         <rect>
          <x>930</x>
@@ -1457,7 +1343,7 @@ QLineEdit:focus {
         </rect>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="AddExamLabel">
         <widget class="QLabel" name="addExamText">
@@ -1653,6 +1539,45 @@ QPushButton#ModifExamConfirm :pressed {
        </property>
        <property name="text">
         <string>Liste des Examens :</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="viewPdfButton">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>570</y>
+         <width>51</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#viewPdfButton  {
+    background-color: #8da3bf; /* Vert sapin */
+	color: rgb(141, 163, 191);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 18px; /* La moitié de la taille pour un cercle */
+    border: none;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+}
+
+QPushButton#viewPdfButton:hover {
+    box-shadow: 0px 3px 8px rgba(1, 121, 111, 0.4);
+	background-color: rgb(115, 131, 168);
+}
+
+QPushButton#viewPdfButton :pressed {
+    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);
+	background-color: #7992bf;
+}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::DocumentPageSetup"/>
        </property>
       </widget>
      </widget>

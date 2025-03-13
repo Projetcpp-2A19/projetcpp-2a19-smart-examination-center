@@ -22,7 +22,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTableView>
-#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -48,7 +47,6 @@ public:
     QLabel *label_4;
     QPushButton *statButton;
     QLabel *label_10;
-    QTableWidget *TableExams;
     QWidget *Menu;
     QStackedWidget *stackedWidget;
     QWidget *HOME;
@@ -69,16 +67,15 @@ public:
     QLineEdit *lineEdit_20;
     QLabel *label_41;
     QPushButton *InsertExamPdf_3;
-    QPushButton *pushButton;
-    QPushButton *pushButton_4;
-    QPushButton *pushButton_5;
-    QPushButton *pushButton_6;
+    QPushButton *MatiereSpeech;
+    QPushButton *DureeSpeech;
+    QPushButton *NiveauSpeech;
     QComboBox *TypeExamenChoix;
     QComboBox *StatutExamenChoix;
     QDateEdit *dateExamenChoix;
     QDateEdit *filterExam;
     QPushButton *RechExam;
-    QLineEdit *lineEdit_2;
+    QLineEdit *SearchBarExamen;
     QStackedWidget *stackedWidget_2;
     QWidget *AddExamLabel;
     QLabel *addExamText;
@@ -90,6 +87,7 @@ public:
     QLabel *label_28;
     QTableView *ListeExamensTab;
     QPushButton *pushButton_2;
+    QPushButton *viewPdfButton;
     QWidget *GestSup;
     QLabel *label_11;
     QWidget *GestEquip;
@@ -423,61 +421,6 @@ public:
 "    font-size: 15px;\n"
 "    font-weight: bold;\n"
 "background-color: rgb(74, 144, 226);"));
-        TableExams = new QTableWidget(fullMenu);
-        if (TableExams->columnCount() < 8)
-            TableExams->setColumnCount(8);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(2, __qtablewidgetitem2);
-        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(3, __qtablewidgetitem3);
-        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(4, __qtablewidgetitem4);
-        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(5, __qtablewidgetitem5);
-        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(6, __qtablewidgetitem6);
-        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
-        TableExams->setHorizontalHeaderItem(7, __qtablewidgetitem7);
-        TableExams->setObjectName("TableExams");
-        TableExams->setGeometry(QRect(-10, 810, 61, 31));
-        TableExams->setStyleSheet(QString::fromUtf8("#TableExams {\n"
-"    border: 2px solid #A0B9D9; /* Bordure bleue */\n"
-"    border-radius: 7px; /* Coins arrondis */\n"
-"    background-color: #F0F4F8; /* Fond l\303\251g\303\250rement gris-bleu */\n"
-"    gridline-color: rgb(61, 61, 61); /* Couleur des lignes du tableau */\n"
-"    selection-background-color: #4A90E2; /* Couleur de s\303\251lection */\n"
-"    selection-color: white; /* Texte blanc lors de la s\303\251lection */\n"
-"}\n"
-"\n"
-"#TableExams::item {\n"
-"    padding: 8px; /* Espacement entre le texte et la cellule */\n"
-"    color: #2C3E50; /* Texte bleu fonc\303\251 */\n"
-"}\n"
-"\n"
-"#TableExams::item:selected {\n"
-"    background-color: #4A90E2; /* Fond bleu lors de la s\303\251lection */\n"
-"    color: white; /* Texte blanc */\n"
-"}\n"
-"\n"
-"#TableExams QHeaderView::section {\n"
-"    background-color: #A0B9D9; /* En-t\303\252te avec une teinte bleu-gris */\n"
-"    color: #2C3E50; /* Texte des en-t\303\252tes en bleu fonc\303\251 */\n"
-"    padding: 6px;\n"
-"    border: 1px solid rgb(61, 61, 61)"
-                        "; /* Bordure des en-t\303\252tes */\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"#TableExams QTableCornerButton::section {\n"
-"    background-color: rgb(61, 61, 61); /* Coin sup\303\251rieur gauche */\n"
-"    border: 1px solid #4A90E2;\n"
-"}\n"
-""));
-        TableExams->horizontalHeader()->setVisible(true);
         examButton->raise();
         etaButton->raise();
         candButton->raise();
@@ -494,7 +437,6 @@ public:
         label_4->raise();
         statButton->raise();
         label_10->raise();
-        TableExams->raise();
         Menu = new QWidget(centralwidget);
         Menu->setObjectName("Menu");
         Menu->setGeometry(QRect(161, 70, 1161, 761));
@@ -722,32 +664,26 @@ public:
 "}"));
         QIcon icon11(QIcon::fromTheme(QString::fromUtf8("document-print-preview")));
         InsertExamPdf_3->setIcon(icon11);
-        pushButton = new QPushButton(AddExamFrame_3);
-        pushButton->setObjectName("pushButton");
-        pushButton->setGeometry(QRect(210, 65, 31, 31));
-        pushButton->setStyleSheet(QString::fromUtf8("border:none;"));
+        MatiereSpeech = new QPushButton(AddExamFrame_3);
+        MatiereSpeech->setObjectName("MatiereSpeech");
+        MatiereSpeech->setGeometry(QRect(210, 65, 31, 31));
+        MatiereSpeech->setStyleSheet(QString::fromUtf8("border:none;"));
         QIcon icon12;
         icon12.addFile(QString::fromUtf8(":/img/mic.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        pushButton->setIcon(icon12);
-        pushButton->setIconSize(QSize(28, 30));
-        pushButton_4 = new QPushButton(AddExamFrame_3);
-        pushButton_4->setObjectName("pushButton_4");
-        pushButton_4->setGeometry(QRect(532, 296, 31, 31));
-        pushButton_4->setStyleSheet(QString::fromUtf8("border:none;"));
-        pushButton_4->setIcon(icon12);
-        pushButton_4->setIconSize(QSize(28, 30));
-        pushButton_5 = new QPushButton(AddExamFrame_3);
-        pushButton_5->setObjectName("pushButton_5");
-        pushButton_5->setGeometry(QRect(533, 175, 31, 31));
-        pushButton_5->setStyleSheet(QString::fromUtf8("border:none;"));
-        pushButton_5->setIcon(icon12);
-        pushButton_5->setIconSize(QSize(28, 30));
-        pushButton_6 = new QPushButton(AddExamFrame_3);
-        pushButton_6->setObjectName("pushButton_6");
-        pushButton_6->setGeometry(QRect(532, 63, 31, 31));
-        pushButton_6->setStyleSheet(QString::fromUtf8("border:none;"));
-        pushButton_6->setIcon(icon12);
-        pushButton_6->setIconSize(QSize(28, 30));
+        MatiereSpeech->setIcon(icon12);
+        MatiereSpeech->setIconSize(QSize(28, 30));
+        DureeSpeech = new QPushButton(AddExamFrame_3);
+        DureeSpeech->setObjectName("DureeSpeech");
+        DureeSpeech->setGeometry(QRect(532, 296, 31, 31));
+        DureeSpeech->setStyleSheet(QString::fromUtf8("border:none;"));
+        DureeSpeech->setIcon(icon12);
+        DureeSpeech->setIconSize(QSize(28, 30));
+        NiveauSpeech = new QPushButton(AddExamFrame_3);
+        NiveauSpeech->setObjectName("NiveauSpeech");
+        NiveauSpeech->setGeometry(QRect(533, 175, 31, 31));
+        NiveauSpeech->setStyleSheet(QString::fromUtf8("border:none;"));
+        NiveauSpeech->setIcon(icon12);
+        NiveauSpeech->setIconSize(QSize(28, 30));
         TypeExamenChoix = new QComboBox(AddExamFrame_3);
         TypeExamenChoix->addItem(QString());
         TypeExamenChoix->addItem(QString());
@@ -807,10 +743,10 @@ public:
         QIcon icon13;
         icon13.addFile(QString::fromUtf8(":/img/recherche.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
         RechExam->setIcon(icon13);
-        lineEdit_2 = new QLineEdit(GestExam);
-        lineEdit_2->setObjectName("lineEdit_2");
-        lineEdit_2->setGeometry(QRect(930, 30, 171, 41));
-        lineEdit_2->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+        SearchBarExamen = new QLineEdit(GestExam);
+        SearchBarExamen->setObjectName("SearchBarExamen");
+        SearchBarExamen->setGeometry(QRect(930, 30, 171, 41));
+        SearchBarExamen->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */\n"
 "    border: 2px solid  rgb(1, 121, 111); /* Bordure bleu-gris pastel */\n"
 "    border-radius: 20px; /* Coins arrondis */\n"
@@ -939,6 +875,32 @@ public:
 "    border: 2px solid #A0B9D9; /* L\303\251g\303\250re bordure bleu-gris pastel */\n"
 "\n"
 ""));
+        viewPdfButton = new QPushButton(GestExam);
+        viewPdfButton->setObjectName("viewPdfButton");
+        viewPdfButton->setGeometry(QRect(220, 570, 51, 41));
+        viewPdfButton->setStyleSheet(QString::fromUtf8("QPushButton#viewPdfButton  {\n"
+"    background-color: #8da3bf; /* Vert sapin */\n"
+"	color: rgb(141, 163, 191);\n"
+"    color: white;\n"
+"    font-size: 18px;\n"
+"    font-weight: bold;\n"
+"    border-radius: 18px; /* La moiti\303\251 de la taille pour un cercle */\n"
+"    border: none;\n"
+"    transition: all 0.3s ease-in-out;\n"
+"    text-align: center;\n"
+"}\n"
+"\n"
+"QPushButton#viewPdfButton:hover {\n"
+"    box-shadow: 0px 3px 8px rgba(1, 121, 111, 0.4);\n"
+"	background-color: rgb(115, 131, 168);\n"
+"}\n"
+"\n"
+"QPushButton#viewPdfButton :pressed {\n"
+"    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
+"	background-color: #7992bf;\n"
+"}"));
+        QIcon icon16(QIcon::fromTheme(QIcon::ThemeIcon::DocumentPageSetup));
+        viewPdfButton->setIcon(icon16);
         stackedWidget->addWidget(GestExam);
         GestSup = new QWidget();
         GestSup->setObjectName("GestSup");
@@ -1021,9 +983,9 @@ public:
 "    box-shadow: 0px 2px 5px rgba(184, 50, 50, 0.5);\n"
 "}\n"
 ""));
-        QIcon icon16;
-        icon16.addFile(QString::fromUtf8(":/img/close.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        closeBtn->setIcon(icon16);
+        QIcon icon17;
+        icon17.addFile(QString::fromUtf8(":/img/close.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        closeBtn->setIcon(icon17);
         closeBtn->setIconSize(QSize(25, 25));
         notifBtn = new QPushButton(centralwidget);
         notifBtn->setObjectName("notifBtn");
@@ -1053,9 +1015,9 @@ public:
 "    box-shadow: 0px 2px 5px rgba(184, 50, 50, 0.5);\n"
 "}\n"
 ""));
-        QIcon icon17;
-        icon17.addFile(QString::fromUtf8(":/img/notif.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        notifBtn->setIcon(icon17);
+        QIcon icon18;
+        icon18.addFile(QString::fromUtf8(":/img/notif.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        notifBtn->setIcon(icon18);
         notifBtn->setIconSize(QSize(42, 41));
         emailBtn = new QPushButton(centralwidget);
         emailBtn->setObjectName("emailBtn");
@@ -1087,9 +1049,9 @@ public:
 "    box-shadow: 0px 2px 5px rgba(184, 50, 50, 0.5);\n"
 "}\n"
 ""));
-        QIcon icon18;
-        icon18.addFile(QString::fromUtf8(":/img/mail.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        emailBtn->setIcon(icon18);
+        QIcon icon19;
+        icon19.addFile(QString::fromUtf8(":/img/mail.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        emailBtn->setIcon(icon19);
         emailBtn->setIconSize(QSize(33, 32));
         paramBtn = new QPushButton(centralwidget);
         paramBtn->setObjectName("paramBtn");
@@ -1121,9 +1083,9 @@ public:
 "    box-shadow: 0px 2px 5px rgba(184, 50, 50, 0.5);\n"
 "}\n"
 ""));
-        QIcon icon19;
-        icon19.addFile(QString::fromUtf8(":/img/settings.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        paramBtn->setIcon(icon19);
+        QIcon icon20;
+        icon20.addFile(QString::fromUtf8(":/img/settings.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        paramBtn->setIcon(icon20);
         paramBtn->setIconSize(QSize(29, 27));
         homeBtn = new QPushButton(centralwidget);
         homeBtn->setObjectName("homeBtn");
@@ -1155,14 +1117,14 @@ public:
 "    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
 "}\n"
 ""));
-        QIcon icon20(QIcon::fromTheme(QIcon::ThemeIcon::GoHome));
-        homeBtn->setIcon(icon20);
+        QIcon icon21(QIcon::fromTheme(QIcon::ThemeIcon::GoHome));
+        homeBtn->setIcon(icon21);
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
 
         stackedWidget->setCurrentIndex(1);
-        stackedWidget_2->setCurrentIndex(1);
+        stackedWidget_2->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1187,22 +1149,6 @@ public:
         label_4->setText(QCoreApplication::translate("MainWindow", "Examens", nullptr));
         statButton->setText(QString());
         label_10->setText(QCoreApplication::translate("MainWindow", "Statistiques", nullptr));
-        QTableWidgetItem *___qtablewidgetitem = TableExams->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "ID", nullptr));
-        QTableWidgetItem *___qtablewidgetitem1 = TableExams->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Mati\303\250re", nullptr));
-        QTableWidgetItem *___qtablewidgetitem2 = TableExams->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "Niveau", nullptr));
-        QTableWidgetItem *___qtablewidgetitem3 = TableExams->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "Type", nullptr));
-        QTableWidgetItem *___qtablewidgetitem4 = TableExams->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "Date", nullptr));
-        QTableWidgetItem *___qtablewidgetitem5 = TableExams->horizontalHeaderItem(5);
-        ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "Dur\303\251e", nullptr));
-        QTableWidgetItem *___qtablewidgetitem6 = TableExams->horizontalHeaderItem(6);
-        ___qtablewidgetitem6->setText(QCoreApplication::translate("MainWindow", "Enonc\303\251", nullptr));
-        QTableWidgetItem *___qtablewidgetitem7 = TableExams->horizontalHeaderItem(7);
-        ___qtablewidgetitem7->setText(QCoreApplication::translate("MainWindow", "Statut", nullptr));
         pdfExambtn->setText(QCoreApplication::translate("MainWindow", "Liste des Examens Par Ann\303\251e PDF", nullptr));
         ModExamButton->setText(QString());
         SuppExamButton->setText(QString());
@@ -1216,10 +1162,9 @@ public:
         label_40->setText(QCoreApplication::translate("MainWindow", "Niveau :", nullptr));
         label_41->setText(QCoreApplication::translate("MainWindow", "Dur\303\251e :", nullptr));
         InsertExamPdf_3->setText(QCoreApplication::translate("MainWindow", "Ins\303\251rer l'\303\251nonc\303\251 en PDF", nullptr));
-        pushButton->setText(QString());
-        pushButton_4->setText(QString());
-        pushButton_5->setText(QString());
-        pushButton_6->setText(QString());
+        MatiereSpeech->setText(QString());
+        DureeSpeech->setText(QString());
+        NiveauSpeech->setText(QString());
         TypeExamenChoix->setItemText(0, QCoreApplication::translate("MainWindow", "Ecrit ", nullptr));
         TypeExamenChoix->setItemText(1, QCoreApplication::translate("MainWindow", "Orale", nullptr));
         TypeExamenChoix->setItemText(2, QCoreApplication::translate("MainWindow", "Pratique", nullptr));
@@ -1230,13 +1175,14 @@ public:
         StatutExamenChoix->setItemText(3, QCoreApplication::translate("MainWindow", "En cours", nullptr));
 
         RechExam->setText(QString());
-        lineEdit_2->setText(QString());
+        SearchBarExamen->setText(QString());
         addExamText->setText(QCoreApplication::translate("MainWindow", "Ajouter un examen :", nullptr));
         AddExamConfirm_3->setText(QString());
         modifExamText->setText(QCoreApplication::translate("MainWindow", "Modifier un examen :", nullptr));
         ModifExamConfirm->setText(QString());
         label_28->setText(QCoreApplication::translate("MainWindow", "Gestion des Examens :", nullptr));
         pushButton_2->setText(QCoreApplication::translate("MainWindow", "Liste des Examens :", nullptr));
+        viewPdfButton->setText(QString());
         label_11->setText(QCoreApplication::translate("MainWindow", "Gestion Des Superviseurs", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "Gestion Des Equipements", nullptr));
         label_12->setText(QCoreApplication::translate("MainWindow", "Gestion des Fournisseurs", nullptr));

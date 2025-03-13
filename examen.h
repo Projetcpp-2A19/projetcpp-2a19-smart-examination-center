@@ -44,12 +44,15 @@ public:
     void setEnonceExamen(QByteArray);
     void setDureeExamen(QString);
     void setDateExamen(QDate);
+    QByteArray getPdfDataById(const QString &id);
 
     // Opérations CRUD
     bool ajouter();
     bool modifier(QString);
     bool supprimer(QString);
     QSqlQueryModel *afficher();
+    QSqlQueryModel *filtrerParDate(const QDate &date);
+
 };
 
 

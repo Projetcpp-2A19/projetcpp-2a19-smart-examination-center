@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql texttospeech
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,14 +11,15 @@ CONFIG += c++17
 SOURCES += \
     connection.cpp \
     examen.cpp \
-    gestion_examens.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    speechtotext.cpp
 
 HEADERS += \
     connection.h \
     examen.h \
-    mainwindow.h
+    mainwindow.h \
+    speechtotext.h
 
 FORMS += \
     mainwindow.ui
@@ -43,7 +44,8 @@ DISTFILES += \
     img/recherche.png \
     img/rechercher-des-personnes.png \
     img/refresh.png \
-    img/settings.png
+    img/settings.png \
+    speech_to_text.py
 
 RESOURCES += \
     img.qrc
