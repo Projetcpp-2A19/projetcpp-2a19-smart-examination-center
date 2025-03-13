@@ -19,15 +19,18 @@ public:
 
 
 public slots:
-    void ajouterEquipement();
+    void on_BinSuperbtn_clicked();
     void afficherEquipements();
-    void modifierEquipement();
-    void supprimerEquipement();
+    void on_Modbtn_clicked();
+  /*  void modifierEquipement();
+    void supprimerEquipement();:
 
 
-/*private slots:
+
+private slots:
     void showNotifications(); */ // Déclare ton slot ici
 private slots:
+
     void on_examBtn_clicked();
 
     void on_supBtn_clicked();
@@ -112,6 +115,10 @@ private slots:
 
 
     void on_EvalAssist_clicked();
+
+   // void on_Modbtn_clicked();
+
+    void on_Ajbtn_clicked();
 
 private:
     Ui::MainWindow *ui;

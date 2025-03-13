@@ -6,21 +6,21 @@
 
 class Equipement {
 private:
-    int id;
+    QString id;
     QString nom;
     QString type;
     QString statut;
     int quantite;
-
 public:
-    // Constructeur
-    Equipement(int id, QString nom, QString type, QString statut, int quantite);
-
     Equipement();
 
+    // Constructor without ID
+    Equipement(QString nom, QString type, QString statut, int quantite);
 
+    // Existing constructor with ID (if still needed)
+    Equipement(QString id, QString nom, QString type, QString statut, int quantite);
     // Accesseurs (Getters)
-    int getId() const;
+
     QString getNom() const;
     QString getType() const;
     QString getStatut() const;
@@ -36,7 +36,7 @@ public:
     // CRUD Operations
     bool ajouter();
     QSqlQueryModel* afficher();
-    bool modifier(int id);
+    bool modifier(int equipmentId, const QString &nom, const QString &type, const QString &statut, int quantite);
     bool supprimer(int id);
 };
 

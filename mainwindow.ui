@@ -938,7 +938,7 @@ QPushButton#Modbtn:pressed {
          <string>Nom :</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="PostLineEdit">
+       <widget class="QLineEdit" name="qte">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -1001,7 +1001,7 @@ QPushButton#Modbtn:pressed {
          <string>Type :</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="NomLineEdit">
+       <widget class="QLineEdit" name="Nom">
         <property name="geometry">
          <rect>
           <x>160</x>
@@ -1048,7 +1048,7 @@ QPushButton#Modbtn:pressed {
          <string>Quantité :</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="EmailLineEdit">
+       <widget class="QLineEdit" name="Status">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1120,7 +1120,7 @@ QPushButton#Ajbtn:pressed {
          <string>Ajouter</string>
         </property>
        </widget>
-       <widget class="QListWidget" name="listWidget">
+       <widget class="QListWidget" name="type">
         <property name="geometry">
          <rect>
           <x>160</x>
@@ -2316,9 +2316,9 @@ QPushButton#homeBtn:pressed {
   <tabstop>BinSuperbtn</tabstop>
   <tabstop>Modbtn</tabstop>
   <tabstop>listWidget_2</tabstop>
-  <tabstop>PostLineEdit</tabstop>
-  <tabstop>NomLineEdit</tabstop>
-  <tabstop>EmailLineEdit</tabstop>
+  <tabstop>qte</tabstop>
+  <tabstop>Nom</tabstop>
+  <tabstop>Status</tabstop>
   <tabstop>Ajbtn</tabstop>
   <tabstop>ModButton</tabstop>
   <tabstop>eqButton</tabstop>
