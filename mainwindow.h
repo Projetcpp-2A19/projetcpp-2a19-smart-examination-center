@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "candidat.h"
-#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,14 +18,17 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_AffButton_5_clicked();  // Afficher les candidats
-    void on_AjButton_5_clicked();   // Ajouter un candidat
-    void on_ModButton_5_clicked();  // Modifier un candidat
-    void on_SuppButton_5_clicked(); // Supprimer un candidat
+    void afficherCandidats();
+    void on_AjButton_5_clicked();
+    void on_btnSupprimer_clicked();
+    void on_ModButton_5_clicked();
+
+    void on_lineCode_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
-    Candidat candidat;  // Instance de la classe Candidat
+    bool verifierSaisie(QString code, QString prenom, int cin, QString adresse, QString nom, int numTel);
+
 };
 
 #endif // MAINWINDOW_H

@@ -4,37 +4,41 @@
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QByteArray>
 
 class Candidat
 {
-public:
-    QString nom;
+private:
+    QString code;
     QString prenom;
-    int code;
     int cin;
     QString adresse;
+    QString nom;
     int numTel;
     QString niveau;
-    // Getters
-    QString getNom() const { return nom; }
-    QString getPrenom() const { return prenom; }
-    int getCode() const { return code; }
-    int getCIN() const { return cin; }
-    QString getAdresse() const { return adresse; }
-    int getNumTel() const { return numTel; }
-    QString getNiveau() const { return niveau; }
-
+    QByteArray photo;
 
 public:
     // Constructeurs
     Candidat() {}
-    Candidat(QString nom, QString prenom, int code, int cin, QString adresse, int numTel, QString niveau);
+    Candidat(QString code, QString prenom, int cin, QString adresse, QString nom, int numTel, QString niveau, QByteArray photo);
 
     // CRUD
     bool ajouter();
     QSqlQueryModel *afficher();
-    bool supprimer(int code);
-    bool modifier(int code, QString nom, QString prenom, int cin, QString adresse, int numTel, QString niveau);
+    bool supprimer(QString code);
+    bool modifier(QString code, QString prenom, int cin, QString adresse, QString nom, int numTel, QString niveau, QByteArray photo);
+    bool chercherCandidat(QString code);
+
+    // Getters
+    QString getCode() const { return code; }
+    QString getPrenom() const { return prenom; }
+    int getCin() const { return cin; }
+    QString getAdresse() const { return adresse; }
+    QString getNom() const { return nom; }
+    int getNumTel() const { return numTel; }
+    QString getNiveau() const { return niveau; }
+    QByteArray getPhoto() const { return photo; }
 };
 
 #endif // CANDIDAT_H
