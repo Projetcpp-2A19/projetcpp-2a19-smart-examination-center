@@ -30,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->ListeExamensTab, &QTableView::clicked, this, &MainWindow::onExamSelected);
     qDebug() << "Connected QTableView clicked signal.";
 
-
     //speech to text
     speechToText = new SpeechToText(this);
     connect(speechToText, &SpeechToText::textRecognized, this, &MainWindow::onSpeechTextRecognized);
@@ -42,11 +41,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Recherche
     // Initialize the model
-    Examen examen;  // Assuming Examen has a method to fetch data
-    yourExamModel = examen.afficher();  // Get the model from afficher()
+    Examen examen;
+    yourExamModel = examen.afficher();
     proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setSourceModel(yourExamModel); // Assuming you already have a model for the exams table
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive); // Case-insensitive search
+    proxyModel->setSourceModel(yourExamModel);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setFilterKeyColumn(1); // Column index of "matière" in your model
 
     ui->ListeExamensTab->setModel(proxyModel);
@@ -190,29 +189,40 @@ void MainWindow::handleModifExamConfirm()
 
 void MainWindow::onExamSelected(const QModelIndex &index)
 {
-    qDebug() << "Selection changed signal received.";
+    qDebug() << "onExamSelected slot triggered.";
 
-    // Get the selected row
-    int row = index.row();
-    qDebug() << "Selected row:" << row;
-
-    // Get the model
-    QSqlQueryModel *model = qobject_cast<QSqlQueryModel*>(ui->ListeExamensTab->model());
-    if (!model) {
-        qDebug() << "Model is not valid!";
+    if (!index.isValid()) {
+        qDebug() << "Invalid index!";
         return;
     }
 
-    // Retrieve data from the selected row (in the new order)
-    QString id = model->data(model->index(row, 0)).toString();          // ID
-    QString matiere = model->data(model->index(row, 1)).toString();    // Matiere
-    QString type = model->data(model->index(row, 2)).toString();       // Type
-    QString statut = model->data(model->index(row, 3)).toString();     // Statut
-    QString niveau = model->data(model->index(row, 4)).toString();     // Niveau
-    QString duree = model->data(model->index(row, 5)).toString();      // Duree
-    QDate date = model->data(model->index(row, 6)).toDate();          // Date
+    // Get the proxy model
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel*>(ui->ListeExamensTab->model());
+    if (!proxyModel) {
+        qDebug() << "Proxy model is not valid!";
+        return;
+    }
 
-    // Debug: Print the retrieved data
+    // Get the source model (QSqlQueryModel)
+    QSqlQueryModel *sourceModel = qobject_cast<QSqlQueryModel*>(proxyModel->sourceModel());
+    if (!sourceModel) {
+        qDebug() << "Source model is not valid!";
+        return;
+    }
+
+    // Map the index to the source model
+    QModelIndex sourceIndex = proxyModel->mapToSource(index);
+    int row = sourceIndex.row();
+
+    // Retrieve data from the selected row
+    QString id = sourceModel->data(sourceModel->index(row, 0)).toString();          // ID
+    QString matiere = sourceModel->data(sourceModel->index(row, 1)).toString();    // Matiere
+    QString type = sourceModel->data(sourceModel->index(row, 2)).toString();        // Type
+    QString statut = sourceModel->data(sourceModel->index(row, 3)).toString();     // Statut
+    QString niveau = sourceModel->data(sourceModel->index(row, 4)).toString();     // Niveau
+    QString duree = sourceModel->data(sourceModel->index(row, 5)).toString();      // Duree
+    QDate date = sourceModel->data(sourceModel->index(row, 6)).toDate();           // Date
+
     qDebug() << "Selected Exam Data:";
     qDebug() << "ID:" << id;
     qDebug() << "Matière:" << matiere;
