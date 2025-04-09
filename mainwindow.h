@@ -96,7 +96,13 @@ private slots:
 
     void on_notifBtn_clicked();
 
+    void on_pushButton_2_clicked();
 
+    void on_pushButton_clicked();
+
+    void genererRapportPDF();
+    void on_pdfSuperbtn_clicked();
+    void afficherStatistiquesEquipements();
 
 /*protected:
     void mousePressEvent(QMouseEvent *event) override; // Détecter le clic en dehors*/

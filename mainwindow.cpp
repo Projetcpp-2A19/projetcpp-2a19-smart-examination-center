@@ -4,6 +4,23 @@
 #include <QDebug>
 //#include <QMouseEvent>
 #include <QMessageBox>
+#include <QMessageBox>
+#include <cstdlib>  // Pour rand() et srand()
+#include <ctime>    // Pour time()
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+#include <ctime>
+#include <QPainter>
+#include <QPdfWriter>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QDir>
+#include <QChart>
+#include <QLineSeries>
+#include <QPieSeries>
+#include <QChartView>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -454,6 +471,7 @@ void MainWindow::on_Ajbtn_clicked()
         qDebug() << "Erreur: Échec lors de l'ajout de l'équipement.";
         QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de l'ajout de l'équipement.");
     }
+    ui->stackedWidget_2->setCurrentWidget(ui->page);
 }
 
 void MainWindow::on_Modbtn_clicked()
@@ -495,7 +513,7 @@ void MainWindow::on_Modbtn_clicked()
             ui->qte->setText(query.value(3).toString());
 
             // Now modify the data once the user confirms the changes
-            connect(ui->Ajbtn, &QPushButton::clicked, this, [this, equipmentId]() {
+            connect(ui->modifier, &QPushButton::clicked, this, [this, equipmentId]() {
                 QString nom = ui->Nom->text();
                 QString type = ui->type->currentItem()->text();
                 QString statut = ui->Status->text();
@@ -524,4 +542,207 @@ void MainWindow::on_Modbtn_clicked()
     } else {
         qDebug() << "Aucun ID saisi ou ID invalide.";
     }
+}
+void MainWindow::on_pushButton_2_clicked()
+{
+    Equipement e;
+    QSqlQueryModel *model = e.trierParNom();
+
+    // Debugging: Check if the model is valid and contains data
+    if (!model) {
+        qDebug() << "Erreur: Le modèle est nul.";
+        return;
+    }
+
+    if (model->rowCount() == 0) {
+        qDebug() << "Erreur: Le modèle est vide.";
+        return;
+    }
+
+    qDebug() << "Nombre de lignes dans le modèle:" << model->rowCount();
+    qDebug() << "Nombre de colonnes dans le modèle:" << model->columnCount();
+
+    // Creating a QTableWidget to manually insert data since setModel is not available
+    ui->tableView->clear();  // Clear the existing data in the table view
+    ui->tableView->setRowCount(model->rowCount());
+    ui->tableView->setColumnCount(model->columnCount());
+
+    // Setting the headers
+    ui->tableView->setHorizontalHeaderLabels({ "Nom", "Type", "Statut", "Quantité" });
+
+    // Manually populate the table with the model data
+    for (int i = 0; i < model->rowCount(); i++) {
+        for (int j = 0; j < model->columnCount(); j++) {
+            QString data = model->data(model->index(i, j)).toString();
+            ui->tableView->setItem(i, j, new QTableWidgetItem(data));
+        }
+    }
+
+    // Optionally resize columns
+    ui->tableView->resizeColumnsToContents();
+    ui->stackedWidget_2->setCurrentWidget(ui->page);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QString nomRecherche = ui->recherche->text();
+    Equipement e;
+    QSqlQueryModel *model = e.rechercherParNom(nomRecherche);
+
+    int rowCount = model->rowCount();
+    qDebug() << "Résultats trouvés pour" << nomRecherche << ":" << rowCount;
+
+    ui->tableView->clear();
+    ui->tableView->setRowCount(rowCount);
+    ui->tableView->setColumnCount(model->columnCount());
+
+    QStringList headers;
+    headers << "ID" << "Nom" << "Type" << "Statut" << "Quantité";
+    ui->tableView->setHorizontalHeaderLabels(headers);
+
+    for (int i = 0; i < rowCount; ++i) {
+        for (int j = 0; j < model->columnCount(); ++j) {
+            QString data = model->data(model->index(i, j)).toString();
+            ui->tableView->setItem(i, j, new QTableWidgetItem(data));
+        }
+    }
+    ui->stackedWidget_2->setCurrentWidget(ui->page);
+}
+void MainWindow::genererRapportPDF()
+{
+    QString filePath = QDir::homePath() + "/Documents/new equipement branch/rapport_equipements.pdf";
+    QPdfWriter pdfWriter(filePath);
+    pdfWriter.setPageSize(QPageSize(QPageSize::A4));
+    pdfWriter.setResolution(300);
+    QPainter painter(&pdfWriter);
+
+    // Marges
+    const int marginLeft = 40;
+    const int marginTop = 50;
+    const int pageWidth = pdfWriter.width() - 2 * marginLeft;
+
+    // Logo et titre
+    //QPixmap logo("/mnt/data/44298757-c475-4d62-8415-e4d92b1b761b-removebg-preview.png");
+    //painter.drawPixmap(marginLeft, marginTop, 80, 80, logo);
+    painter.setFont(QFont("Arial", 20, QFont::Bold));
+    painter.setPen(Qt::darkBlue);
+    painter.drawText(marginLeft + 100, marginTop + 40, "SmartEval - Rapport des Équipements");
+
+    // Ligne séparatrice
+    painter.setPen(QPen(Qt::black, 2));
+    painter.drawLine(marginLeft, marginTop + 100, marginLeft + pageWidth, marginTop + 100);
+
+    // Titre tableau
+    painter.setFont(QFont("Arial", 14, QFont::Bold));
+    painter.drawText(marginLeft, marginTop + 130, "Liste des Équipements");
+
+    // Coordonnées du tableau
+    int y = marginTop + 160;
+    int rowHeight = 45;
+
+    // Largeur totale à diviser
+    QVector<int> columnWidths = {
+        int(pageWidth * 0.10),  // ID
+        int(pageWidth * 0.30),  // Nom
+        int(pageWidth * 0.25),  // Type
+        int(pageWidth * 0.15),  // Statut
+        int(pageWidth * 0.20)   // Quantité
+    };
+
+    QStringList headers = {"ID", "Nom", "Type", "Statut", "Quantité"};
+
+    // En-tête stylée
+    painter.setFont(QFont("Arial", 11, QFont::Bold));
+    painter.setPen(Qt::white);
+    painter.setBrush(QColor("#2E86C1"));
+    int x = marginLeft;
+    for (int i = 0; i < headers.size(); ++i) {
+        painter.drawRect(x, y, columnWidths[i], rowHeight);
+        painter.drawText(x + 10, y + 30, headers[i]);
+        x += columnWidths[i];
+    }
+    y += rowHeight;
+
+    // Récupération des équipements
+    QSqlQuery query;
+    if (!query.exec("SELECT ID_EQUIPEMENT, NOM_EQUIPEMENT, TYPE_EQUIPEMENT, STATUT_EQUIPEMENT, QUANTITE__EQUIPEMENT FROM EQUIPEMENTS ORDER BY ID_EQUIPEMENT")) {
+        QMessageBox::critical(this, "Erreur SQL", "Impossible de récupérer les équipements: " + query.lastError().text());
+        return;
+    }
+
+    // Dessiner les lignes
+    painter.setFont(QFont("Arial", 10));
+    bool isAlternate = false;
+    while (query.next()) {
+        x = marginLeft;
+        painter.setPen(Qt::black);
+        painter.setBrush(isAlternate ? QColor("#f5f6fa") : Qt::white);
+        isAlternate = !isAlternate;
+
+        for (int i = 0; i < headers.size(); ++i) {
+            painter.drawRect(x, y, columnWidths[i], rowHeight);
+            painter.drawText(x + 10, y + 28, query.value(i).toString());
+            x += columnWidths[i];
+        }
+
+        y += rowHeight;
+
+        // Saut de page si dépassement
+        if (y > pdfWriter.height() - 100) {
+            pdfWriter.newPage();
+            y = marginTop;
+        }
+    }
+
+    painter.end();
+    QMessageBox::information(this, "Succès", "Le rapport PDF a été généré avec succès !");
+}
+void MainWindow::on_pdfSuperbtn_clicked(){
+    genererRapportPDF();
+}
+void MainWindow::afficherStatistiquesEquipements()
+{
+    QSqlQuery query;
+    if (!query.exec("SELECT TYPE_EQUIPEMENT, COUNT(*) FROM EQUIPEMENTS GROUP BY TYPE_EQUIPEMENT ORDER BY TYPE_EQUIPEMENT")) {
+        QMessageBox::critical(this, "Erreur SQL", "Impossible de récupérer les statistiques des équipements : " + query.lastError().text());
+        return;
+    }
+
+    QLineSeries *serie = new QLineSeries();
+    int index = 0;
+    while (query.next()) {
+        int nombre = query.value(1).toInt();
+        serie->append(index++, nombre);
+    }
+
+    QChart *chart = new QChart();
+    chart->addSeries(serie);
+    chart->setTitle("Courbe du nombre d'équipements par type");
+    chart->createDefaultAxes();
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    // Nettoyer l'ancien layout s'il existe dans page_2 de stackedWidget_2
+    QLayout *oldLayout = ui->page_2->layout();
+    if (oldLayout) {
+        QLayoutItem *item;
+        while ((item = oldLayout->takeAt(0)) != nullptr) {
+            delete item->widget();
+            delete item;
+        }
+        delete oldLayout;
+    }
+
+    // Créer un nouveau layout et ajouter le graphique
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(chartView);
+    ui->page_2->setLayout(layout);
+
+    // Activer la page_2 dans stackedWidget_2 si besoin
+    ui->stackedWidget_2->setCurrentWidget(ui->page_2);
+}
+
+void MainWindow::on_ModButton_clicked(){
+    afficherStatistiquesEquipements();
 }

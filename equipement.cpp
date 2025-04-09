@@ -133,3 +133,19 @@ bool Equipement::modifier(int equipmentId, const QString &nom, const QString &ty
         return false;
     }
 }
+QSqlQueryModel* Equipement::trierParNom()
+{
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery("SELECT ID_EQUIPEMENT, NOM_EQUIPEMENT, TYPE_EQUIPEMENT, STATUT_EQUIPEMENT, QUANTITE__EQUIPEMENT FROM EQUIPEMENTS ORDER BY NOM_EQUIPEMENT ASC");
+    return model;
+}
+QSqlQueryModel* Equipement::rechercherParNom(const QString &nom) {
+    QSqlQueryModel *model = new QSqlQueryModel();
+    QSqlQuery query;
+    query.prepare("SELECT * FROM EQUIPEMENTS WHERE ID_EQUIPEMENT LIKE :nom");
+    query.bindValue(":nom", "%" + nom + "%");
+    query.exec();
+    model->setQuery(query);
+    return model;
+}
+

@@ -38,6 +38,8 @@ public:
     QSqlQueryModel* afficher();
     bool modifier(int equipmentId, const QString &nom, const QString &type, const QString &statut, int quantite);
     bool supprimer(int id);
+    QSqlQueryModel*  trierParNom();
+    QSqlQueryModel* rechercherParNom(const QString &nom);
 };
 
 #endif // EQUIPEMENT_H
