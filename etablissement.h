@@ -1,39 +1,48 @@
 #ifndef ETABLISSEMENT_H
 #define ETABLISSEMENT_H
 
+#include <QSqlQueryModel>
 #include <QString>
 
 class Etablissement {
 private:
-    int id_eta;
-    QString nom_eta;
-    QString type;
-    QString ville;
-    QString gouvernorat;
-    QString directeur;
-    int nb_salles;
+    QString id_etablissement; // Clé primaire
+    QString gouvernorat_etablissement;
+    QString type_etablissement;
+    QString directeur_etablissement;
+    QString nom_etablissement;
+    int nombreSalle_etablissement;
+    QString ville_etablissement;
+    QString adresse_etablissement;
+
 
 public:
-    Etablissement(int id_eta = 0, const QString& nom_eta = "", const QString& type = "",
-                  const QString& ville = "", const QString& gouvernorat = "",
-                  const QString& directeur = "", int nb_salles = 0);
+    Etablissement();
+    Etablissement(QString id, QString gouvernorat, QString type, QString directeur, QString nom, int nombreSalle, QString ville ,QString adresse);
 
-    int getIdEta() const;
-    QString getNomEta() const;
-    QString getType() const;
-    QString getVille() const;
+    QString getId() const;
     QString getGouvernorat() const;
+    QString getType() const;
     QString getDirecteur() const;
-    int getNbSalles() const;
+    QString getNom() const;
+    int getNombreSalle() const;
+    QString getVille() const;
+    QString getAdresse() const;
 
-    void setNomEta(const QString& nom_eta);
-    void setType(const QString& type);
-    void setVille(const QString& ville);
-    void setGouvernorat(const QString& gouvernorat);
-    void setDirecteur(const QString& directeur);
-    void setNbSalles(int nb_salles);
+    void setId(QString id);
+    void setGouvernorat(QString gouvernorat);
+    void setType(QString type);
+    void setDirecteur(QString directeur);
+    void setNom(QString nom);
+    void setNombreSalle(int nombreSalle);
+    void setVille(QString ville);
+    void setAdresse(QString adresse);
 
-    QString afficherDetails() const;
+
+    bool ajouter();
+    QSqlQueryModel* afficher();
+    bool supprimer(QString id);
+    bool modifier();
 };
 
 #endif // ETABLISSEMENT_H

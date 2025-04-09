@@ -12,13 +12,22 @@
         <file>img/plus-moins.png</file>
         <file>img/recherche.png</file>
         <file>img/rechercher-des-personnes.png</file>
-        <file>img/refresh.png</file>
         <file>img/settings.png</file>
         <file>img/pdf.png</file>
         <file>img/supprimer.png</file>
         <file>img/home.png</file>
-        <file>img/images-removebg-preview.png</file>
-        <file>img/en-arriere.png</file>
-        <file>img/analytics.png</file>
+        <file>img/accueil.png</file>
+        <file>img/email.png</file>
+        <file>img/fermer-la-fenetre.png</file>
+        <file>img/parametres.png</file>
+        <file>img/profil.png</file>
+        <file>img/chatBot.png</file>
+        <file>img/statistiques.png</file>
+        <file>img/carte-3d.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>img/statistiques.png</file>
+        <file>img/marker.png</file>
+        <file>map.qml</file>
     </qresource>
 </RCC>
