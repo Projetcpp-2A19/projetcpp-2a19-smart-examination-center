@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSqlQueryModel>
+#include <QtCharts>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -85,11 +86,26 @@ private slots:
     void handleAddFournisseur();
     void handleDeleteFournisseur();
     void updateTableView();
+    void showStatistiques();
 //modification
     void on_ModButton_clicked();
     void on_SaveMod_clicked();
 
+    void on_rechBtn_clicked();
 
+
+    void on_emailBtn_clicked();
+
+    void on_EnvBtn_clicked();
+
+    void on_btnAfficherTout_clicked();
+
+
+    void on_btnTrierNom_clicked();
+
+    void on_pdfBtn_clicked();
+
+    void on_statButton_clicked();
 
 private:
     QSqlQueryModel *model;  // Modèle pour stocker les données des fournisseurs

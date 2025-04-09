@@ -20,6 +20,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTableView>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -56,11 +57,9 @@ public:
     QWidget *GestExam;
     QLabel *label_13;
     QWidget *GestFourn;
-    QPushButton *pdfSuperbtn;
+    QPushButton *pdfBtn;
     QTableView *tableFourn;
     QLabel *label_27;
-    QLabel *Tri;
-    QLineEdit *TriLineEditTri;
     QPushButton *ModButton;
     QListWidget *listWidget_2;
     QLineEdit *TypeService;
@@ -76,12 +75,21 @@ public:
     QLabel *label_20;
     QLabel *label_21;
     QLabel *label_22;
-    QLineEdit *lineEdit;
+    QLineEdit *lineEditRech;
     QPushButton *rechBtn;
     QPushButton *suppButton;
     QLabel *Recherche;
     QLineEdit *Nom;
     QPushButton *SaveMod;
+    QPushButton *btnAfficherTout;
+    QPushButton *btnTrierNom;
+    QWidget *Email_2;
+    QListWidget *listWidget_3;
+    QLabel *label_28;
+    QLineEdit *lineEdit_2;
+    QLineEdit *lineEdit_3;
+    QTextEdit *textEdit;
+    QPushButton *EnvBtn;
     QWidget *AjSuperv;
     QWidget *widget_6;
     QPushButton *AffButton_4;
@@ -90,7 +98,7 @@ public:
     QWidget *GestSuperv;
     QLabel *label_12;
     QWidget *GestCand;
-    QLabel *label_15;
+    QWidget *chartContainerType;
     QWidget *GestEtab;
     QLabel *label_16;
     QWidget *widget;
@@ -500,6 +508,8 @@ public:
 "    box-shadow: 0px 2px 5px rgba(184, 50, 50, 0.5);\n"
 "}\n"
 ""));
+        QIcon icon2(QIcon::fromTheme(QIcon::ThemeIcon::MailForward));
+        emailBtn->setIcon(icon2);
         paramBtn = new QPushButton(centralwidget);
         paramBtn->setObjectName("paramBtn");
         paramBtn->setGeometry(QRect(1260, 50, 36, 36));
@@ -534,6 +544,7 @@ public:
         stackedWidget = new QStackedWidget(centralwidget);
         stackedWidget->setObjectName("stackedWidget");
         stackedWidget->setGeometry(QRect(180, 90, 1301, 791));
+        stackedWidget->setLayoutDirection(Qt::LayoutDirection::LeftToRight);
         stackedWidget->setStyleSheet(QString::fromUtf8("background-color: rgb(239, 239, 239);"));
         HOME = new QWidget();
         HOME->setObjectName("HOME");
@@ -555,11 +566,11 @@ public:
         stackedWidget->addWidget(GestExam);
         GestFourn = new QWidget();
         GestFourn->setObjectName("GestFourn");
-        pdfSuperbtn = new QPushButton(GestFourn);
-        pdfSuperbtn->setObjectName("pdfSuperbtn");
-        pdfSuperbtn->setGeometry(QRect(20, 500, 141, 41));
-        pdfSuperbtn->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
-        pdfSuperbtn->setStyleSheet(QString::fromUtf8("QPushButton#pdfSuperbtn {\n"
+        pdfBtn = new QPushButton(GestFourn);
+        pdfBtn->setObjectName("pdfBtn");
+        pdfBtn->setGeometry(QRect(20, 500, 141, 41));
+        pdfBtn->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        pdfBtn->setStyleSheet(QString::fromUtf8("QPushButton#pdfSuperbtn {\n"
 "    background-color: #3A7BD5; \n"
 "    color: white;\n"
 "    font-size: 16px;\n"
@@ -582,9 +593,9 @@ public:
 "    border: 2px dashed #5A9BD5;\n"
 "}\n"
 ""));
-        pdfSuperbtn->setIconSize(QSize(20, 20));
-        pdfSuperbtn->setCheckable(true);
-        pdfSuperbtn->setAutoExclusive(true);
+        pdfBtn->setIconSize(QSize(20, 20));
+        pdfBtn->setCheckable(true);
+        pdfBtn->setAutoExclusive(true);
         tableFourn = new QTableView(GestFourn);
         tableFourn->setObjectName("tableFourn");
         tableFourn->setGeometry(QRect(20, 80, 721, 351));
@@ -636,38 +647,6 @@ public:
 "    text-align: center; /* Centrage du texte */\n"
 "}\n"
 ""));
-        Tri = new QLabel(GestFourn);
-        Tri->setObjectName("Tri");
-        Tri->setGeometry(QRect(380, 30, 221, 31));
-        Tri->setStyleSheet(QString::fromUtf8("#Trilabel4 { \n"
-"    font-size: 20px; /* Taille r\303\251duite du texte */\n"
-"    font-weight: bold; /* Texte en gras pour un effet titre */\n"
-"    color: #2C3E50; /* Bleu fonc\303\251 pour une bonne lisibilit\303\251 */\n"
-"    background-color: transparent; /* Fond transparent */\n"
-"    padding: 4px 8px; /* Espacement pour l'a\303\251ration */\n"
-"  \n"
-"    border-radius: 5px; /* Coins l\303\251g\303\250rement arrondis */\n"
-"    text-align: center; /* Centrage du texte */\n"
-"}\n"
-""));
-        TriLineEditTri = new QLineEdit(GestFourn);
-        TriLineEditTri->setObjectName("TriLineEditTri");
-        TriLineEditTri->setGeometry(QRect(600, 30, 181, 41));
-        TriLineEditTri->setStyleSheet(QString::fromUtf8("#TriLineEdit4 { \n"
-"    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */\n"
-"    border: 2px solid #B85042; /* Bordure rouge brique pastel */\n"
-"    border-radius: 20px; /* Coins arrondis */\n"
-"    padding: 8px 12px; /* Espacement interne */\n"
-"    font-size: 16px; /* Taille de police agr\303\251able */\n"
-"    color: #2C3E50; /* Bleu fonc\303\251 pour le texte */\n"
-"    selection-background-color: #B85042; /* Couleur de s\303\251lection */\n"
-"}\n"
-"\n"
-"#TriLineEdit4:focus { \n"
-"    border: 2px solid #D6655A; /* Rouge brique l\303\251g\303\250rement plus clair au focus */\n"
-"    background-color: #F8E8E6; /* L\303\251g\303\250re variation pour effet moderne */\n"
-"}\n"
-""));
         ModButton = new QPushButton(GestFourn);
         ModButton->setObjectName("ModButton");
         ModButton->setGeometry(QRect(20, 450, 51, 41));
@@ -691,8 +670,8 @@ public:
 "    background-color: rgb(0, 100, 92); /* Vert sapin plus fonc\303\251*/\n"
 "    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
 "}"));
-        QIcon icon2(QIcon::fromTheme(QIcon::ThemeIcon::MailMessageNew));
-        ModButton->setIcon(icon2);
+        QIcon icon3(QIcon::fromTheme(QIcon::ThemeIcon::MailMessageNew));
+        ModButton->setIcon(icon3);
         listWidget_2 = new QListWidget(GestFourn);
         listWidget_2->setObjectName("listWidget_2");
         listWidget_2->setGeometry(QRect(810, 140, 451, 521));
@@ -865,10 +844,10 @@ public:
         label_22->setGeometry(QRect(1070, 440, 171, 20));
         label_22->setStyleSheet(QString::fromUtf8("color: rgb(12, 12, 12);\n"
 "font: 10pt \"Sitka\";"));
-        lineEdit = new QLineEdit(GestFourn);
-        lineEdit->setObjectName("lineEdit");
-        lineEdit->setGeometry(QRect(420, 450, 251, 41));
-        lineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+        lineEditRech = new QLineEdit(GestFourn);
+        lineEditRech->setObjectName("lineEditRech");
+        lineEditRech->setGeometry(QRect(420, 450, 251, 41));
+        lineEditRech->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */\n"
 "    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */\n"
 "    border-radius: 20px; /* Coins arrondis */\n"
@@ -910,8 +889,8 @@ public:
 "    border: 2px solid #C74C4C;\n"
 "}\n"
 ""));
-        QIcon icon3(QIcon::fromTheme(QIcon::ThemeIcon::SystemSearch));
-        rechBtn->setIcon(icon3);
+        QIcon icon4(QIcon::fromTheme(QIcon::ThemeIcon::SystemSearch));
+        rechBtn->setIcon(icon4);
         suppButton = new QPushButton(GestFourn);
         suppButton->setObjectName("suppButton");
         suppButton->setGeometry(QRect(80, 450, 51, 41));
@@ -936,11 +915,11 @@ public:
 "    background-color: rgb(0, 100, 92); /* Vert sapin plus fonc\303\251*/\n"
 "    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
 "}"));
-        QIcon icon4(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
-        suppButton->setIcon(icon4);
+        QIcon icon5(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
+        suppButton->setIcon(icon5);
         Recherche = new QLabel(GestFourn);
         Recherche->setObjectName("Recherche");
-        Recherche->setGeometry(QRect(160, 450, 261, 31));
+        Recherche->setGeometry(QRect(250, 450, 261, 31));
         Recherche->setStyleSheet(QString::fromUtf8("#label22 { \n"
 "    font-size: 20px; /* Taille r\303\251duite du texte */\n"
 "    font-weight: bold; /* Texte en gras pour un effet titre */\n"
@@ -995,9 +974,174 @@ public:
 "    background-color: rgb(0, 100, 92); /* Vert sapin plus fonc\303\251*/\n"
 "    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
 "}"));
-        QIcon icon5(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
-        SaveMod->setIcon(icon5);
+        QIcon icon6(QIcon::fromTheme(QIcon::ThemeIcon::DocumentNew));
+        SaveMod->setIcon(icon6);
+        btnAfficherTout = new QPushButton(GestFourn);
+        btnAfficherTout->setObjectName("btnAfficherTout");
+        btnAfficherTout->setGeometry(QRect(150, 450, 51, 41));
+        btnAfficherTout->setStyleSheet(QString::fromUtf8("QPushButton#ModButton  {\n"
+"    color: white;\n"
+"	background-color: rgb(58, 123, 213);\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    border-radius: 18px; /* La moiti\303\251 de la taille pour un cercle */\n"
+"    border: none;\n"
+"    transition: all 0.3s ease-in-out;\n"
+"    text-align: center;\n"
+"}\n"
+"\n"
+"QPushButton#ModButton:hover {\n"
+"    background-color: rgb(3, 150, 138); /* Vert sapin plus clair au survol */\n"
+"    box-shadow: 0px 3px 8px rgba(1, 121, 111, 0.4);\n"
+"}\n"
+"\n"
+"QPushButton#ModButton :pressed {\n"
+"    background-color: rgb(0, 100, 92); /* Vert sapin plus fonc\303\251*/\n"
+"    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
+"}"));
+        QIcon icon7(QIcon::fromTheme(QIcon::ThemeIcon::DocumentRevert));
+        btnAfficherTout->setIcon(icon7);
+        btnTrierNom = new QPushButton(GestFourn);
+        btnTrierNom->setObjectName("btnTrierNom");
+        btnTrierNom->setGeometry(QRect(570, 30, 151, 41));
+        btnTrierNom->setStyleSheet(QString::fromUtf8("QPushButton#btnTrierNom {\n"
+"    background-color: #3A7BD5; \n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 20px; /* Uniformiser le padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px dashed #3A7BD5;\n"
+"    text-align: center; /* Alignement horizontal */\n"
+"    qproperty-alignment: 'AlignCenter'; /* Alignement Qt */\n"
+"}\n"
+"\n"
+"QPushButton#btnTrierNom:hover {\n"
+"    background-color: #A0C4FF; \n"
+"    border: 2px dashed #A0C4FF; \n"
+"    color: #F9F9F9; \n"
+"}\n"
+"\n"
+"QPushButton#btnTrierNom:pressed {\n"
+"    background-color: #C74C4C; \n"
+"    border: 2px dashed #5A9BD5;\n"
+"}"));
         stackedWidget->addWidget(GestFourn);
+        Recherche->raise();
+        pdfBtn->raise();
+        tableFourn->raise();
+        label_27->raise();
+        ModButton->raise();
+        listWidget_2->raise();
+        TypeService->raise();
+        ID->raise();
+        Email->raise();
+        NumTel->raise();
+        ADRESSE->raise();
+        Ajbtn->raise();
+        label_11->raise();
+        NomT->raise();
+        label_19->raise();
+        label_23->raise();
+        label_20->raise();
+        label_21->raise();
+        label_22->raise();
+        lineEditRech->raise();
+        rechBtn->raise();
+        suppButton->raise();
+        Nom->raise();
+        SaveMod->raise();
+        btnAfficherTout->raise();
+        btnTrierNom->raise();
+        Email_2 = new QWidget();
+        Email_2->setObjectName("Email_2");
+        listWidget_3 = new QListWidget(Email_2);
+        listWidget_3->setObjectName("listWidget_3");
+        listWidget_3->setGeometry(QRect(40, 40, 1191, 681));
+        listWidget_3->setStyleSheet(QString::fromUtf8("QListWidget {\n"
+"    border: 2px solid blue;    /* Bordure bleue */\n"
+"    border-radius: 10px;        /* Coins arrondis */\n"
+"    padding: 5px;               /* Un peu d'espace \303\240 l'int\303\251rieur */\n"
+"}\n"
+""));
+        label_28 = new QLabel(Email_2);
+        label_28->setObjectName("label_28");
+        label_28->setGeometry(QRect(520, 60, 161, 51));
+        label_28->setStyleSheet(QString::fromUtf8("#label_28 { \n"
+"    font-size: 25px; /* Taille r\303\251duite du texte */\n"
+"    font-weight: bold; /* Texte en gras pour un effet titre */\n"
+"    color: #2C3E50; /* Bleu fonc\303\251 pour une bonne lisibilit\303\251 */\n"
+"    background-color: transparent; /* Fond transparent */\n"
+"    padding: 4px 8px; /* Espacement pour l'a\303\251ration */\n"
+"    border: 1px solid #A0B9D9; /* L\303\251g\303\250re bordure bleu-gris pastel */\n"
+"    border-radius: 5px; /* Coins l\303\251g\303\250rement arrondis */\n"
+"    text-align: center; /* Centrage du texte */\n"
+"}\n"
+""));
+        lineEdit_2 = new QLineEdit(Email_2);
+        lineEdit_2->setObjectName("lineEdit_2");
+        lineEdit_2->setGeometry(QRect(180, 180, 731, 41));
+        lineEdit_2->setStyleSheet(QString::fromUtf8("#lineEdit_2 { \n"
+"    font-size: 25px; /* Taille r\303\251duite du texte */\n"
+"    font-weight: bold; /* Texte en gras pour un effet titre */\n"
+"    color: #2C3E50; /* Bleu fonc\303\251 pour une bonne lisibilit\303\251 */\n"
+"    background-color: transparent; /* Fond transparent */\n"
+"    padding: 4px 8px; /* Espacement pour l'a\303\251ration */\n"
+"    border: 1px solid #A0B9D9; /* L\303\251g\303\250re bordure bleu-gris pastel */\n"
+"    border-radius: 5px; /* Coins l\303\251g\303\250rement arrondis */\n"
+"    text-align: center; /* Centrage du texte */\n"
+"}"));
+        lineEdit_3 = new QLineEdit(Email_2);
+        lineEdit_3->setObjectName("lineEdit_3");
+        lineEdit_3->setGeometry(QRect(180, 255, 511, 41));
+        lineEdit_3->setStyleSheet(QString::fromUtf8("#lineEdit_3 { \n"
+"    font-size: 25px; /* Taille r\303\251duite du texte */\n"
+"    font-weight: bold; /* Texte en gras pour un effet titre */\n"
+"    color: #2C3E50; /* Bleu fonc\303\251 pour une bonne lisibilit\303\251 */\n"
+"    background-color: transparent; /* Fond transparent */\n"
+"    padding: 4px 8px; /* Espacement pour l'a\303\251ration */\n"
+"    border: 1px solid #A0B9D9; /* L\303\251g\303\250re bordure bleu-gris pastel */\n"
+"    border-radius: 5px; /* Coins l\303\251g\303\250rement arrondis */\n"
+"    text-align: center; /* Centrage du texte */\n"
+"}"));
+        textEdit = new QTextEdit(Email_2);
+        textEdit->setObjectName("textEdit");
+        textEdit->setGeometry(QRect(180, 330, 991, 281));
+        textEdit->setStyleSheet(QString::fromUtf8("#textEdit { \n"
+"    font-size: 25px; /* Taille r\303\251duite du texte */\n"
+"    font-weight: bold; /* Texte en gras pour un effet titre */\n"
+"    color: #2C3E50; /* Bleu fonc\303\251 pour une bonne lisibilit\303\251 */\n"
+"    background-color: transparent; /* Fond transparent */\n"
+"    padding: 4px 8px; /* Espacement pour l'a\303\251ration */\n"
+"    border: 1px solid #3A7BD5; /* L\303\251g\303\250re bordure bleu-gris pastel */\n"
+"    border-radius: 5px; /* Coins l\303\251g\303\250rement arrondis */\n"
+"    text-align: center; /* Centrage du texte */\n"
+"}"));
+        EnvBtn = new QPushButton(Email_2);
+        EnvBtn->setObjectName("EnvBtn");
+        EnvBtn->setGeometry(QRect(1030, 650, 141, 51));
+        EnvBtn->setStyleSheet(QString::fromUtf8("#EnvBtn { \n"
+"    background-color: #3A7BD5; /* Bleu plus profond et \303\251l\303\251gant */\n"
+"     border: 2px dashed #2E5FA2; /* Bordure bleu fonc\303\251 */\n"
+"    border-radius: 10px; /* Coins arrondis */\n"
+"    padding: 8px 16px; /* Espacement interne */\n"
+"    font-size: 14px; /* Taille du texte */\n"
+"    font-weight: bold; /* Texte en gras */\n"
+"    color: white; /* Texte blanc */\n"
+"}\n"
+"\n"
+"#Ajbtn:hover { \n"
+"    background-color: #5294E2; /* Bleu l\303\251g\303\250rement plus clair au survol */\n"
+"    border: 2px solid #3A7BD5;\n"
+"}\n"
+"\n"
+"#Ajbtn:pressed { \n"
+"    background-color: #A8D5BA; /* Vert pastel au clic */\n"
+"    border: 2px solid #86C79A; /* Bordure verte pastel */\n"
+"    color: #2C3E50; /* Texte bleu fonc\303\251 */\n"
+"}\n"
+""));
+        stackedWidget->addWidget(Email_2);
         AjSuperv = new QWidget();
         AjSuperv->setObjectName("AjSuperv");
         widget_6 = new QWidget(AjSuperv);
@@ -1026,7 +1170,7 @@ public:
 "    background-color: rgb(0, 100, 92); /* Vert sapin plus fonc\303\251*/\n"
 "    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);\n"
 "}"));
-        AffButton_4->setIcon(icon5);
+        AffButton_4->setIcon(icon6);
         stackedWidget->addWidget(AjSuperv);
         GestEquip = new QWidget();
         GestEquip->setObjectName("GestEquip");
@@ -1044,10 +1188,9 @@ public:
         stackedWidget->addWidget(GestSuperv);
         GestCand = new QWidget();
         GestCand->setObjectName("GestCand");
-        label_15 = new QLabel(GestCand);
-        label_15->setObjectName("label_15");
-        label_15->setGeometry(QRect(280, 50, 171, 31));
-        label_15->setStyleSheet(QString::fromUtf8("color: rgb(12, 12, 12);"));
+        chartContainerType = new QWidget(GestCand);
+        chartContainerType->setObjectName("chartContainerType");
+        chartContainerType->setGeometry(QRect(320, 210, 361, 191));
         stackedWidget->addWidget(GestCand);
         GestEtab = new QWidget();
         GestEtab->setObjectName("GestEtab");
@@ -1095,7 +1238,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(7);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1125,10 +1268,8 @@ public:
         paramBtn->setText(QString());
         label_17->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         label_13->setText(QCoreApplication::translate("MainWindow", "Gestion Des Examens", nullptr));
-        pdfSuperbtn->setText(QCoreApplication::translate("MainWindow", "G\303\251rer la liste", nullptr));
+        pdfBtn->setText(QCoreApplication::translate("MainWindow", "G\303\251rer la liste", nullptr));
         label_27->setText(QCoreApplication::translate("MainWindow", "Liste des Fournisseurs :", nullptr));
-        Tri->setText(QCoreApplication::translate("MainWindow", "Tri par TypeService :", nullptr));
-        TriLineEditTri->setText(QString());
         ModButton->setText(QString());
         TypeService->setText(QString());
         ID->setText(QString());
@@ -1145,13 +1286,16 @@ public:
         label_22->setText(QCoreApplication::translate("MainWindow", "Adresse :", nullptr));
         rechBtn->setText(QString());
         suppButton->setText(QString());
-        Recherche->setText(QCoreApplication::translate("MainWindow", "Recherche par ID/NOM :", nullptr));
+        Recherche->setText(QCoreApplication::translate("MainWindow", "Recherche par ID :", nullptr));
         Nom->setText(QString());
         SaveMod->setText(QString());
+        btnAfficherTout->setText(QString());
+        btnTrierNom->setText(QCoreApplication::translate("MainWindow", "Tri par Nom", nullptr));
+        label_28->setText(QCoreApplication::translate("MainWindow", "Email Form", nullptr));
+        EnvBtn->setText(QCoreApplication::translate("MainWindow", "Envoyer", nullptr));
         AffButton_4->setText(QString());
         label_14->setText(QCoreApplication::translate("MainWindow", "Gestion Des Equipements", nullptr));
         label_12->setText(QCoreApplication::translate("MainWindow", "Gestion des Fournisseurs", nullptr));
-        label_15->setText(QCoreApplication::translate("MainWindow", "Gestion des Superviseurs ", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "Gestion des Superviseurs", nullptr));
         homeBtn->setText(QString());
     } // retranslateUi
