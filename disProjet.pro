@@ -29,5 +29,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 QT+= sql
 
+QT += core gui widgets sql charts
+QT += core gui widgets printsupport
+QT += core gui network
+QT += network
+
+
+
+
+
 RESOURCES += \
     img.qrc

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "mainwindow.h"  // pour std::unique_ptr
 #include "./ui_mainwindow.h"
 #include <QMouseEvent>  // For detecting mouse events
 #include <QPushButton>
@@ -14,12 +14,36 @@
 #include <QTimer>
 #include <QString>
 //#include <QMouseEvent>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+#include <QVBoxLayout>
+#include <QFileDialog>
+#include <QPainter>
+#include <QPdfWriter>
+#include <QSqlQuery>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextTable>
+#include <QSqlRecord> // Ajoutez cette inclusion
+ //using namespace QtCharts;
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrlQuery>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow) ,
+    networkManager(new QNetworkAccessManager(this))
+
 {
     ui->setupUi(this);
+     // Pour éviter de préfixer avec QtCharts::
 
     //ui->tableView1->setModel(Etmp.afficher()); // Remplace tableWidget1 par tableView
     // Affichage direct du tableView1 au démarrage
@@ -31,54 +55,27 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit1->setPlaceholderText("Rechercher...");
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
-    ui->labelNotification1->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    //ui->labelNotification1->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    // Connexion du bouton de recherche
+    connect(ui->rechBtn_2, &QPushButton::clicked, this, &MainWindow::rechercherSuperviseur);
+   // connect(ui->TriButton, &QPushButton::clicked, this, &MainWindow::onTriButtonClicked);
+    connect(ui->TriButton, SIGNAL(clicked()), this, SLOT(onTriButtonClicked()));
+    connect(ui->ReMod, SIGNAL(clicked()), this, SLOT(resetTableView()));
+    // Connecter le bouton d'envoi avec le slot
 
-    /*ui->scrollArea->setVisible(false);
-     ui->scrollArea->raise();
-    // Toujours afficher la barre de scroll verticale
-    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-     ui->scrollAreaWidgetContents->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::handleChatCommand);
+    connect(ui->chatInput, &QLineEdit::returnPressed, this, &MainWindow::handleChatCommand);
 
+}
 
-    // Connexion du bouton pour afficher les notifications
-     connect(ui->notifBtn, &QPushButton::clicked, this, &MainWindow::showNotifications);*/
-    // Initialiser le modèle
-   }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete model;
-}
-// Charger les données existantes dans le tableView1
 
-//Start showNotif
-/*void MainWindow::showNotifications()
-{
-    // Affiche ou masque la fenêtre de notifications
-    if (ui->scrollArea->isVisible()) {
-        ui->scrollArea->hide();  // Masquer la fenêtre de notifications
-    } else {
-        ui->scrollArea->show();  // Afficher la fenêtre de notifications
-        ui->scrollArea->raise();  // S'assurer que la fenêtre est bien visible
 
-    }
 }
-// ✅ Fermer la fenêtre en cliquant en dehors
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-    if (ui->scrollArea->isVisible() &&!ui->scrollArea->geometry().contains(event->pos())) {
-        ui->scrollArea->hide();
-    }
-    QMainWindow::mousePressEvent(event);
-}
-void MainWindow::on_linkActivated(const QString &link)
-{
-    // Change the popup content based on the link clicked
-    LabelNotificationContent->setText("Détails de " + link);
-    popupNotification->show();
-}*/
-//end showNotif
 
 void MainWindow::on_examButton_clicked()
 {
@@ -152,10 +149,10 @@ void MainWindow::on_AjButton_clicked()
 }
 
 
-void MainWindow::on_ModButton_clicked()
+/*void MainWindow::on_ModButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
-}
+}*/
 
 void MainWindow::on_SuppButton_clicked()
 {
@@ -277,15 +274,18 @@ void MainWindow::on_Ajbtn_clicked()
     QString numTelStr = ui->TlfLineEdit->text().trimmed();
     QString email = ui->EmailLineEdit->text().trimmed();
 
+    // Récupère la zone depuis le ComboBox et pas depuis NomLineEdit
+    QString zone = ui->ZoneLineEdit->text().trimmed();
+
     // Vérification des champs obligatoires
     if (id.isEmpty() || cinStr.isEmpty() || statut.isEmpty() || poste.isEmpty() ||
-        prenom.isEmpty() || nom.isEmpty() || numTelStr.isEmpty() || email.isEmpty()) {
+        prenom.isEmpty() || nom.isEmpty() || numTelStr.isEmpty() || email.isEmpty() || zone.isEmpty()) {
         QMessageBox::warning(this, "Champs vides", "Tous les champs sont obligatoires !");
         return;
     }
 
     // Vérification que CIN et Numéro de téléphone sont des nombres de 8 chiffres
-    QRegularExpression regex("\\d{8}");
+    QRegularExpression regex("\\d{6}");
     if (!regex.match(cinStr).hasMatch()) {
         QMessageBox::warning(this, "Erreur de saisie", "Le CIN doit contenir exactement 8 chiffres !");
         return;
@@ -304,10 +304,10 @@ void MainWindow::on_Ajbtn_clicked()
 
     // Conversion après validation
     int cin = cinStr.toInt();
-    int numTel = numTelStr.toInt();
+
 
     // Création et ajout du superviseur
-    Superviseur S(id, cin, statut, poste, prenom, nom, numTel, email);
+    Superviseur S(id, cin, statut, poste, prenom, nom, numTelStr, email, zone);
     if (S.ajouter()) {
         QMessageBox::information(this, "Succès", "Superviseur ajouté avec succès !");
         ui->tableView1->setModel(S.afficher()); // Rafraîchir l'affichage
@@ -316,6 +316,7 @@ void MainWindow::on_Ajbtn_clicked()
         QMessageBox::critical(this, "Erreur", "Échec de l'ajout du superviseur.");
     }
 }
+
 
 //Fonction Supprimer
 
@@ -380,8 +381,9 @@ void MainWindow::on_Modbtn_clicked() {
     originalPoste = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 3)).toString();
     originalPrenom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 4)).toString();
     originalNom = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 5)).toString();
-    originalTel = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 6)).toInt();
+    originalTel = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 6)).toString();
     originalEmail = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 7)).toString();
+    originalZone = ui->tableView1->model()->data(ui->tableView1->model()->index(index.row(), 8)).toString();  // Récupérer la zone
 
     // Afficher les valeurs dans les champs du formulaire
     ui->CINLineEdit->setText(QString::number(originalCin));
@@ -389,8 +391,9 @@ void MainWindow::on_Modbtn_clicked() {
     ui->PostLineEdit->setText(originalPoste);
     ui->PrenLineEdit->setText(originalPrenom);
     ui->NomLineEdit->setText(originalNom);
-    ui->TlfLineEdit->setText(QString::number(originalTel));
+    ui->TlfLineEdit->setText(originalTel);
     ui->EmailLineEdit->setText(originalEmail);
+    ui->ZoneLineEdit->setText(originalZone);  // Afficher la zone dans le champ approprié
 
     modificationInProgress = true; // Définir le flag quand la modification commence
 }
@@ -401,39 +404,43 @@ void MainWindow::on_SaveMod_clicked() {
         return;
     }
 
-    //QString newId = currentId; // Utiliser l'ID du superviseur sélectionné
+    // Récupérer les nouvelles valeurs
     int newCin = ui->CINLineEdit->text().toInt();
     QString newStatut = ui->StatutlineEdit->text();
     QString newPoste = ui->PostLineEdit->text();
     QString newPrenom = ui->PrenLineEdit->text();
     QString newNom = ui->NomLineEdit->text();
-    int newNumTel = ui->TlfLineEdit->text().toInt();
+    QString newNumTel = ui->TlfLineEdit->text();
     QString newEmail = ui->EmailLineEdit->text();
-    //verifier si aucaun changment efectue
+    QString newZone = ui->ZoneLineEdit->text();  // Récupérer la nouvelle zone
+
+    // Vérifier si aucun changement n'a été effectué
     if (newCin == originalCin && newStatut == originalStatut &&
         newPoste == originalPoste && newPrenom == originalPrenom &&
         newNom == originalNom && newNumTel == originalTel &&
-        newEmail == originalEmail){
+        newEmail == originalEmail && newZone == originalZone) {
         QMessageBox::information(this, tr("Modification"), tr("Aucune modification apportée."));
         return;
     }
 
     // Vérification des champs vides
     if (newStatut.isEmpty() || newPoste.isEmpty() || newPrenom.isEmpty() ||
-        newNom.isEmpty() || newEmail.isEmpty()) {
+        newNom.isEmpty() || newEmail.isEmpty() || newZone.isEmpty()) {  // Vérifier si la zone est vide
         QMessageBox::warning(this, "Modification", "Tous les champs doivent être remplis.");
         return;
     }
 
     // Vérification de la validité du CIN et du numéro de téléphone
-    if (QString::number(newCin).length() != 8) {
-        QMessageBox::warning(this, "Erreur", "Le CIN doit contenir exactement 8 chiffres.");
+    if (QString::number(newCin).length() != 6) {
+        QMessageBox::warning(this, "Erreur", "Le CIN doit contenir exactement 6 chiffres.");
         return;
     }
-    if (QString::number(newNumTel).length() != 8) {
+    QRegularExpression re("^\\d{8}$"); // exactly 8 digits
+    if (!re.match(newNumTel).hasMatch()) {
         QMessageBox::warning(this, "Erreur", "Le numéro de téléphone doit contenir exactement 8 chiffres.");
         return;
     }
+
 
     // Vérification du format de l'email
     if (!newEmail.contains("@") || !newEmail.contains(".")) {
@@ -441,15 +448,457 @@ void MainWindow::on_SaveMod_clicked() {
         return;
     }
 
-    // Création de l'objet Superviseur avec les nouvelles valeurs
-    Superviseur s(currentId, newCin, newStatut, newPoste, newPrenom, newNom, newNumTel, newEmail );
+    // Création de l'objet Superviseur avec les nouvelles valeurs, y compris la zone
+    Superviseur s(currentId, newCin, newStatut, newPoste, newPrenom, newNom, newNumTel, newEmail, newZone);
 
     // Modifier l'entrée dans la base de données
     if (s.modifier(currentId)) {
         QMessageBox::information(this, "Modification", "Superviseur modifié avec succès !");
-        ui->tableView1->setModel(s.afficher());
+        ui->tableView1->setModel(s.afficher());  // Actualiser la table avec les nouvelles données
         modificationInProgress = false;
     } else {
         QMessageBox::critical(this, "Erreur", "La modification a échoué.");
     }
 }
+
+// Fonction pour rechercher un superviseur par ID
+void MainWindow::rechercherSuperviseur()
+{
+    QString idRecherche = ui->lineEdit1->text();  // L'ID entré par l'utilisateur
+
+    if (idRecherche.isEmpty()) {
+        // Si l'utilisateur n'a pas entré d'ID, afficher un avertissement
+        QMessageBox::warning(this, "Avertissement", "Veuillez entrer un ID !");
+        return;
+    }
+
+    // Appel à la méthode rechercherParID pour effectuer la recherche
+    QSqlQueryModel *model = S.rechercherParID(idRecherche);  // On passe un QString à la méthode
+
+    if (model && model->rowCount() > 0) {
+        // Si des résultats sont trouvés, les afficher dans tableView1
+        ui->tableView1->setModel(model);
+    } else {
+        // Sinon, afficher un message d'information
+        QMessageBox::information(this, "Résultat", "Aucun superviseur trouvé !");
+    }
+}
+
+// Slot pour trier les superviseurs par ordre alphabétique
+void MainWindow::onTriButtonClicked()
+{
+    QSqlQueryModel* model = S.trierNoms(); // Appel de la fonction de tri
+
+    if (model) {
+        ui->tableView1->setModel(model); // Mise à jour de l'affichage
+        qDebug() << "TableView mise à jour avec le tri par noms.";
+
+        // Vérifier le nombre de lignes retournées
+        qDebug() << "Nombre de superviseurs après tri :" << model->rowCount();
+
+        if (model->rowCount() == 0) {
+            qDebug() << "Aucun superviseur trouvé après tri.";
+        }
+    } else {
+        qDebug() << "Erreur : Impossible de mettre à jour TableView après tri.";
+    }
+}
+
+//Re
+void MainWindow::resetTableView()
+{
+    QSqlQueryModel* model = S.afficher(); // Récupérer les données originales
+
+    if (model) {
+        ui->tableView1->setModel(model); // Mettre à jour le tableau avec les données initiales
+        qDebug() << "TableView réinitialisé aux valeurs d'origine.";
+    } else {
+        qDebug() << "❌ Erreur : Impossible de réinitialiser TableView.";
+    }
+}
+//stat
+void MainWindow::showStatistiques() {
+    qDebug() << ":bar_chart: Updating Equipment Type Statistics...";
+
+    if (!ui->chartContainerType) {
+        qDebug() << ":x: ERROR: chartContainerType is NULL!";
+        return;
+    }
+
+    // Clear existing layout content
+    if (ui->chartContainerType->layout()) {
+        QLayout *layout = ui->chartContainerType->layout();
+        while (QLayoutItem *item = layout->takeAt(0)) {
+            if (QWidget *widget = item->widget()) {
+                widget->deleteLater();
+            }
+            delete item;
+        }
+    } else {
+        ui->chartContainerType->setLayout(new QVBoxLayout());
+    }
+
+    // :bar_chart: Pie Chart (Type Distribution)
+    QPieSeries *pieSeries = new QPieSeries();
+    QMap<QString, int> statsType = S.getStatistiquesParZone();
+
+    int total = 0;
+    for (auto it = statsType.begin(); it != statsType.end(); ++it) {
+        total += it.value();  // Calculate total count of all equipment
+    }
+
+    if (statsType.isEmpty()) {
+        qDebug() << ":warning: WARNING: No data found for equipment types!";
+    } else {
+        for (auto it = statsType.begin(); it != statsType.end(); ++it) {
+            double percentage = (total > 0) ? (it.value() * 100.0 / total) : 0;  // Calculate percentage
+
+            QPieSlice *slice = pieSeries->append(it.key(), it.value());
+
+            // Set label format to show percentage
+            slice->setLabel(QString("%1: %2%").arg(it.key()).arg(percentage, 0, 'f', 1));
+
+            slice->setLabelVisible(true);  // Ensure label is visible
+
+            // Add hover effect
+            connect(slice, &QPieSlice::hovered, [slice](bool hovered) {
+                slice->setExploded(hovered);
+                slice->setLabelFont(QFont("Arial", hovered ? 12 : 10, hovered ? QFont::Bold : QFont::Normal));
+            });
+        }
+    }
+
+    QChart *pieChart = new QChart();
+    pieChart->addSeries(pieSeries);
+    //pieChart->setTitle("Répartition des équipements par type");
+
+    // Set Background Color :art:
+    //pieChart->setBackgroundBrush(QBrush(QColor(234, 251, 255)));
+
+    QChartView *chartView = new QChartView(pieChart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    ui->chartContainerType->layout()->addWidget(chartView);
+
+    qDebug() << ":white_check_mark: Type Statistics Updated Successfully!";
+}
+
+
+void MainWindow::on_ModButton_clicked()
+{
+    showStatistiques();
+
+    qDebug() << "Statistics loaded successfully!";
+    ui->stackedWidget->setCurrentIndex(4);
+}
+//pdf
+void MainWindow::on_pdfSuperbtn_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer PDF", "", "*.pdf");
+    if (fileName.isEmpty())
+        return;
+
+    QPdfWriter pdfWriter(fileName);
+    pdfWriter.setPageSize(QPageSize::A4);
+    pdfWriter.setResolution(300);
+    QPainter painter(&pdfWriter);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    int margin = 50;
+    int startX = margin;
+    int startY = 120;
+    int rowHeight = 40;
+    int headerRowHeight = 60;  // Plus d’espace pour les en-têtes
+
+    // 🔵 TITRE
+    painter.setFont(QFont("Arial", 18, QFont::Bold));
+    painter.drawText(startX, startY - 50, "Liste des Superviseurs");
+
+    // 🔵 EN-TÊTES À AFFICHER
+    QStringList headers = {"ID", "CIN", "Email", "NumTel", "Zone"};
+    QVector<int> columnWidths(headers.size(), 100);
+    QSqlQuery query;
+
+    // Requête avec les colonnes ciblées
+    QString queryStr = "SELECT ID_SUPERVISEUR, CIN_SUPERVISEUR, EMAIL_SUPERVISEUR, NUMTEL_SUPERVISEUR, ZONE_SUPERVISEUR FROM superviseurs";
+
+    if (query.exec(queryStr)) {
+        while (query.next()) {
+            for (int col = 0; col < headers.size(); ++col) {
+                QString data = query.value(col).toString();
+                int cellWidth = painter.fontMetrics().horizontalAdvance(data) + 20;
+                columnWidths[col] = qMax(columnWidths[col], cellWidth);
+            }
+        }
+    } else {
+        qDebug() << "Erreur requête:" << query.lastError().text();
+        return;
+    }
+
+    // Calculer les positions X cumulées
+    QVector<int> columnPositions(headers.size());
+    columnPositions[0] = startX;
+    for (int i = 1; i < headers.size(); ++i) {
+        columnPositions[i] = columnPositions[i - 1] + columnWidths[i - 1];
+    }
+
+    // 🟢 DESSINER LES EN-TÊTES
+    painter.setFont(QFont("Arial", 12, QFont::Bold));
+    QColor headerColor(0, 102, 204);
+    painter.setBrush(headerColor);
+    painter.setPen(Qt::white);
+
+    for (int col = 0; col < headers.size(); ++col) {
+        int x = columnPositions[col];
+        int w = columnWidths[col];
+        painter.drawRect(x, startY, w, headerRowHeight);
+
+        // Centrer le texte verticalement avec un décalage vers le bas
+        int textWidth = painter.fontMetrics().horizontalAdvance(headers[col]);
+        int textHeight = painter.fontMetrics().height();
+        int textY = startY + (headerRowHeight + textHeight) / 2 - 10;
+
+        painter.drawText(x + (w - textWidth) / 2, textY, headers[col]);
+    }
+
+    startY += headerRowHeight;
+
+    // 🟢 DESSINER LES DONNÉES
+    painter.setFont(QFont("Arial", 10));
+    if (!query.exec(queryStr)) {
+        qDebug() << "Erreur requête:" << query.lastError().text();
+        return;
+    }
+
+    int rowNum = 0;
+    while (query.next()) {
+        QColor rowColor = (rowNum % 2 == 0) ? QColor(240, 240, 240) : QColor(255, 255, 255);
+        painter.setBrush(rowColor);
+        painter.setPen(Qt::black);
+
+        for (int col = 0; col < headers.size(); ++col) {
+            QString data = query.value(col).toString();
+            int x = columnPositions[col];
+            int w = columnWidths[col];
+            int y = startY;
+
+            painter.drawRect(x, y, w, rowHeight);
+
+            int textWidth = painter.fontMetrics().horizontalAdvance(data);
+            int textHeight = painter.fontMetrics().height();
+            painter.drawText(x + (w - textWidth) / 2, y + (rowHeight + textHeight) / 2 - 4, data);
+        }
+
+        startY += rowHeight;
+        rowNum++;
+
+        // 🔴 Saut de page
+        if (startY > pdfWriter.height() - margin) {
+            pdfWriter.newPage();
+            startY = 100;
+        }
+    }
+
+    painter.end();
+}
+
+//sms
+void MainWindow::envoyerRappelExamenSuperviseur() {
+    QSqlQuery query;
+    query.prepare("SELECT s.numtel_superviseur, e.date_examen, e.duree_examen, et.nom_etablissement "
+                  "FROM EXAMENS e, ETABLISSEMENTS et, SUPERVISEURS s, AFFECTER a, SUPERVISE sp "
+                  "WHERE e.id_examen = sp.id_examen AND s.id_superviseur = sp.id_superviseur "
+                  "AND s.id_superviseur = a.id_superviseur AND et.ID_ETABLISSEMENT = a.ID_ETABLISSEMENT");
+
+    if (!query.exec()) {
+        QMessageBox::warning(this, "Erreur", "Échec de récupération des examens : " + query.lastError().text());
+        return;
+    }
+
+    QString accountSID = "ACee5ebb535e9033421f9370e128932b60";
+    QString authToken = "7dc4cd519b4021756e199c08ade5ec88";
+    QString twilioNumber = "+12202153672";
+
+    while (query.next()) {
+        QString phoneNumber = query.value(0).toString().trimmed();
+        QString dateExamen = query.value(1).toDate().toString("dd/MM/yyyy");
+        QString dureeExamen = query.value(2).toString();
+        QString nomEtablissement = query.value(3).toString();
+
+        if (phoneNumber.length() != 8) {
+            qDebug() << "Numéro de téléphone invalide : " << phoneNumber;
+            continue;
+        }
+
+        QString message = "Rappel : Vous avez un examen le " + dateExamen +
+                          " à l’établissement " + nomEtablissement + ". Durée : " + dureeExamen + "h.";
+
+        QNetworkRequest request(QUrl("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json"));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+        QUrlQuery params;
+        params.addQueryItem("To", "+216" + phoneNumber);
+        params.addQueryItem("From", twilioNumber);
+        params.addQueryItem("Body", message);
+
+        QByteArray postData = params.query().toUtf8();
+        request.setRawHeader("Authorization", "Basic " +
+                                                  QByteArray(QString(accountSID + ":" + authToken).toUtf8()).toBase64());
+
+        QNetworkReply *reply = networkManager->post(request, postData);
+
+        connect(reply, &QNetworkReply::finished, this, [reply]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                qDebug() << "SMS envoyé avec succès !" << reply->readAll();
+            } else {
+                qDebug() << "Erreur d'envoi du SMS :" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+    }
+}
+
+
+
+void MainWindow::on_btnEnvoyerSMS_clicked() {
+    envoyerRappelExamenSuperviseur();
+}
+
+
+// Implémentation du slot on_sendChat_clicked()
+
+void MainWindow::handleChatCommand() {
+    QString command = ui->chatInput->text().trimmed();
+    addToChat(command, true);
+    ui->chatInput->clear();
+
+    QStringList parts = command.split(" ", Qt::SkipEmptyParts);
+    if (parts.isEmpty()) return;
+
+    QString action = parts[0].toLower();
+
+    if (action == "ajouter" || action == "add") {
+        processAddCommand(parts);
+    }
+    else if (action == "supprimer" || action == "delete") {
+        processDeleteCommand(parts);
+    }
+    else if (action == "modifier" || action == "update") {
+        processUpdateCommand(parts);
+    }
+    else if (action == "aide" || action == "help") {
+        showHelp();
+    }
+    else {
+        addToChat("Commande non reconnue. Tapez 'aide' pour voir les commandes disponibles.");
+    }
+}
+
+void MainWindow::processAddCommand(const QStringList &parts) {
+    if (parts.size() < 10) {
+        addToChat("Format incorrect. Usage: ajouter [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]");
+        return;
+    }
+
+    // Validation des données
+    QString id = parts[1];
+    QString cinStr = parts[2];
+    QString statut = parts[3];
+    QString poste = parts[4];
+    QString prenom = parts[5];
+    QString nom = parts[6];
+    QString numTelStr = parts[7];
+    QString email = parts[8];
+    QString zone = parts[9];
+
+    // Affichage de débogage pour vérifier les valeurs avant l'ajout
+    qDebug() << "Données à ajouter :"
+             << "\nID: " << id
+             << "\nCIN: " << cinStr
+             << "\nStatut: " << statut
+             << "\nPoste: " << poste
+             << "\nPrénom: " << prenom
+             << "\nNom: " << nom
+             << "\nTéléphone: " << numTelStr
+             << "\nEmail: " << email
+             << "\nZone: " << zone;
+
+    // Validation des champs CIN et Numéro de téléphone
+    QRegularExpression regex("\\d{6}");
+    if (!regex.match(cinStr).hasMatch() || !regex.match(numTelStr).hasMatch()) {
+        addToChat("Erreur: Le CIN et le téléphone doivent contenir 6 chiffres.");
+        return;
+    }
+
+    // Validation de l'email
+    QRegularExpression emailRegex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+    if (!emailRegex.match(email).hasMatch()) {
+        addToChat("Erreur: Email invalide.");
+        return;
+    }
+
+    // Convertir CIN et numéro de téléphone en entier
+    int cin = cinStr.toInt();
+    // Instanciation de l'objet Superviseur
+    Superviseur S(id, cin, statut, poste, prenom, nom, numTelStr, email, zone);
+
+    // Tentative d'ajout
+    if (S.ajouter()) {
+        addToChat("Superviseur ajouté avec succès !");
+        refreshTableView();
+    } else {
+        addToChat("Échec de l'ajout du superviseur.");
+    }
+}
+void MainWindow::processDeleteCommand(const QStringList &parts) {
+    if (parts.size() < 2) {
+        addToChat("Format incorrect. Usage: supprimer [ID]");
+        return;
+    }
+
+    QString id = parts[1];
+    if (S.supprimer(id)) {
+        addToChat("Superviseur supprimé avec succès !");
+        refreshTableView();
+    } else {
+        addToChat("Échec de la suppression. Vérifiez l'ID.");
+    }
+}
+
+void MainWindow::processUpdateCommand(const QStringList &parts) {
+    if (parts.size() < 10) {
+        addToChat("Format incorrect. Usage: modifier [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]");
+        return;
+    }
+
+    QString id = parts[1];
+    // ... (validation similaire à processAddCommand)
+
+    // Créer l'objet Superviseur et appeler modifier()
+    if (S.modifier(id)) {
+        addToChat("Superviseur modifié avec succès !");
+        refreshTableView();
+    } else {
+        addToChat("Échec de la modification.");
+    }
+}
+
+void MainWindow::showHelp() {
+    QString helpText = "Commandes disponibles:\n"
+                       "- ajouter [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]\n"
+                       "- supprimer [ID]\n"
+                       "- modifier [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]\n"
+                       "- aide : Affiche ce message";
+    addToChat(helpText);
+}
+
+void MainWindow::refreshTableView() {
+    ui->tableView1->setModel(S.afficher());
+    actualiserTableView();
+}
+
+void MainWindow::addToChat(const QString &message, bool isUser) {
+    QString formatted = isUser ? "Vous: " + message : "Bot: " + message;
+    ui->chatDisplay->append(formatted);
+}
+

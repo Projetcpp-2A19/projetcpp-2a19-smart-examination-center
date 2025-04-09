@@ -550,7 +550,7 @@ QPushButton#EvalAssist :pressed {
          <x>10</x>
          <y>70</y>
          <width>691</width>
-         <height>351</height>
+         <height>281</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -627,8 +627,8 @@ QPushButton#EvalAssist :pressed {
       <widget class="QWidget" name="widget_9" native="true">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>500</y>
+         <x>0</x>
+         <y>430</y>
          <width>311</width>
          <height>171</height>
         </rect>
@@ -787,8 +787,8 @@ QPushButton#pdfSuperbtn:pressed {
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>480</y>
+         <x>10</x>
+         <y>410</y>
          <width>161</width>
          <height>31</height>
         </rect>
@@ -804,78 +804,11 @@ QPushButton#pdfSuperbtn:pressed {
         <string>Fonctionalités</string>
        </property>
       </widget>
-      <widget class="QWidget" name="widget_3" native="true">
-       <property name="geometry">
-        <rect>
-         <x>740</x>
-         <y>30</y>
-         <width>341</width>
-         <height>61</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="Trilabel4">
-        <property name="geometry">
-         <rect>
-          <x>-10</x>
-          <y>10</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#Trilabel4 { 
-    font-size: 20px; /* Taille réduite du texte */
-    font-weight: bold; /* Texte en gras pour un effet titre */
-    color: #2C3E50; /* Bleu foncé pour une bonne lisibilité */
-    background-color: transparent; /* Fond transparent */
-    padding: 4px 8px; /* Espacement pour l'aération */
-  
-    border-radius: 5px; /* Coins légèrement arrondis */
-    text-align: center; /* Centrage du texte */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Tri par nom :</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="TriLineEdit4">
-        <property name="geometry">
-         <rect>
-          <x>130</x>
-          <y>10</y>
-          <width>211</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#TriLineEdit4 { 
-    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
-    border: 2px solid rgb(1, 121, 111); /* Bordure rouge brique pastel */
-
-    border-radius: 20px; /* Coins arrondis */
-    padding: 8px 12px; /* Espacement interne */
-    font-size: 16px; /* Taille de police agréable */
-    color: #2C3E50; /* Bleu foncé pour le texte */
-    selection-background-color: #B85042; /* Couleur de sélection */
-}
-
-#TriLineEdit4:focus { 
-    border: 2px solid rgb(1, 121, 111); /* Rouge brique légèrement plus clair au focus */
-    background-color: #F8E8E6; /* Légère variation pour effet moderne */
-}
-</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </widget>
       <widget class="QPushButton" name="BinSuperbtn">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>430</y>
+         <x>20</x>
+         <y>360</y>
          <width>51</width>
          <height>41</height>
         </rect>
@@ -930,8 +863,8 @@ QPushButton#BinSuperbtn:pressed {
       <widget class="QPushButton" name="Modbtn">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>430</y>
+         <x>80</x>
+         <y>360</y>
          <width>51</width>
          <height>41</height>
         </rect>
@@ -1009,7 +942,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="IDLineEdit">
         <property name="geometry">
          <rect>
-          <x>90</x>
+          <x>30</x>
           <y>170</y>
           <width>121</width>
           <height>41</height>
@@ -1040,7 +973,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_18">
         <property name="geometry">
          <rect>
-          <x>100</x>
+          <x>40</x>
           <y>60</y>
           <width>63</width>
           <height>20</height>
@@ -1056,7 +989,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="PostLineEdit">
         <property name="geometry">
          <rect>
-          <x>100</x>
+          <x>30</x>
           <y>340</y>
           <width>111</width>
           <height>41</height>
@@ -1087,7 +1020,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_21">
         <property name="geometry">
          <rect>
-          <x>90</x>
+          <x>40</x>
           <y>220</y>
           <width>63</width>
           <height>20</height>
@@ -1103,7 +1036,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_20">
         <property name="geometry">
          <rect>
-          <x>100</x>
+          <x>40</x>
           <y>140</y>
           <width>63</width>
           <height>20</height>
@@ -1119,7 +1052,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="CINLineEdit">
         <property name="geometry">
          <rect>
-          <x>230</x>
+          <x>190</x>
           <y>170</y>
           <width>131</width>
           <height>41</height>
@@ -1150,7 +1083,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_19">
         <property name="geometry">
          <rect>
-          <x>250</x>
+          <x>220</x>
           <y>60</y>
           <width>63</width>
           <height>20</height>
@@ -1166,8 +1099,8 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="NomLineEdit">
         <property name="geometry">
          <rect>
-          <x>90</x>
-          <y>80</y>
+          <x>30</x>
+          <y>90</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -1197,7 +1130,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_22">
         <property name="geometry">
          <rect>
-          <x>230</x>
+          <x>190</x>
           <y>230</y>
           <width>111</width>
           <height>20</height>
@@ -1213,7 +1146,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_23">
         <property name="geometry">
          <rect>
-          <x>250</x>
+          <x>210</x>
           <y>140</y>
           <width>63</width>
           <height>20</height>
@@ -1229,8 +1162,8 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="PrenLineEdit">
         <property name="geometry">
          <rect>
-          <x>240</x>
-          <y>80</y>
+          <x>200</x>
+          <y>90</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -1260,7 +1193,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_24">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>40</x>
           <y>310</y>
           <width>63</width>
           <height>20</height>
@@ -1276,7 +1209,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="EmailLineEdit">
         <property name="geometry">
          <rect>
-          <x>80</x>
+          <x>30</x>
           <y>260</y>
           <width>121</width>
           <height>41</height>
@@ -1307,7 +1240,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_25">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>200</x>
           <y>310</y>
           <width>63</width>
           <height>20</height>
@@ -1323,7 +1256,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="TlfLineEdit">
         <property name="geometry">
          <rect>
-          <x>220</x>
+          <x>180</x>
           <y>260</y>
           <width>141</width>
           <height>41</height>
@@ -1354,7 +1287,7 @@ QPushButton#Modbtn:pressed {
        <widget class="QLineEdit" name="ZoneLineEdit">
         <property name="geometry">
          <rect>
-          <x>220</x>
+          <x>180</x>
           <y>340</y>
           <width>131</width>
           <height>41</height>
@@ -1382,54 +1315,10 @@ QPushButton#Modbtn:pressed {
          <string/>
         </property>
        </widget>
-       <widget class="QPushButton" name="PhotoSuper">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>420</y>
-          <width>181</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton#PhotoSuper {
-    background-color: #FFFFFF; /* Fond blanc */
-    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
-    border-radius: 20px; /* Coins arrondis */
-    padding: 8px 12px; /* Espacement interne */
-    font-size: 16px; /* Taille de police */
-    color: #2C3E50; /* Couleur du texte */
-    selection-background-color: #A0B9D9; /* Couleur de sélection */
-    qproperty-icon: url(:/new/prefix1/img/profil.png); /* Définit l'icône */
-    qproperty-iconSize: 32px 32px; /* Taille de l'icône */
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Animation fluide */
-}
-
-/* Effet au survol */
-QPushButton#PhotoSuper:hover {
-    background-color: #E3ECF8; /* Bleu très clair */
-    border-color: #6C91C2; /* Bleu un peu plus foncé */
-}
-
-/* Effet lors du clic */
-QPushButton#PhotoSuper:pressed {
-    background-color: #A0B9D9; /* Bleu-gris pastel */
-    border-color: #2C3E50; /* Bleu foncé */
-    color: #FFFFFF; /* Texte blanc pour contraste */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Insérer une photo</string>
-        </property>
-       </widget>
        <widget class="QLineEdit" name="StatutlineEdit">
         <property name="geometry">
          <rect>
-          <x>90</x>
+          <x>130</x>
           <y>420</y>
           <width>131</width>
           <height>41</height>
@@ -1457,8 +1346,8 @@ QPushButton#PhotoSuper:pressed {
        <widget class="QPushButton" name="SaveMod">
         <property name="geometry">
          <rect>
-          <x>110</x>
-          <y>500</y>
+          <x>90</x>
+          <y>490</y>
           <width>51</width>
           <height>41</height>
          </rect>
@@ -1501,7 +1390,7 @@ QPushButton#SaveMod:pressed {
        <widget class="QLabel" name="label_26">
         <property name="geometry">
          <rect>
-          <x>110</x>
+          <x>140</x>
           <y>390</y>
           <width>63</width>
           <height>20</height>
@@ -1517,9 +1406,9 @@ QPushButton#SaveMod:pressed {
        <widget class="QListWidget" name="listWidget_2">
         <property name="geometry">
          <rect>
-          <x>0</x>
+          <x>20</x>
           <y>0</y>
-          <width>361</width>
+          <width>341</width>
           <height>551</height>
          </rect>
         </property>
@@ -1551,7 +1440,6 @@ QPushButton#SaveMod:pressed {
        <zorder>label_25</zorder>
        <zorder>TlfLineEdit</zorder>
        <zorder>ZoneLineEdit</zorder>
-       <zorder>PhotoSuper</zorder>
        <zorder>StatutlineEdit</zorder>
        <zorder>SaveMod</zorder>
        <zorder>label_26</zorder>
@@ -1560,7 +1448,7 @@ QPushButton#SaveMod:pressed {
        <property name="geometry">
         <rect>
          <x>940</x>
-         <y>620</y>
+         <y>600</y>
          <width>121</width>
          <height>41</height>
         </rect>
@@ -1597,7 +1485,215 @@ QPushButton#Ajbtn:pressed {
         <string>Ajouter</string>
        </property>
       </widget>
-      <zorder>widget_3</zorder>
+      <widget class="QWidget" name="widget_8" native="true">
+       <property name="geometry">
+        <rect>
+         <x>760</x>
+         <y>30</y>
+         <width>211</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <widget class="QPushButton" name="TriButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>121</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#TriButton { 
+    background-color: #FFFFFF; /* Fond blanc pour un bon contraste */
+    border: 2px solid rgb(1, 121, 111); /* Bordure verte foncée */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 10px 15px; /* Espacement interne ajusté */
+    font-size: 16px; /* Taille de police */
+    font-weight: bold; /* Texte en gras pour une meilleure lisibilité */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    cursor: pointer; /* Curseur en main pour montrer l'interactivité */
+    transition: all 0.3s ease-in-out; /* Animation fluide des effets */
+}
+
+#TriButton:hover { 
+    background-color: rgb(1, 121, 111); /* Fond vert au survol */
+    color: #FFFFFF; /* Texte blanc pour un bon contraste */
+}
+
+#TriButton:focus, #TriButton:active { 
+    border: 2px solid rgb(1, 121, 111); /* Bordure renforcée */
+    background-color: #E8F6F3; /* Léger vert pastel au focus */
+    outline: none; /* Supprime le contour bleu par défaut */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Tri par nom</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="ReMod">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>8</y>
+          <width>51</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#ReMod { 
+    background-color: #FFFFFF; /* Fond blanc pour un bon contraste */
+    border: 2px solid rgb(1, 121, 111); /* Bordure verte foncée */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 10px 15px; /* Espacement interne ajusté */
+    font-size: 16px; /* Taille de police */
+    font-weight: bold; /* Texte en gras pour une meilleure lisibilité */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    cursor: pointer; /* Curseur en main pour montrer l'interactivité */
+    transition: all 0.3s ease-in-out; /* Animation fluide des effets */
+}
+
+#ReMod:hover { 
+    background-color: rgb(1, 121, 111); /* Fond vert au survol */
+    color: #FFFFFF; /* Texte blanc pour un bon contraste */
+}
+
+#ReMod:focus, #ReMod:active { 
+    border: 2px solid rgb(1, 121, 111); /* Bordure renforcée */
+    background-color: #E8F6F3; /* Léger vert pastel au focus */
+    outline: none; /* Supprime le contour bleu par défaut */
+}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::DocumentRevert"/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="widget_7" native="true">
+       <property name="geometry">
+        <rect>
+         <x>310</x>
+         <y>370</y>
+         <width>391</width>
+         <height>291</height>
+        </rect>
+       </property>
+       <widget class="QLineEdit" name="chatInput">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>240</y>
+          <width>341</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#chatInput {
+    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #A0B9D9; /* Couleur de sélection */
+}
+
+#chatInput:focus {
+    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
+    background-color: #F0F4F8; /* Légère variation pour effet moderne */
+}
+
+</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="sendButton">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>250</y>
+          <width>36</width>
+          <height>36</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton#sendButton {
+    color: rgb(8, 8, 8);
+    background-color: rgb(1, 121, 111); /* Vert sapin */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 36px; /* Largeur minimale */
+    min-height: 36px; /* Hauteur minimale */
+    max-width: 36px; /* Largeur maximale */
+    max-height: 36px; /* Hauteur maximale */
+    border-radius: 18px; /* La moitié de la taille pour un cercle */
+    border: none;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+}
+
+QPushButton#sendButton:hover {
+    background-color: rgb(3, 150, 138); /* Vert sapin plus clair au survol */
+    box-shadow: 0px 3px 8px rgba(1, 121, 111, 0.4);
+}
+
+QPushButton#sendButton:pressed {
+    background-color: rgb(0, 100, 92); /* Vert sapin plus foncé au clic */
+    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);
+}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>15</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="chatDisplay">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>361</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#chatDisplay {
+   
+background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #A0B9D9; /* Couleur de sélection */
+}
+
+#chatDisplay:focus {
+    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
+    background-color: #F0F4F8; /* Légère variation pour effet moderne */
+}
+
+</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
       <zorder>widget</zorder>
       <zorder>tableView1</zorder>
       <zorder>label_27</zorder>
@@ -1606,6 +1702,8 @@ QPushButton#Ajbtn:pressed {
       <zorder>BinSuperbtn</zorder>
       <zorder>Modbtn</zorder>
       <zorder>Ajbtn</zorder>
+      <zorder>widget_8</zorder>
+      <zorder>widget_7</zorder>
      </widget>
      <widget class="QWidget" name="notifSup">
       <widget class="QLabel" name="label_31">
@@ -1636,17 +1734,17 @@ QPushButton#Ajbtn:pressed {
       <widget class="QWidget" name="widget_2" native="true">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>290</x>
          <y>100</y>
          <width>471</width>
          <height>511</height>
         </rect>
        </property>
-       <widget class="QPushButton" name="smsEnv">
+       <widget class="QPushButton" name="btnEnvoyerSMS">
         <property name="geometry">
          <rect>
-          <x>320</x>
-          <y>440</y>
+          <x>310</x>
+          <y>360</y>
           <width>121</width>
           <height>41</height>
          </rect>
@@ -1655,7 +1753,7 @@ QPushButton#Ajbtn:pressed {
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton#smsEnv {
+         <string notr="true">QPushButton#btnEnvoyerSMS {
     background-color: #28A745; /* Vert standard pour l'envoi */
     color: white;
     font-size: 16px;
@@ -1667,13 +1765,13 @@ QPushButton#Ajbtn:pressed {
     qproperty-alignment: 'AlignCenter'; /* Alignement Qt */
 }
 
-QPushButton#smsEnv:hover {
+QPushButton#btnEnvoyerSMS:hover {
     background-color: #218838; /* Vert plus foncé au survol */
     border: 2px dashed #1E7E34; /* Bordure encore plus foncée */
     color: #F9F9F9; 
 }
 
-QPushButton#smsEnv:pressed {
+QPushButton#btnEnvoyerSMS:pressed {
     background-color: #1E7E34; /* Vert encore plus foncé quand pressé */
     border: 2px dashed #155724; /* Bordure assombrie */
 }
@@ -1796,139 +1894,21 @@ QPushButton#smsEnv:pressed {
         </property>
        </widget>
       </widget>
-      <widget class="QLabel" name="histo">
-       <property name="geometry">
-        <rect>
-         <x>720</x>
-         <y>80</y>
-         <width>161</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"> font-size: 20px; /* Taille réduite du texte */
-    font-weight: bold; /* Texte en gras pour un effet titre */
-    color: #2C3E50; /* Bleu foncé pour une bonne lisibilité */
-    
-    padding: 4px 8px; /* Espacement pour l'aération */</string>
-       </property>
-       <property name="text">
-        <string>Historiques :</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="Historique" native="true">
-       <property name="geometry">
-        <rect>
-         <x>680</x>
-         <y>100</y>
-         <width>351</width>
-         <height>501</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">#Historique {
-    border: 2px dashed #3498db; /* Bordure en pointillés bleue */
-    border-radius: 10px; /* Coins arrondis */
-    background-color: #f8f9fa; /* Couleur de fond légère */
-}
-</string>
-       </property>
-       <widget class="QWidget" name="gridLayoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>30</y>
-          <width>271</width>
-          <height>421</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="HistoConenu">
-         <item row="10" column="0">
-          <widget class="QLabel" name="label_46">
-           <property name="text">
-            <string>notif4</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="testnotf">
-           <property name="text">
-            <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_42">
-           <property name="text">
-            <string>notif2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_41">
-           <property name="text">
-            <string>notif3</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_40">
-           <property name="text">
-            <string>notif3</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_47">
-           <property name="text">
-            <string>notif2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_43">
-           <property name="text">
-            <string>notif2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_39">
-           <property name="text">
-            <string>notif3</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_44">
-           <property name="text">
-            <string>notif2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_45">
-           <property name="text">
-            <string>notif2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelNotification1">
-           <property name="text">
-            <string>notif1</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
       <zorder>widget_2</zorder>
       <zorder>label_31</zorder>
-      <zorder>Historique</zorder>
-      <zorder>histo</zorder>
      </widget>
-     <widget class="QWidget" name="ModSuperv"/>
+     <widget class="QWidget" name="ModSuperv">
+      <widget class="QWidget" name="chartContainerType" native="true">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>30</y>
+         <width>1021</width>
+         <height>621</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
      <widget class="QWidget" name="chatBot">
       <widget class="QLabel" name="chatbotTitre">
        <property name="geometry">
@@ -2031,123 +2011,6 @@ QPushButton#smsEnv:pressed {
 📌Affectation des superviseurs.</string>
          </property>
         </widget>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="widget_7" native="true">
-       <property name="geometry">
-        <rect>
-         <x>550</x>
-         <y>30</y>
-         <width>501</width>
-         <height>561</height>
-        </rect>
-       </property>
-       <widget class="QLineEdit" name="chatUser">
-        <property name="geometry">
-         <rect>
-          <x>62</x>
-          <y>477</y>
-          <width>371</width>
-          <height>61</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#chatUser {
-    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
-    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
-    border-radius: 20px; /* Coins arrondis */
-    padding: 8px 12px; /* Espacement interne */
-    font-size: 16px; /* Taille de police agréable */
-    color: #2C3E50; /* Bleu foncé pour le texte */
-    selection-background-color: #A0B9D9; /* Couleur de sélection */
-}
-
-#chatUser:focus {
-    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
-    background-color: #F0F4F8; /* Légère variation pour effet moderne */
-}
-
-</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="sendChat">
-        <property name="geometry">
-         <rect>
-          <x>440</x>
-          <y>490</y>
-          <width>36</width>
-          <height>36</height>
-         </rect>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton#sendChat {
-    color: rgb(8, 8, 8);
-    background-color: rgb(1, 121, 111); /* Vert sapin */
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    min-width: 36px; /* Largeur minimale */
-    min-height: 36px; /* Hauteur minimale */
-    max-width: 36px; /* Largeur maximale */
-    max-height: 36px; /* Hauteur maximale */
-    border-radius: 18px; /* La moitié de la taille pour un cercle */
-    border: none;
-    transition: all 0.3s ease-in-out;
-    text-align: center;
-}
-
-QPushButton#sendChat:hover {
-    background-color: rgb(3, 150, 138); /* Vert sapin plus clair au survol */
-    box-shadow: 0px 3px 8px rgba(1, 121, 111, 0.4);
-}
-
-QPushButton#sendChat:pressed {
-    background-color: rgb(0, 100, 92); /* Vert sapin plus foncé au clic */
-    box-shadow: 0px 2px 5px rgba(1, 121, 111, 0.5);
-}
-</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>20</width>
-          <height>15</height>
-         </size>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="chatConvo">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>451</width>
-          <height>441</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#chatConvo {
-   
-background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
-    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
-    border-radius: 20px; /* Coins arrondis */
-    padding: 8px 12px; /* Espacement interne */
-    font-size: 16px; /* Taille de police agréable */
-    color: #2C3E50; /* Bleu foncé pour le texte */
-    selection-background-color: #A0B9D9; /* Couleur de sélection */
-}
-
-#chatConvo:focus {
-    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
-    background-color: #F0F4F8; /* Légère variation pour effet moderne */
-}
-
-</string>
-        </property>
        </widget>
       </widget>
      </widget>
@@ -2472,7 +2335,6 @@ QPushButton#homeBtn:pressed {
   <tabstop>homeBtn</tabstop>
   <tabstop>tableView1</tabstop>
   <tabstop>lineEdit1</tabstop>
-  <tabstop>TriLineEdit4</tabstop>
   <tabstop>rechBtn_2</tabstop>
   <tabstop>pdfSuperbtn</tabstop>
   <tabstop>supButton</tabstop>
@@ -2488,7 +2350,6 @@ QPushButton#homeBtn:pressed {
   <tabstop>TlfLineEdit</tabstop>
   <tabstop>ZoneLineEdit</tabstop>
   <tabstop>Ajbtn</tabstop>
-  <tabstop>PhotoSuper</tabstop>
   <tabstop>ModButton</tabstop>
   <tabstop>eqButton</tabstop>
  </tabstops>
