@@ -1,0 +1,10 @@
+release/connection.o
+release/examen.o
+release/examenfilterproxymodel.o
+release/main.o
+release/mainwindow.o
+release/speechtotext.o
+release/qrc_img.o
+release/moc_examenfilterproxymodel.o
+release/moc_mainwindow.o
+release/moc_speechtotext.o

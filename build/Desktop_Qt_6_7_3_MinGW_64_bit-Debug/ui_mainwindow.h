@@ -100,6 +100,16 @@ public:
     QLabel *label_16;
     QWidget *GestStats;
     QLabel *label_29;
+    QPushButton *examButton_2;
+    QPushButton *supButton_2;
+    QPushButton *eqButton_2;
+    QPushButton *FourButton_2;
+    QPushButton *candButton_2;
+    QPushButton *etaButton_2;
+    QStackedWidget *stackedWidget_3;
+    QWidget *PageStatExam;
+    QWidget *ExamChartContainer;
+    QWidget *PageStatSuper;
     QPushButton *closeBtn;
     QPushButton *notifBtn;
     QPushButton *emailBtn;
@@ -666,7 +676,7 @@ public:
         InsertExamPdf_3->setIcon(icon11);
         MatiereSpeech = new QPushButton(AddExamFrame_3);
         MatiereSpeech->setObjectName("MatiereSpeech");
-        MatiereSpeech->setGeometry(QRect(210, 65, 31, 31));
+        MatiereSpeech->setGeometry(QRect(214, 65, 31, 31));
         MatiereSpeech->setStyleSheet(QString::fromUtf8("border:none;"));
         QIcon icon12;
         icon12.addFile(QString::fromUtf8(":/img/mic.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
@@ -941,7 +951,7 @@ public:
         GestStats->setObjectName("GestStats");
         label_29 = new QLabel(GestStats);
         label_29->setObjectName("label_29");
-        label_29->setGeometry(QRect(40, 30, 171, 51));
+        label_29->setGeometry(QRect(20, 20, 171, 51));
         label_29->setStyleSheet(QString::fromUtf8("  \n"
 "    font-size: 22px; /* Taille r\303\251duite du texte */\n"
 "    font-weight: bold; /* Texte en gras pour un effet titre */\n"
@@ -953,6 +963,211 @@ public:
 "    border: 2px solid #A0B9D9; /* L\303\251g\303\250re bordure bleu-gris pastel */\n"
 "\n"
 ""));
+        examButton_2 = new QPushButton(GestStats);
+        examButton_2->setObjectName("examButton_2");
+        examButton_2->setGeometry(QRect(230, 26, 61, 41));
+        examButton_2->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        examButton_2->setStyleSheet(QString::fromUtf8("QPushButton#examButton_2 {\n"
+"    image: url(:/new/prefix1/img/examen.png);\n"
+"    background-color: #4A90E2;\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 111px 10px 20px; /* Increase right padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #4A90E2;\n"
+"    text-align: left; /* Align text to the left */\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton#examButton_2:hover {\n"
+"    background-color: #5A9BD5; /* Bleu plus clair au survol */\n"
+"    border: 2px solid #F9F9F9; /* Bordure plus claire */\n"
+"    color: #F9F9F9; /* Texte plus clair */\n"
+"}\n"
+"\n"
+"QPushButton#examButton_2:pressed {\n"
+"    background-color: #C74C4C; /* Rouge brique au clic */\n"
+"    border: 2px solid #C74C4C;\n"
+"}\n"
+""));
+        examButton_2->setIcon(icon5);
+        examButton_2->setIconSize(QSize(22, 22));
+        examButton_2->setCheckable(true);
+        examButton_2->setAutoExclusive(true);
+        supButton_2 = new QPushButton(GestStats);
+        supButton_2->setObjectName("supButton_2");
+        supButton_2->setGeometry(QRect(350, 26, 61, 41));
+        supButton_2->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        supButton_2->setStyleSheet(QString::fromUtf8("QPushButton#supButton_2 {\n"
+"	image: url(:/new/prefix1/img/rechercher-des-personnes.png);\n"
+"    background-color: #4A90E2;\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 111px 10px 20px; /* Increase right padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #4A90E2;\n"
+"    text-align: left; /* Align text to the left */\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton#supButton_2:hover {\n"
+"    background-color: #5A9BD5; /* Bleu plus clair au survol */\n"
+"    border: 2px solid #F9F9F9; /* Bordure plus claire */\n"
+"    color: #F9F9F9; /* Texte plus clair */\n"
+"}\n"
+"\n"
+"QPushButton#supButton_2:pressed {\n"
+"    background-color: #C74C4C; /* Rouge brique au clic */\n"
+"    border: 2px solid #C74C4C;\n"
+"}\n"
+""));
+        supButton_2->setIcon(icon);
+        supButton_2->setIconSize(QSize(22, 22));
+        supButton_2->setCheckable(true);
+        supButton_2->setAutoExclusive(true);
+        eqButton_2 = new QPushButton(GestStats);
+        eqButton_2->setObjectName("eqButton_2");
+        eqButton_2->setGeometry(QRect(470, 26, 61, 41));
+        eqButton_2->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        eqButton_2->setStyleSheet(QString::fromUtf8("QPushButton#eqButton_2 {\n"
+"	image: url(:/new/prefix1/img/equipe.png);\n"
+"    background-color: #4A90E2;\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 111px 10px 20px; /* Increase right padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #4A90E2;\n"
+"    text-align: left; /* Align text to the left */\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton#eqButton_2:hover {\n"
+"    background-color: #5A9BD5; /* Bleu plus clair au survol */\n"
+"    border: 2px solid #F9F9F9; /* Bordure plus claire */\n"
+"    color: #F9F9F9; /* Texte plus clair */\n"
+"}\n"
+"\n"
+"QPushButton#eqButton_2:pressed {\n"
+"    background-color: #C74C4C; /* Rouge brique au clic */\n"
+"    border: 2px solid #C74C4C;\n"
+"}\n"
+""));
+        eqButton_2->setIcon(icon1);
+        eqButton_2->setIconSize(QSize(23, 22));
+        eqButton_2->setCheckable(true);
+        eqButton_2->setAutoExclusive(true);
+        FourButton_2 = new QPushButton(GestStats);
+        FourButton_2->setObjectName("FourButton_2");
+        FourButton_2->setGeometry(QRect(580, 26, 61, 41));
+        FourButton_2->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        FourButton_2->setStyleSheet(QString::fromUtf8("QPushButton#FourButton_2 {\n"
+"	image: url(:/new/prefix1/img/livreur.png);\n"
+"	\n"
+"    background-color: #4A90E2;\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 111px 10px 20px; /* Increase right padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #4A90E2;\n"
+"    text-align: left; /* Align text to the left */\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton#FourButton_2:hover {\n"
+"    background-color: #5A9BD5; /* Bleu plus clair au survol */\n"
+"    border: 2px solid #F9F9F9; /* Bordure plus claire */\n"
+"    color: #F9F9F9; /* Texte plus clair */\n"
+"}\n"
+"\n"
+"QPushButton#FourButton_2:pressed {\n"
+"    background-color: #C74C4C; /* Rouge brique au clic */\n"
+"    border: 2px solid #C74C4C;\n"
+"}\n"
+""));
+        FourButton_2->setIcon(icon2);
+        FourButton_2->setIconSize(QSize(22, 22));
+        FourButton_2->setCheckable(true);
+        FourButton_2->setAutoExclusive(true);
+        candButton_2 = new QPushButton(GestStats);
+        candButton_2->setObjectName("candButton_2");
+        candButton_2->setGeometry(QRect(690, 26, 61, 41));
+        candButton_2->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        candButton_2->setStyleSheet(QString::fromUtf8("QPushButton#candButton_2 {\n"
+"	\n"
+"    background-color: #4A90E2;\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 111px 10px 20px; /* Increase right padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #4A90E2;\n"
+"    text-align: left; /* Align text to the left */\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton#candButton_2:hover {\n"
+"    background-color: #5A9BD5; /* Bleu plus clair au survol */\n"
+"    border: 2px solid #F9F9F9; /* Bordure plus claire */\n"
+"    color: #F9F9F9; /* Texte plus clair */\n"
+"}\n"
+"\n"
+"QPushButton#candButton_2:pressed {\n"
+"    background-color: #C74C4C; /* Rouge brique au clic */\n"
+"    border: 2px solid #C74C4C;\n"
+"}\n"
+""));
+        candButton_2->setIcon(icon3);
+        candButton_2->setIconSize(QSize(22, 22));
+        candButton_2->setCheckable(true);
+        candButton_2->setAutoExclusive(true);
+        etaButton_2 = new QPushButton(GestStats);
+        etaButton_2->setObjectName("etaButton_2");
+        etaButton_2->setGeometry(QRect(800, 26, 61, 41));
+        etaButton_2->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        etaButton_2->setStyleSheet(QString::fromUtf8("QPushButton#etaButton_2 {\n"
+"	image: url(:/new/prefix1/img/batiment-educatif.png);\n"
+"    background-color: #4A90E2;\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"    font-weight: bold;\n"
+"    padding: 10px 111px 10px 20px; /* Increase right padding */\n"
+"    border-radius: 20px;\n"
+"    border: 2px solid #4A90E2;\n"
+"    text-align: left; /* Align text to the left */\n"
+" \n"
+"}\n"
+"\n"
+"QPushButton#etaButton_2:hover {\n"
+"    background-color: #5A9BD5; /* Bleu plus clair au survol */\n"
+"    border: 2px solid #F9F9F9; /* Bordure plus claire */\n"
+"    color: #F9F9F9; /* Texte plus clair */\n"
+"}\n"
+"\n"
+"QPushButton#etaButton_2:pressed {\n"
+"    background-color: #C74C4C; /* Rouge brique au clic */\n"
+"    border: 2px solid #C74C4C;\n"
+"}\n"
+""));
+        etaButton_2->setIcon(icon4);
+        etaButton_2->setIconSize(QSize(22, 22));
+        etaButton_2->setCheckable(true);
+        etaButton_2->setAutoExclusive(true);
+        stackedWidget_3 = new QStackedWidget(GestStats);
+        stackedWidget_3->setObjectName("stackedWidget_3");
+        stackedWidget_3->setGeometry(QRect(40, 100, 1091, 611));
+        PageStatExam = new QWidget();
+        PageStatExam->setObjectName("PageStatExam");
+        ExamChartContainer = new QWidget(PageStatExam);
+        ExamChartContainer->setObjectName("ExamChartContainer");
+        ExamChartContainer->setGeometry(QRect(60, 40, 991, 561));
+        stackedWidget_3->addWidget(PageStatExam);
+        PageStatSuper = new QWidget();
+        PageStatSuper->setObjectName("PageStatSuper");
+        stackedWidget_3->addWidget(PageStatSuper);
         stackedWidget->addWidget(GestStats);
         closeBtn = new QPushButton(centralwidget);
         closeBtn->setObjectName("closeBtn");
@@ -1123,7 +1338,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(7);
         stackedWidget_2->setCurrentIndex(2);
 
 
@@ -1189,6 +1404,12 @@ public:
         label_15->setText(QCoreApplication::translate("MainWindow", "Gestion des Candidats", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "Gestion des Etablissements", nullptr));
         label_29->setText(QCoreApplication::translate("MainWindow", "Statistiques :", nullptr));
+        examButton_2->setText(QString());
+        supButton_2->setText(QString());
+        eqButton_2->setText(QString());
+        FourButton_2->setText(QString());
+        candButton_2->setText(QString());
+        etaButton_2->setText(QString());
         closeBtn->setText(QString());
         notifBtn->setText(QString());
         emailBtn->setText(QString());

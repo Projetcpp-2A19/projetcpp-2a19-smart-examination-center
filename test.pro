@@ -1,4 +1,4 @@
-QT       += core gui sql texttospeech
+QT       += core gui sql texttospeech printsupport network charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     connection.cpp \
     examen.cpp \
+    examenfilterproxymodel.cpp \
     main.cpp \
     mainwindow.cpp \
     speechtotext.cpp
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     connection.h \
     examen.h \
+    examenfilterproxymodel.h \
     mainwindow.h \
     speechtotext.h
 

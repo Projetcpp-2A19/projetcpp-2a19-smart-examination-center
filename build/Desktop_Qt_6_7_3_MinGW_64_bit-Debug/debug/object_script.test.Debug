@@ -1,0 +1,10 @@
+debug/connection.o
+debug/examen.o
+debug/examenfilterproxymodel.o
+debug/main.o
+debug/mainwindow.o
+debug/speechtotext.o
+debug/qrc_img.o
+debug/moc_examenfilterproxymodel.o
+debug/moc_mainwindow.o
+debug/moc_speechtotext.o

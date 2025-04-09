@@ -651,7 +651,7 @@ background-color: rgb(74, 144, 226);</string>
       <string notr="true">background-color: rgb(239, 239, 239);</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="HOME">
       <property name="styleSheet">
@@ -1091,7 +1091,7 @@ QPushButton#InsertExamPdf_3:pressed {
        <widget class="QPushButton" name="MatiereSpeech">
         <property name="geometry">
          <rect>
-          <x>210</x>
+          <x>214</x>
           <y>65</y>
           <width>31</width>
           <height>31</height>
@@ -1675,8 +1675,8 @@ QPushButton#viewPdfButton :pressed {
       <widget class="QLabel" name="label_29">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>30</y>
+         <x>20</x>
+         <y>20</y>
          <width>171</width>
          <height>51</height>
         </rect>
@@ -1697,6 +1697,378 @@ QPushButton#viewPdfButton :pressed {
        <property name="text">
         <string>Statistiques :</string>
        </property>
+      </widget>
+      <widget class="QPushButton" name="examButton_2">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>26</y>
+         <width>61</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#examButton_2 {
+    image: url(:/new/prefix1/img/examen.png);
+    background-color: #4A90E2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 111px 10px 20px; /* Increase right padding */
+    border-radius: 20px;
+    border: 2px solid #4A90E2;
+    text-align: left; /* Align text to the left */
+ 
+}
+
+QPushButton#examButton_2:hover {
+    background-color: #5A9BD5; /* Bleu plus clair au survol */
+    border: 2px solid #F9F9F9; /* Bordure plus claire */
+    color: #F9F9F9; /* Texte plus clair */
+}
+
+QPushButton#examButton_2:pressed {
+    background-color: #C74C4C; /* Rouge brique au clic */
+    border: 2px solid #C74C4C;
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img.qrc">
+         <normaloff>:/img/examen.png</normaloff>:/img/examen.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="supButton_2">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>26</y>
+         <width>61</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#supButton_2 {
+	image: url(:/new/prefix1/img/rechercher-des-personnes.png);
+    background-color: #4A90E2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 111px 10px 20px; /* Increase right padding */
+    border-radius: 20px;
+    border: 2px solid #4A90E2;
+    text-align: left; /* Align text to the left */
+ 
+}
+
+QPushButton#supButton_2:hover {
+    background-color: #5A9BD5; /* Bleu plus clair au survol */
+    border: 2px solid #F9F9F9; /* Bordure plus claire */
+    color: #F9F9F9; /* Texte plus clair */
+}
+
+QPushButton#supButton_2:pressed {
+    background-color: #C74C4C; /* Rouge brique au clic */
+    border: 2px solid #C74C4C;
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img.qrc">
+         <normaloff>:/img/rechercher-des-personnes.png</normaloff>:/img/rechercher-des-personnes.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="eqButton_2">
+       <property name="geometry">
+        <rect>
+         <x>470</x>
+         <y>26</y>
+         <width>61</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#eqButton_2 {
+	image: url(:/new/prefix1/img/equipe.png);
+    background-color: #4A90E2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 111px 10px 20px; /* Increase right padding */
+    border-radius: 20px;
+    border: 2px solid #4A90E2;
+    text-align: left; /* Align text to the left */
+ 
+}
+
+QPushButton#eqButton_2:hover {
+    background-color: #5A9BD5; /* Bleu plus clair au survol */
+    border: 2px solid #F9F9F9; /* Bordure plus claire */
+    color: #F9F9F9; /* Texte plus clair */
+}
+
+QPushButton#eqButton_2:pressed {
+    background-color: #C74C4C; /* Rouge brique au clic */
+    border: 2px solid #C74C4C;
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img.qrc">
+         <normaloff>:/img/equipe.png</normaloff>:/img/equipe.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>23</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="FourButton_2">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>26</y>
+         <width>61</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#FourButton_2 {
+	image: url(:/new/prefix1/img/livreur.png);
+	
+    background-color: #4A90E2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 111px 10px 20px; /* Increase right padding */
+    border-radius: 20px;
+    border: 2px solid #4A90E2;
+    text-align: left; /* Align text to the left */
+ 
+}
+
+QPushButton#FourButton_2:hover {
+    background-color: #5A9BD5; /* Bleu plus clair au survol */
+    border: 2px solid #F9F9F9; /* Bordure plus claire */
+    color: #F9F9F9; /* Texte plus clair */
+}
+
+QPushButton#FourButton_2:pressed {
+    background-color: #C74C4C; /* Rouge brique au clic */
+    border: 2px solid #C74C4C;
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img.qrc">
+         <normaloff>:/img/livreur.png</normaloff>:/img/livreur.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="candButton_2">
+       <property name="geometry">
+        <rect>
+         <x>690</x>
+         <y>26</y>
+         <width>61</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#candButton_2 {
+	
+    background-color: #4A90E2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 111px 10px 20px; /* Increase right padding */
+    border-radius: 20px;
+    border: 2px solid #4A90E2;
+    text-align: left; /* Align text to the left */
+ 
+}
+
+QPushButton#candButton_2:hover {
+    background-color: #5A9BD5; /* Bleu plus clair au survol */
+    border: 2px solid #F9F9F9; /* Bordure plus claire */
+    color: #F9F9F9; /* Texte plus clair */
+}
+
+QPushButton#candButton_2:pressed {
+    background-color: #C74C4C; /* Rouge brique au clic */
+    border: 2px solid #C74C4C;
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img.qrc">
+         <normaloff>:/img/candidat.png</normaloff>:/img/candidat.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="etaButton_2">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>26</y>
+         <width>61</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#etaButton_2 {
+	image: url(:/new/prefix1/img/batiment-educatif.png);
+    background-color: #4A90E2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 111px 10px 20px; /* Increase right padding */
+    border-radius: 20px;
+    border: 2px solid #4A90E2;
+    text-align: left; /* Align text to the left */
+ 
+}
+
+QPushButton#etaButton_2:hover {
+    background-color: #5A9BD5; /* Bleu plus clair au survol */
+    border: 2px solid #F9F9F9; /* Bordure plus claire */
+    color: #F9F9F9; /* Texte plus clair */
+}
+
+QPushButton#etaButton_2:pressed {
+    background-color: #C74C4C; /* Rouge brique au clic */
+    border: 2px solid #C74C4C;
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img.qrc">
+         <normaloff>:/img/batiment-educatif.png</normaloff>:/img/batiment-educatif.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QStackedWidget" name="stackedWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>100</y>
+         <width>1091</width>
+         <height>611</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="PageStatExam">
+        <widget class="QWidget" name="ExamChartContainer" native="true">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>40</y>
+           <width>991</width>
+           <height>561</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="PageStatSuper"/>
       </widget>
      </widget>
     </widget>

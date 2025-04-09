@@ -134,38 +134,3 @@ QByteArray Examen::getPdfDataById(const QString &id)
     }
 }
 
-QSqlQueryModel* Examen::filtrerParDate(const QDate &date) {
-    QSqlQueryModel* model = new QSqlQueryModel();
-
-    // Debug: Print the query
-    qDebug() << "Executing query: SELECT ID_EXAMEN, MATIERE_EXAMEN, TYPE_EXAMEN, STATUT_EXAMEN, "
-                "NIVEAU_EXAMEN, DUREE_EXAMEN, DATE_EXAMEN FROM EXAMENS WHERE DATE_EXAMEN = :date";
-
-    // Prepare the query to filter by date
-    QSqlQuery query;
-    query.prepare("SELECT ID_EXAMEN, MATIERE_EXAMEN, TYPE_EXAMEN, STATUT_EXAMEN, "
-                  "NIVEAU_EXAMEN, DUREE_EXAMEN, DATE_EXAMEN FROM EXAMENS WHERE DATE_EXAMEN = :date");
-    query.bindValue(":date", date.toString("yyyy-MM-dd")); // Ensure the date format matches your database
-
-    // Execute the query
-    if (!query.exec()) {
-        qDebug() << "Erreur lors de l'exécution de la requête : " << query.lastError().text();
-        delete model; // Clean up the model if the query fails
-        return nullptr;
-    }
-
-    // Move the query into the model
-    model->setQuery(std::move(query));
-
-    // Check for SQL errors
-    if (model->lastError().isValid()) {
-        qDebug() << "Erreur SQL: " << model->lastError().text();
-        delete model; // Clean up the model if there's an error
-        return nullptr;
-    }
-
-    // Debug: Print the number of rows returned
-    qDebug() << "Query executed successfully. Rows returned:" << model->rowCount();
-
-    return model;
-}

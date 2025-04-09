@@ -9,7 +9,9 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QSortFilterProxyModel>
-
+#include "examenfilterproxymodel.h"
+#include <QMap>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -52,8 +54,16 @@ private slots:
     void onNiveauSpeechClicked();
     void onDureeSpeechClicked();
     void onSpeechTextRecognized(const QString &text);
-    void filterExams(const QString &searchText);
-    void filtrerParDate(const QDate &date);
+    void on_pdfExambtn_clicked();  // slot pour le bouton PDF
+    //void showExamStatistics();
+    void on_examButton_2_clicked();
+    //void showChart(const QMap<QString, int>& statusCounts);
+    void clearChartWidget();
+    void loadExamStatistics();
+    void on_supButton_2_clicked();
+    void showChartInPage(const QMap<QString, int>& statusCounts);
+    QMap<QString, int> getExamStatusCounts();
+
 
 private:
     Ui::MainWindow *ui;
@@ -64,8 +74,7 @@ private:
     void clearForm();                // Clear the exam form
     SpeechToText *speechToText;
     QLineEdit *currentLineEdit; // To track which field to populate
-    QSortFilterProxyModel *proxyModel;
     QSqlQueryModel *yourExamModel;
-
+    ExamenFilterProxyModel *proxyModel;
 };
 #endif // MAINWINDOW_H

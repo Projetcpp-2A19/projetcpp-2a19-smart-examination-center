@@ -51,7 +51,6 @@ public:
     bool modifier(QString);
     bool supprimer(QString);
     QSqlQueryModel *afficher();
-    QSqlQueryModel *filtrerParDate(const QDate &date);
 
 };
 
