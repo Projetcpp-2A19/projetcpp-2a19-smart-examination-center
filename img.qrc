@@ -22,6 +22,7 @@
         <file>img/parametres.png</file>
         <file>img/profil.png</file>
         <file>img/chatBot.png</file>
+<<<<<<< HEAD
         <file>img/statistiques.png</file>
         <file>img/carte-3d.png</file>
     </qresource>
@@ -29,5 +30,7 @@
         <file>img/statistiques.png</file>
         <file>img/marker.png</file>
         <file>map.qml</file>
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     </qresource>
 </RCC>

@@ -13,12 +13,19 @@ private:
     QString nom_etablissement;
     int nombreSalle_etablissement;
     QString ville_etablissement;
+<<<<<<< HEAD
     QString adresse_etablissement;
 
 
 public:
     Etablissement();
     Etablissement(QString id, QString gouvernorat, QString type, QString directeur, QString nom, int nombreSalle, QString ville ,QString adresse);
+=======
+
+public:
+    Etablissement();
+    Etablissement(QString id, QString gouvernorat, QString type, QString directeur, QString nom, int nombreSalle, QString ville);
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
     QString getId() const;
     QString getGouvernorat() const;
@@ -27,7 +34,10 @@ public:
     QString getNom() const;
     int getNombreSalle() const;
     QString getVille() const;
+<<<<<<< HEAD
     QString getAdresse() const;
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
     void setId(QString id);
     void setGouvernorat(QString gouvernorat);
@@ -36,9 +46,13 @@ public:
     void setNom(QString nom);
     void setNombreSalle(int nombreSalle);
     void setVille(QString ville);
+<<<<<<< HEAD
     void setAdresse(QString adresse);
 
 
+=======
+
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     bool ajouter();
     QSqlQueryModel* afficher();
     bool supprimer(QString id);

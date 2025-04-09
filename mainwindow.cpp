@@ -12,6 +12,7 @@
 #include <QSqlError>  // Ajoute cette ligne pour inclure QSqlError
 #include <QInputDialog>
 #include <QTimer>
+<<<<<<< HEAD
 #include <QSqlQuery>
 #include <QFileDialog>       // Pour QFileDialog
 #include <QStandardPaths>    // Pour QStandardPaths
@@ -22,6 +23,9 @@
 
 
 
+=======
+
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 // Constructeur
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+<<<<<<< HEAD
     // Initialisations existantes...
     ui->tableView1->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);     // Connexions existantes...
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
@@ -53,6 +58,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initialiser les stats
     setupGovernorateStats();
+=======
+    // Initialiser le modèle pour afficher les établissements
+    ui->tableView1->setModel(E.afficher());
+
+    // Configurer le placeholder pour la recherche
+    ui->lineEdit->setPlaceholderText("Rechercher...");
+
+    // Connexion des boutons
+    connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
+    connect(ui->BinSuperbtn, &QPushButton::clicked, this, &MainWindow::on_BinSuperbtn_clicked);
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 }
 
 // Destructeur
@@ -74,20 +90,31 @@ void MainWindow::on_Ajbtn_clicked()
     // Récupérer les valeurs des champs de saisie
     QString id = ui->idEtablissementLineEdit->text();
     QString gouvernorat = ui->gouvernoratLineEdit->text();
+<<<<<<< HEAD
     QString type = ui->typeLineEdit->currentText();
+=======
+    QString type = ui->typeLineEdit->text();
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     QString directeur = ui->directeurLineEdit->text();
     QString nom = ui->nomLineEdit->text();
     int nombreSalle = ui->nombreSalleLineEdit->text().toInt();
     QString ville = ui->villeLineEdit->text();
+<<<<<<< HEAD
     QString adresse = ui->adresseLineEdit->text(); // Nouveau champ
 
 
     // Vérifier que tous les champs sont remplis
     if (id.isEmpty() || gouvernorat.isEmpty() || type.isEmpty() || directeur.isEmpty() || nom.isEmpty() || ville.isEmpty() || adresse.isEmpty())
+=======
+
+    // Vérifier que tous les champs sont remplis
+    if (id.isEmpty() || gouvernorat.isEmpty() || type.isEmpty() || directeur.isEmpty() || nom.isEmpty() || ville.isEmpty())
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     {
         QMessageBox::warning(this, "Erreur", "Tous les champs doivent être remplis.");
         return;
     }
+<<<<<<< HEAD
     if (nombreSalle <= 0)
     {
         QMessageBox::warning(this, "Erreur", "Le nombre de salles doit être supérieur à 0.");
@@ -97,6 +124,11 @@ void MainWindow::on_Ajbtn_clicked()
 
     // Créer un objet Etablissement
     Etablissement E(id, gouvernorat, type, directeur, nom, nombreSalle, ville, adresse);
+=======
+
+    // Créer un objet Etablissement
+    Etablissement E(id, gouvernorat, type, directeur, nom, nombreSalle, ville);
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
     // Ajouter l'établissement à la base de données
     if (E.ajouter())
@@ -137,7 +169,10 @@ void MainWindow::on_BinSuperbtn_clicked()
 }
 
 // Modifier un établissement
+<<<<<<< HEAD
 // Modifier un établissement
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 void MainWindow::on_Modbtn_clicked()
 {
     // Récupérer l'index de la ligne sélectionnée dans le tableau
@@ -148,6 +183,7 @@ void MainWindow::on_Modbtn_clicked()
         return;
     }
 
+<<<<<<< HEAD
     // Récupérer toutes les données de la ligne sélectionnée
     QSqlQueryModel *model = qobject_cast<QSqlQueryModel*>(ui->tableView1->model());
     if (!model) return;
@@ -184,18 +220,41 @@ void MainWindow::on_Modbtn_clicked()
     ui->adresseLineEdit->setText(adresse);
 
 }
+=======
+    // Récupérer l'ID de l'établissement sélectionné
+    QString id = ui->tableView1->model()->data(index).toString();
+
+    // Remplir les champs de saisie avec les données de l'établissement sélectionné
+    E.setId(id);
+    ui->idEtablissementLineEdit->setText(id);
+    ui->gouvernoratLineEdit->setText(E.getGouvernorat());
+    ui->typeLineEdit->setText(E.getType());
+    ui->directeurLineEdit->setText(E.getDirecteur());
+    ui->nomLineEdit->setText(E.getNom());
+    ui->nombreSalleLineEdit->setText(QString::number(E.getNombreSalle()));
+    ui->villeLineEdit->setText(E.getVille());
+}
+
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 // Sauvegarder les modifications
 void MainWindow::on_SaveMod_clicked()
 {
     // Récupérer les nouvelles valeurs des champs de saisie
     QString id = ui->idEtablissementLineEdit->text();
     QString gouvernorat = ui->gouvernoratLineEdit->text();
+<<<<<<< HEAD
     QString type = ui->typeLineEdit->currentText();
+=======
+    QString type = ui->typeLineEdit->text();
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     QString directeur = ui->directeurLineEdit->text();
     QString nom = ui->nomLineEdit->text();
     int nombreSalle = ui->nombreSalleLineEdit->text().toInt();
     QString ville = ui->villeLineEdit->text();
+<<<<<<< HEAD
     QString adresse = ui->adresseLineEdit->text();
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
     // Vérifier que tous les champs sont remplis
     if (id.isEmpty() || gouvernorat.isEmpty() || type.isEmpty() || directeur.isEmpty() || nom.isEmpty() || ville.isEmpty())
@@ -203,12 +262,16 @@ void MainWindow::on_SaveMod_clicked()
         QMessageBox::warning(this, "Erreur", "Tous les champs doivent être remplis.");
         return;
     }
+<<<<<<< HEAD
     if (nombreSalle <= 0)
     {
         QMessageBox::warning(this, "Erreur", "Le nombre de salles doit être supérieur à 0.");
         ui->nombreSalleLineEdit->setFocus();
         return;
     }
+=======
+
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     // Mettre à jour les données de l'établissement
     E.setId(id);
     E.setGouvernorat(gouvernorat);
@@ -217,7 +280,10 @@ void MainWindow::on_SaveMod_clicked()
     E.setNom(nom);
     E.setNombreSalle(nombreSalle);
     E.setVille(ville);
+<<<<<<< HEAD
     E.setAdresse(adresse);
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
     // Modifier l'établissement dans la base de données
     if (E.modifier())
@@ -230,6 +296,7 @@ void MainWindow::on_SaveMod_clicked()
         QMessageBox::critical(this, "Erreur", "Échec de la modification.");
     }
 }
+<<<<<<< HEAD
 void MainWindow::on_newBtn_clicked()
 {
     // Vider tous les champs de saisie
@@ -483,6 +550,8 @@ void MainWindow::on_mapsButton_clicked()
 }
 
 
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
 // Navigation dans l'interface
 void MainWindow::on_examButton_clicked() { ui->stackedWidget->setCurrentIndex(1); }

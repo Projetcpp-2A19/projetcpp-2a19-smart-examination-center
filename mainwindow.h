@@ -4,11 +4,14 @@
 #include <QMainWindow>
 #include <QSqlTableModel>
 #include "Etablissement.h"  // Inclure la classe Etablissement
+<<<<<<< HEAD
 #include <QChartView>
 #include <QPieSeries>
 #include <QPieSlice>
 #include <QQmlApplicationEngine>
 #include <QQuickView>
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -41,6 +44,7 @@ private slots:
     void on_BinSuperbtn_clicked();  // Supprimer un établissement
     void on_Modbtn_clicked();  // Modifier un établissement
     void on_SaveMod_clicked();  // Sauvegarder les modifications
+<<<<<<< HEAD
     void on_newBtn_clicked();
     // Slots pour les notifications et autres fonctionnalités
     void on_notifBtn_clicked();
@@ -50,11 +54,20 @@ private slots:
     void on_exportPdfBtn_clicked();
     void on_statsButton_clicked();
     void on_mapsButton_clicked();
+=======
+
+    // Slots pour les notifications et autres fonctionnalités
+    void on_notifBtn_clicked();
+    void on_EvalAssist_clicked();
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
 private:
     Ui::MainWindow *ui;  // Interface utilisateur générée par Qt
     Etablissement E;  // Objet pour gérer les établissements
+<<<<<<< HEAD
     QQuickView *mapView = nullptr;
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     QSqlTableModel *model;  // Modèle pour afficher les données dans le tableau
 
     // Variables pour stocker les données en cours de modification
@@ -63,9 +76,13 @@ private:
     QString currentType;
     QString currentDirecteur;
     QString currentNom;
+<<<<<<< HEAD
     QString currentAdresse;
     int currentNbS;
     void setupGovernorateStats();
+=======
+    int currentNbS;
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 };
 
 #endif // MAINWINDOW_H

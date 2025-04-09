@@ -529,7 +529,11 @@ QPushButton#EvalAssist :pressed {
       <widget class="QLabel" name="label_13">
        <property name="geometry">
         <rect>
+<<<<<<< HEAD
          <x>360</x>
+=======
+         <x>250</x>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          <y>40</y>
          <width>181</width>
          <height>41</height>
@@ -547,10 +551,17 @@ QPushButton#EvalAssist :pressed {
       <widget class="QTableView" name="tableView1">
        <property name="geometry">
         <rect>
+<<<<<<< HEAD
          <x>20</x>
          <y>90</y>
          <width>571</width>
          <height>441</height>
+=======
+         <x>10</x>
+         <y>90</y>
+         <width>571</width>
+         <height>411</height>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
         </rect>
        </property>
        <property name="styleSheet">
@@ -594,12 +605,45 @@ QPushButton#EvalAssist :pressed {
         <number>34</number>
        </attribute>
       </widget>
+<<<<<<< HEAD
+=======
+      <widget class="QLabel" name="label_27">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>351</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#label_27 { 
+    font-size: 25px; /* Taille réduite du texte */
+    font-weight: bold; /* Texte en gras pour un effet titre */
+    color: #2C3E50; /* Bleu foncé pour une bonne lisibilité */
+    background-color: transparent; /* Fond transparent */
+    padding: 4px 8px; /* Espacement pour l'aération */
+    
+    text-align: center; /* Centrage du texte */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Liste des Etablissements  :</string>
+       </property>
+      </widget>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
       <widget class="QWidget" name="widget_9" native="true">
        <property name="geometry">
         <rect>
          <x>10</x>
+<<<<<<< HEAD
          <y>610</y>
          <width>281</width>
+=======
+         <y>580</y>
+         <width>271</width>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          <height>61</height>
         </rect>
        </property>
@@ -611,7 +655,11 @@ QPushButton#EvalAssist :pressed {
 }
 </string>
        </property>
+<<<<<<< HEAD
        <widget class="QPushButton" name="exportPdfBtn">
+=======
+       <widget class="QPushButton" name="pdfSuperbtn">
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
         <property name="geometry">
          <rect>
           <x>100</x>
@@ -624,7 +672,11 @@ QPushButton#EvalAssist :pressed {
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">QPushButton#exportPdfBtn {
+=======
+         <string notr="true">QPushButton#pdfSuperbtn {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #3A7BD5; 
     color: white;
     font-size: 16px;
@@ -636,13 +688,21 @@ QPushButton#EvalAssist :pressed {
     qproperty-alignment: 'AlignCenter'; /* Alignement Qt */
 }
 
+<<<<<<< HEAD
 QPushButton#exportPdfBtn:hover {
+=======
+QPushButton#pdfSuperbtn:hover {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #A0C4FF; 
     border: 2px dashed #A0C4FF; 
     color: #F9F9F9; 
 }
 
+<<<<<<< HEAD
 QPushButton#exportPdfBtn:pressed {
+=======
+QPushButton#pdfSuperbtn:pressed {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #A8D5BA; 
     border: 2px dashed #5A9BD5;
 }
@@ -685,11 +745,16 @@ QPushButton#exportPdfBtn:pressed {
        <property name="geometry">
         <rect>
          <x>20</x>
+<<<<<<< HEAD
          <y>0</y>
+=======
+         <y>30</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          <width>411</width>
          <height>51</height>
         </rect>
        </property>
+<<<<<<< HEAD
        <widget class="QFrame" name="statsContainer">
         <property name="geometry">
          <rect>
@@ -712,23 +777,76 @@ QPushButton#exportPdfBtn:pressed {
           <x>0</x>
           <y>10</y>
           <width>351</width>
+=======
+       <widget class="QLabel" name="Trilabel4">
+        <property name="geometry">
+         <rect>
+          <x>-10</x>
+          <y>10</y>
+          <width>231</width>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
           <height>31</height>
          </rect>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">#label_27 { 
     font-size: 25px; /* Taille réduite du texte */
+=======
+         <string notr="true">#Trilabel4 { 
+    font-size: 20px; /* Taille réduite du texte */
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     font-weight: bold; /* Texte en gras pour un effet titre */
     color: #2C3E50; /* Bleu foncé pour une bonne lisibilité */
     background-color: transparent; /* Fond transparent */
     padding: 4px 8px; /* Espacement pour l'aération */
+<<<<<<< HEAD
     
+=======
+  
+    border-radius: 5px; /* Coins légèrement arrondis */
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     text-align: center; /* Centrage du texte */
 }
 </string>
         </property>
         <property name="text">
+<<<<<<< HEAD
          <string>Liste des Etablissements  :</string>
+=======
+         <string>Tri par  Gouvernorat :</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="TriLineEdit4">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>10</y>
+          <width>211</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#TriLineEdit4 { 
+    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid rgb(1, 121, 111); /* Bordure rouge brique pastel */
+
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #B85042; /* Couleur de sélection */
+}
+
+#TriLineEdit4:focus { 
+    border: 2px solid rgb(1, 121, 111); /* Rouge brique légèrement plus clair au focus */
+    background-color: #F8E8E6; /* Légère variation pour effet moderne */
+}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
         </property>
        </widget>
       </widget>
@@ -736,7 +854,11 @@ QPushButton#exportPdfBtn:pressed {
        <property name="geometry">
         <rect>
          <x>20</x>
+<<<<<<< HEAD
          <y>540</y>
+=======
+         <y>520</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          <width>51</width>
          <height>41</height>
         </rect>
@@ -792,7 +914,11 @@ QPushButton#BinSuperbtn:pressed {
        <property name="geometry">
         <rect>
          <x>80</x>
+<<<<<<< HEAD
          <y>540</y>
+=======
+         <y>520</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          <width>51</width>
          <height>41</height>
         </rect>
@@ -836,18 +962,30 @@ QPushButton#Modbtn:pressed {
        <property name="geometry">
         <rect>
          <x>600</x>
+<<<<<<< HEAD
          <y>80</y>
          <width>481</width>
          <height>561</height>
+=======
+         <y>120</y>
+         <width>481</width>
+         <height>521</height>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
         </rect>
        </property>
        <widget class="QListWidget" name="listWidget_2">
         <property name="geometry">
          <rect>
           <x>10</x>
+<<<<<<< HEAD
           <y>10</y>
           <width>471</width>
           <height>541</height>
+=======
+          <y>0</y>
+          <width>471</width>
+          <height>521</height>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          </rect>
         </property>
         <property name="styleSheet">
@@ -859,11 +997,45 @@ QPushButton#Modbtn:pressed {
 </string>
         </property>
        </widget>
+<<<<<<< HEAD
        <widget class="QLineEdit" name="idEtablissementLineEdit">
         <property name="geometry">
          <rect>
           <x>40</x>
           <y>60</y>
+=======
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>10</y>
+          <width>391</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#label_11 { 
+    font-size: 30px; /* Taille réduite du texte */
+    font-weight: bold; /* Texte en gras pour un effet titre */
+    color: #2C3E50; /* Bleu foncé pour une bonne lisibilité */
+    background-color: transparent; /* Fond transparent */
+    padding: 4px 8px; /* Espacement pour l'aération */
+   
+    
+    text-align: center; /* Centrage du texte */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Ajouter un Etablissement</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="idEtablissementLineEdit">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>90</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
           <width>131</width>
           <height>41</height>
          </rect>
@@ -893,8 +1065,13 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_18">
         <property name="geometry">
          <rect>
+<<<<<<< HEAD
           <x>50</x>
           <y>130</y>
+=======
+          <x>40</x>
+          <y>140</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
           <width>63</width>
           <height>20</height>
          </rect>
@@ -916,7 +1093,11 @@ QPushButton#Modbtn:pressed {
          </rect>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">#directeurLineEdit {
+=======
+         <string notr="true">#PostLineEdit {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -926,7 +1107,11 @@ QPushButton#Modbtn:pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
+<<<<<<< HEAD
 #directeurLineEdit:focus {
+=======
+#PostLineEdit:focus {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -956,8 +1141,13 @@ QPushButton#Modbtn:pressed {
        <widget class="QLabel" name="label_20">
         <property name="geometry">
          <rect>
+<<<<<<< HEAD
           <x>70</x>
           <y>30</y>
+=======
+          <x>220</x>
+          <y>60</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
           <width>63</width>
           <height>20</height>
          </rect>
@@ -979,7 +1169,11 @@ QPushButton#Modbtn:pressed {
          </rect>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">#villeLineEdit {
+=======
+         <string notr="true">#CINLineEdit {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -989,7 +1183,11 @@ QPushButton#Modbtn:pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
+<<<<<<< HEAD
 #villeLineEdit:focus {
+=======
+#CINLineEdit:focus {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -1004,7 +1202,11 @@ QPushButton#Modbtn:pressed {
         <property name="geometry">
          <rect>
           <x>310</x>
+<<<<<<< HEAD
           <y>130</y>
+=======
+          <y>140</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
           <width>141</width>
           <height>20</height>
          </rect>
@@ -1026,7 +1228,11 @@ QPushButton#Modbtn:pressed {
          </rect>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">#nomLineEdit {
+=======
+         <string notr="true">#NomLineEdit {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -1089,7 +1295,11 @@ QPushButton#Modbtn:pressed {
          </rect>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">#nombreSalleLineEdit {
+=======
+         <string notr="true">#PrenLineEdit {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -1099,7 +1309,11 @@ QPushButton#Modbtn:pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
+<<<<<<< HEAD
 #nombreSalleLineEdit:focus {
+=======
+#PrenLineEdit:focus {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -1136,7 +1350,11 @@ QPushButton#Modbtn:pressed {
          </rect>
         </property>
         <property name="styleSheet">
+<<<<<<< HEAD
          <string notr="true">#gouvernoratLineEdit {
+=======
+         <string notr="true">#EmailLineEdit {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -1146,7 +1364,42 @@ QPushButton#Modbtn:pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
+<<<<<<< HEAD
 #gouvernoratLineEdit:focus {
+=======
+#EmailLineEdit:focus {
+    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
+    background-color: #F0F4F8; /* Légère variation pour effet moderne */
+}
+
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="typeLineEdit">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>380</y>
+          <width>161</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#TlfLineEdit {
+    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #A0B9D9; /* Couleur de sélection */
+}
+
+#TlfLineEdit:focus {
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -1195,7 +1448,11 @@ QPushButton#SaveMod:pressed {
 </string>
         </property>
         <property name="text">
+<<<<<<< HEAD
          <string>save</string>
+=======
+         <string>pdf</string>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
         </property>
         <property name="icon">
          <iconset theme="QIcon::ThemeIcon::DocumentPrintPreview"/>
@@ -1242,6 +1499,7 @@ QPushButton#Ajbtn:pressed {
          <string>Ajouter</string>
         </property>
        </widget>
+<<<<<<< HEAD
        <widget class="QComboBox" name="typeLineEdit">
         <property name="geometry">
          <rect>
@@ -1327,6 +1585,16 @@ QPushButton#Ajbtn:pressed {
          <y>50</y>
          <width>261</width>
          <height>31</height>
+=======
+      </widget>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>10</y>
+         <width>251</width>
+         <height>41</height>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
         </rect>
        </property>
        <property name="styleSheet">
@@ -1350,8 +1618,13 @@ QLineEdit:focus {
       <widget class="QLabel" name="label22">
        <property name="geometry">
         <rect>
+<<<<<<< HEAD
          <x>30</x>
          <y>50</y>
+=======
+         <x>540</x>
+         <y>10</y>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
          <width>261</width>
          <height>31</height>
         </rect>
@@ -1373,6 +1646,7 @@ QLineEdit:focus {
         <string>Recherche par directeur :</string>
        </property>
       </widget>
+<<<<<<< HEAD
       <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
@@ -1577,6 +1851,17 @@ QPushButton#sortGovernorateBtn:pressed {
       <zorder>statsButton</zorder>
       <zorder>mapsButton</zorder>
       <zorder>sortGovernorateBtn</zorder>
+=======
+      <zorder>widget_3</zorder>
+      <zorder>widget</zorder>
+      <zorder>tableView1</zorder>
+      <zorder>label_27</zorder>
+      <zorder>widget_9</zorder>
+      <zorder>BinSuperbtn</zorder>
+      <zorder>Modbtn</zorder>
+      <zorder>lineEdit</zorder>
+      <zorder>label22</zorder>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
      </widget>
      <widget class="QWidget" name="notifSup">
       <widget class="QLabel" name="label_31">
@@ -2194,7 +2479,10 @@ background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
        </property>
       </widget>
      </widget>
+<<<<<<< HEAD
      <widget class="QWidget" name="page"/>
+=======
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     </widget>
    </widget>
    <widget class="QPushButton" name="closeBtn">
@@ -2443,7 +2731,12 @@ QPushButton#homeBtn:pressed {
   <tabstop>paramBtn</tabstop>
   <tabstop>homeBtn</tabstop>
   <tabstop>tableView1</tabstop>
+<<<<<<< HEAD
   <tabstop>exportPdfBtn</tabstop>
+=======
+  <tabstop>TriLineEdit4</tabstop>
+  <tabstop>pdfSuperbtn</tabstop>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
   <tabstop>supButton</tabstop>
   <tabstop>BinSuperbtn</tabstop>
   <tabstop>Modbtn</tabstop>
@@ -2454,6 +2747,10 @@ QPushButton#homeBtn:pressed {
   <tabstop>nomLineEdit</tabstop>
   <tabstop>nombreSalleLineEdit</tabstop>
   <tabstop>gouvernoratLineEdit</tabstop>
+<<<<<<< HEAD
+=======
+  <tabstop>typeLineEdit</tabstop>
+>>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
   <tabstop>Ajbtn</tabstop>
   <tabstop>ModButton</tabstop>
   <tabstop>eqButton</tabstop>
