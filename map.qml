@@ -66,7 +66,7 @@ Rectangle {
         TextField {
             id: searchField
             width: parent.width
-            placeholderText: "Entrez une adresse (ex: Tunis, Ariana)"
+            placeholderText: "Entrez une adresse (ex: Tour Eiffel, Paris)"
             onAccepted: performSearch()
         }
 
