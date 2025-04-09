@@ -29,6 +29,13 @@ public:
     bool supprimer(QString code);
     bool modifier(QString code, QString prenom, int cin, QString adresse, QString nom, int numTel, QString niveau, QByteArray photo);
     bool chercherCandidat(QString code);
+    QSqlQuery trierParNiveauQuery(QString niveau);
+    QSqlQuery chercherParCodeDansTable(QString code);
+    QSqlQuery statistiquesParNiveau();
+    void on_btnpdf_clicked(); // ← ajoute bien ceci
+
+
+
 
     // Getters
     QString getCode() const { return code; }

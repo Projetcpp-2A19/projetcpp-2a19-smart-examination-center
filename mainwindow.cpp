@@ -2,6 +2,24 @@
 #include "ui_mainwindow.h"
 #include "candidat.h"
 #include <QMessageBox>
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QPieSeries>
+#include <QPdfWriter>
+#include <QPainter>
+#include <QFileDialog>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QPageSize>
+#include <QPdfWriter>
+#include <QPainter>
+#include <QFileDialog>
+#include <QSqlQuery>
+#include <QMessageBox>
+
+
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -178,4 +196,151 @@ void MainWindow::on_lineCode_textChanged(const QString &code)
         ui->comboNiveau->setCurrentRow(0);
     }
 }
+void MainWindow::on_btnTrierNiveau_clicked()
+{
+    QString niveau = ui->comboTriNiveau->currentText();
+    Candidat c;
+    QSqlQuery query = c.trierParNiveauQuery(niveau);
 
+    // Vider le tableau actuel
+    ui->tableView->clearContents();
+    ui->tableView->setRowCount(0);
+
+    int row = 0;
+    while (query.next()) {
+        ui->tableView->insertRow(row);
+        for (int col = 0; col < 7; col++) {
+            ui->tableView->setItem(row, col, new QTableWidgetItem(query.value(col).toString()));
+        }
+        row++;
+    }
+
+    // Facultatif : redéfinir les entêtes
+    QStringList headers = {"Code", "Nom", "Prénom", "CIN", "Adresse", "NumTel", "Niveau"};
+    ui->tableView->setHorizontalHeaderLabels(headers);
+}
+void MainWindow::on_btnRechercher_clicked()
+{
+    QString code = ui->lineCODE->text();
+    if (code.isEmpty()) {
+        QMessageBox::warning(this, "Champ vide", "Veuillez entrer un code.");
+        return;
+    }
+
+    Candidat c;
+    QSqlQuery query = c.chercherParCodeDansTable(code);
+
+    // Effacer le contenu actuel du tableau
+    ui->tableView->clearContents();
+    ui->tableView->setRowCount(0);
+
+    int row = 0;
+    while (query.next()) {
+        ui->tableView->insertRow(row);
+        for (int col = 0; col < 7; col++) {
+            ui->tableView->setItem(row, col, new QTableWidgetItem(query.value(col).toString()));
+        }
+        row++;
+    }
+
+    if (row == 0) {
+        QMessageBox::information(this, "Introuvable", "Aucun candidat trouvé avec ce code.");
+    }
+}
+void MainWindow::on_btnStats_clicked()
+{
+    Candidat c;
+    QSqlQuery query = c.statistiquesParNiveau(); // cette requête retourne (niveau, count)
+
+    QPieSeries *series = new QPieSeries();
+
+    int total = 0;
+    QList<QPair<QString, int>> data; // stocker pour traitement
+
+    while (query.next()) {
+        QString niveau = query.value(0).toString();
+        int nombre = query.value(1).toInt();
+        data.append(qMakePair(niveau, nombre));
+        total += nombre;
+    }
+
+    for (const QPair<QString, int> &entry : data) {
+        QString niveau = entry.first;
+        int nombre = entry.second;
+        qreal pourcentage = (double)nombre / total * 100;
+        QString label = QString("%1: %2%").arg(niveau).arg(QString::number(pourcentage, 'f', 1));
+
+        QPieSlice *slice = new QPieSlice(label, nombre);
+        slice->setLabelVisible(true);
+        series->append(slice);
+    }
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Répartition des candidats par niveau (%)");
+    chart->legend()->setAlignment(Qt::AlignRight);
+
+    ui->chartStats->setChart(chart);
+    ui->chartStats->setRenderHint(QPainter::Antialiasing);
+}
+#include <QPdfWriter>
+#include <QPainter>
+#include <QFileDialog>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QPageSize> // important !
+
+void MainWindow::on_btnpdf_clicked()
+{
+    // 1. Choisir le fichier
+    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer en PDF", "", "*.pdf");
+    if (fileName.isEmpty())
+        return;
+
+    if (!fileName.endsWith(".pdf"))
+        fileName += ".pdf";
+
+    // 2. Préparer le PDF
+    QPdfWriter pdfWriter(fileName);
+    pdfWriter.setPageSize(QPageSize(QPageSize::A4));
+    QPainter painter(&pdfWriter);
+
+    int y = 100; // Position verticale
+
+    // 3. Titre
+    painter.setFont(QFont("Arial", 16, QFont::Bold));
+    painter.drawText(200, y, "Liste des candidats");
+    y += 50;
+
+    // 4. En-têtes
+    painter.setFont(QFont("Arial", 10, QFont::Bold));
+    painter.drawText(50, y, "Code");
+    painter.drawText(150, y, "Nom");
+    painter.drawText(300, y, "Prénom");
+    painter.drawText(450, y, "CIN");
+    painter.drawText(600, y, "Téléphone");
+    painter.drawText(750, y, "Niveau");
+    y += 30;
+
+    // 5. Parcours de la liste des candidats (depuis base de données par exemple)
+    QSqlQuery query("SELECT code, nom, prenom, cin, numTel, niveau FROM candidat");
+
+    painter.setFont(QFont("Arial", 10));
+    while (query.next()) {
+        painter.drawText(50, y, query.value(0).toString());   // code
+        painter.drawText(150, y, query.value(1).toString());  // nom
+        painter.drawText(300, y, query.value(2).toString());  // prénom
+        painter.drawText(450, y, query.value(3).toString());  // CIN
+        painter.drawText(600, y, query.value(4).toString());  // téléphone
+        painter.drawText(750, y, query.value(5).toString());  // niveau
+
+        y += 30;
+        if (y > 800) {  // Si on atteint le bas de la page
+            pdfWriter.newPage();
+            y = 100;
+        }
+    }
+
+    painter.end();
+    QMessageBox::information(this, "Succès", "Liste exportée en PDF avec succès !");
+}

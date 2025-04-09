@@ -91,4 +91,29 @@ bool Candidat::chercherCandidat(QString code)
     }
     return false;
 }
+QSqlQuery Candidat::trierParNiveauQuery(QString niveau)
+{
+    QSqlQuery query;
+    query.prepare("SELECT CODE_CANDIDAT, NOM_CANDIDAT, PRENOM_CANDIDAT, CIN_CANDIDAT, ADRESSE_CANDIDAT, NUMTEL_CANDIDAT, NIVEAU_CANDIDAT FROM CANDIDAT WHERE NIVEAU_CANDIDAT = :niveau");
+    query.bindValue(":niveau", niveau);
+    query.exec();
+    return query;
+}
+QSqlQuery Candidat::chercherParCodeDansTable(QString code)
+{
+    QSqlQuery query;
+    query.prepare("SELECT CODE_CANDIDAT, NOM_CANDIDAT, PRENOM_CANDIDAT, CIN_CANDIDAT, ADRESSE_CANDIDAT, NUMTEL_CANDIDAT, NIVEAU_CANDIDAT FROM CANDIDAT WHERE CODE_CANDIDAT = :code");
+    query.bindValue(":code", code);
+    query.exec();
+    return query;
+}
+QSqlQuery Candidat::statistiquesParNiveau()
+{
+    QSqlQuery query;
+    query.prepare("SELECT NIVEAU_CANDIDAT, COUNT(*) FROM CANDIDAT GROUP BY NIVEAU_CANDIDAT");
+    query.exec();
+    return query;
+}
+
+
 

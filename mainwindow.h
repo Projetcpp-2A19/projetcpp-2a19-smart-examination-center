@@ -24,6 +24,14 @@ private slots:
     void on_ModButton_5_clicked();
 
     void on_lineCode_textChanged(const QString &arg1);
+    void on_btnTrierNiveau_clicked();
+    void on_btnRechercher_clicked();
+    void on_btnStats_clicked();
+    void on_btnpdf_clicked();
+
+
+
+
 
 private:
     Ui::MainWindow *ui;
