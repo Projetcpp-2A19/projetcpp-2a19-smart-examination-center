@@ -19,7 +19,7 @@ CXXFLAGS      = -fno-keep-inline-dllexport -g -std=gnu++1z -Wall -Wextra -Wextra
 INCPATH       = -I../../../projectcc -I. -I../../simple-mail/src -I../../../QT/6.7.3/mingw_64/include -I../../../QT/6.7.3/mingw_64/include/QtCharts -I../../../QT/6.7.3/mingw_64/include/QtOpenGLWidgets -I../../../QT/6.7.3/mingw_64/include/QtWidgets -I../../../QT/6.7.3/mingw_64/include/QtOpenGL -I../../../QT/6.7.3/mingw_64/include/QtGui -I../../../QT/6.7.3/mingw_64/include/QtSql -I../../../QT/6.7.3/mingw_64/include/QtNetwork -I../../../QT/6.7.3/mingw_64/include/QtCore -Idebug -I. -I/include -I../../../QT/6.7.3/mingw_64/mkspecs/win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -lQt6Charts C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Charts.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6OpenGLWidgets.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Widgets.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6OpenGL.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Gui.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Sql.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Network.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Core.a -lmingw32 C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6EntryPoint.a -lshell32  
+LIBS        =        C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Charts.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6OpenGLWidgets.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Widgets.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6OpenGL.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Gui.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Sql.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Network.a C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6Core.a -lmingw32 C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\lib\libQt6EntryPoint.a -lshell32  
 QMAKE         = C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\bin\qmake.exe
 DEL_FILE      = del
 CHK_DIR_EXISTS= if not exist
@@ -86,7 +86,30 @@ OBJECTS       = debug/Fournisseurs.o \
 		debug/serverreply.o \
 		debug/moc_mainwindow.o
 
-DIST          =  ..\..\fournisseurs.h \
+DIST          = img/480403914_1638328830141470_6590277718263893232_n.jpg \
+		img/analytics.png \
+		img/batiment-educatif.png \
+		img/candidat.png \
+		img/chat.avif \
+		img/chat.png \
+		img/chat1.png \
+		img/close.png \
+		img/en-arriere.png \
+		img/equipe.png \
+		img/examen.png \
+		img/home.png \
+		img/images-removebg-preview.png \
+		img/livreur.png \
+		img/logo.png \
+		img/mail.png \
+		img/notif.png \
+		img/pdf.png \
+		img/plus-moins.png \
+		img/recherche.png \
+		img/rechercher-des-personnes.png \
+		img/refresh.png \
+		img/settings.png \
+		img/supprimer.png ..\..\fournisseurs.h \
 		..\..\connection.h \
 		..\..\mainwindow.h \
 		..\..\simple-mail\src\emailaddress.h \
@@ -364,6 +387,7 @@ debug/moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qtsqlexports.h \
 		../../../QT/6.7.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqldatabase.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts \
 		debug/moc_predefs.h \
 		../../../QT/6.7.3/mingw_64/bin/moc.exe
 	C:\Users\Dahmani\Desktop\QT\6.7.3\mingw_64\bin\moc.exe $(DEFINES) --include C:/Users/Dahmani/Desktop/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/debug/moc_predefs.h -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/mkspecs/win32-g++ -IC:/Users/Dahmani/Desktop/projectcc -IC:/Users/Dahmani/Desktop/projectcc/simple-mail/src -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtCharts -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtOpenGLWidgets -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtWidgets -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtOpenGL -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtGui -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtSql -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtNetwork -IC:/Users/Dahmani/Desktop/QT/6.7.3/mingw_64/include/QtCore -I. -IC:/Users/Dahmani/Desktop/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++ -IC:/Users/Dahmani/Desktop/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32 -IC:/Users/Dahmani/Desktop/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward -IC:/Users/Dahmani/Desktop/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include -IC:/Users/Dahmani/Desktop/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed -IC:/Users/Dahmani/Desktop/QT/Tools/mingw1120_64/x86_64-w64-mingw32/include ..\..\mainwindow.h -o debug\moc_mainwindow.cpp
@@ -731,6 +755,7 @@ debug/Fournisseurs.o: ../../Fournisseurs.cpp ../../fournisseurs.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlquery.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/QSqlError \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlerror.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QMap \
 		../../../QT/6.7.3/mingw_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\Fournisseurs.o ..\..\Fournisseurs.cpp
 
@@ -1054,6 +1079,7 @@ debug/main.o: ../../main.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qtsqlexports.h \
 		../../../QT/6.7.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqldatabase.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/QApplication \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qapplication.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/QMessageBox \
@@ -1065,7 +1091,22 @@ debug/main.o: ../../main.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/QSqlError \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlerror.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/QSqlQuery \
-		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlquery.h
+		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlquery.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/QSslSocket \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qsslsocket.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qtnetworkglobal.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qtnetwork-config.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qtnetworkexports.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qtcpsocket.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qabstractsocket.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qhostaddress.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qsslerror.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qsslcertificate.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qcryptographichash.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qdatetime.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qcalendar.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qssl.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QFlags
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\..\main.cpp
 
 debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
@@ -1264,17 +1305,14 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qtsqlexports.h \
 		../../../QT/6.7.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqldatabase.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts \
 		ui_mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtCore/QVariant \
 		../../../QT/6.7.3/mingw_64/include/QtGui/QIcon \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/QApplication \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qapplication.h \
-		../../../QT/6.7.3/mingw_64/include/QtWidgets/QHeaderView \
-		../../../QT/6.7.3/mingw_64/include/QtWidgets/qheaderview.h \
-		../../../QT/6.7.3/mingw_64/include/QtWidgets/qabstractitemview.h \
-		../../../QT/6.7.3/mingw_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../QT/6.7.3/mingw_64/include/QtWidgets/qframe.h \
-		../../../QT/6.7.3/mingw_64/include/QtCore/qitemselectionmodel.h \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/QComboBox \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/qcombobox.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qstyleoption.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qabstractspinbox.h \
@@ -1285,6 +1323,12 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qstyle.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qtabbar.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qrubberband.h \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/qframe.h \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/QHeaderView \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/qheaderview.h \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/qabstractitemview.h \
+		../../../QT/6.7.3/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qitemselectionmodel.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/QLabel \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qlabel.h \
 		../../../QT/6.7.3/mingw_64/include/QtGui/qpicture.h \
@@ -1314,6 +1358,7 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlquery.h \
 		../../../QT/6.7.3/mingw_64/include/QtSql/QSqlError \
 		../../../QT/6.7.3/mingw_64/include/QtSql/qsqlerror.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QMap \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/QMessageBox \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qdialog.h \
@@ -1366,18 +1411,30 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtCore/QSharedDataPointer \
 		../../simple-mail/src/mimemessage.h \
 		../../simple-mail/src/emailaddress.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QChartView \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qchartview.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QAbstractAxis \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qabstractaxis.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QPieSeries \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qpieseries.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QAbstractSeries \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qabstractseries.h \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/QChartGlobal \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/qchartglobal.h \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/qtcharts-config.h \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/qtchartsexports.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QAbstractAxis \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qabstractaxis.h \
 		../../../QT/6.7.3/mingw_64/include/QtGui/QPen \
 		../../../QT/6.7.3/mingw_64/include/QtGui/QFont \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QAbstractSeries \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qabstractseries.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QPieSlice \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qpieslice.h \
+		../../../QT/6.7.3/mingw_64/include/QtGui/QBrush \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QBarSeries \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qbarseries.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QAbstractBarSeries \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qabstractbarseries.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QStringList \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QBarSet \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qbarset.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QChartView \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qchartview.h \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/QChart \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/qchart.h \
 		../../../QT/6.7.3/mingw_64/include/QtCharts/QLegend \
@@ -1387,27 +1444,38 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qgraphicslayoutitem.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qgraphicsitem.h \
 		../../../QT/6.7.3/mingw_64/include/QtGui/qpainterpath.h \
-		../../../QT/6.7.3/mingw_64/include/QtGui/QBrush \
 		../../../QT/6.7.3/mingw_64/include/QtCore/QMargins \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/QGraphicsView \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qgraphicsview.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qscrollarea.h \
 		../../../QT/6.7.3/mingw_64/include/QtWidgets/qgraphicsscene.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QPieSeries \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qpieseries.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QPieSlice \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qpieslice.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QBarSet \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qbarset.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QBarSeries \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qbarseries.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QAbstractBarSeries \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qabstractbarseries.h \
-		../../../QT/6.7.3/mingw_64/include/QtCore/QStringList \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QBarCategoryAxis \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qbarcategoryaxis.h \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/QValueAxis \
-		../../../QT/6.7.3/mingw_64/include/QtCharts/qvalueaxis.h
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QLineSeries \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qlineseries.h \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/QXYSeries \
+		../../../QT/6.7.3/mingw_64/include/QtCharts/qxyseries.h \
+		../../../QT/6.7.3/mingw_64/include/QtGui/QImage \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/QNetworkAccessManager \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qnetworkrequest.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/QSslConfiguration \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qsslconfiguration.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/QNetworkReply \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/qnetworkreply.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QIODevice \
+		../../../QT/6.7.3/mingw_64/include/QtNetwork/QNetworkRequest \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QJsonDocument \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qjsondocument.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qjsonvalue.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qcborvalue.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qcborcommon.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/quuid.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QJsonObject \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qjsonobject.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QJsonArray \
+		../../../QT/6.7.3/mingw_64/include/QtCore/qjsonarray.h \
+		../../../QT/6.7.3/mingw_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\..\mainwindow.cpp
 
 debug/emailaddress.o: ../../simple-mail/src/emailaddress.cpp ../../simple-mail/src/emailaddress_p.h \

@@ -1,6 +1,5 @@
-QT       += core gui sql network
-QT += core gui widgets sql charts
-QT += charts
+QT       += core gui sql network widgets sql charts
+
 
 
 
@@ -57,4 +56,32 @@ DEFINES += SIMPLE_MAIL_QT_STATIC
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-LIBS += -lQt6Charts
+
+DISTFILES += \
+    img/480403914_1638328830141470_6590277718263893232_n.jpg \
+    img/analytics.png \
+    img/batiment-educatif.png \
+    img/candidat.png \
+    img/chat.avif \
+    img/chat.png \
+    img/chat1.png \
+    img/close.png \
+    img/en-arriere.png \
+    img/equipe.png \
+    img/examen.png \
+    img/home.png \
+    img/images-removebg-preview.png \
+    img/livreur.png \
+    img/logo.png \
+    img/mail.png \
+    img/notif.png \
+    img/pdf.png \
+    img/plus-moins.png \
+    img/recherche.png \
+    img/rechercher-des-personnes.png \
+    img/refresh.png \
+    img/settings.png \
+    img/supprimer.png
+
+RESOURCES +=
+

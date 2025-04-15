@@ -2,7 +2,7 @@
 #include "./ui_mainwindow.h"
 #include "fournisseurs.h"
 #include <QMessageBox>
-#include <QSqlError> // Assurez-vous que cette inclusion est présente
+#include <QSqlError>
 #include <QSslError>
 #include <QSslSocket>
 #include <QSqlQueryModel>
@@ -18,17 +18,18 @@
 #include "simple-mail/src/mimetext.h"
 #include "simple-mail/src/mimemessage.h"
 #include "simple-mail/src/emailaddress.h"
-#include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
-#include <QtCharts/QPieSlice>
-#include <QtCharts/QBarSet>
 #include <QtCharts/QBarSeries>
-#include <QtCharts/QChart>
-#include <QtCharts/QBarCategoryAxis>
-#include <QtCharts/QValueAxis>
-#include <QVBoxLayout>
-#include <QLayoutItem>
-#include <QLayout>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDebug>
 
 
 
@@ -52,11 +53,20 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    model = new QSqlQueryModel();  // Initialisation du modèle
+    ui->chatInput->setPlaceholderText("Pose ta question ici...");
+    ui->lineEdit_2->setPlaceholderText("Entrez l'adresse e-mail du destinataire");
+    ui->lineEdit_3->setPlaceholderText("Entrez l'objet de l'email");
+    ui->textEdit->setPlaceholderText("Écrivez ici le contenu de votre message...");
+    ui->lineEditRech->setPlaceholderText("Recherche par ID ...");
 
+
+    model = new QSqlQueryModel();  // Initialisation du modèle
     updateTableView();
     connect(ui->Ajbtn, &QPushButton::clicked, this, &MainWindow::handleAddFournisseur);
     connect(ui->suppButton, &QPushButton::clicked, this, &MainWindow::handleDeleteFournisseur);
+    connect(ui->comboBoxStatType, &QComboBox::currentIndexChanged,
+            this, &MainWindow::showStatistiques);
+
 
 
 
@@ -472,68 +482,84 @@ void MainWindow::on_rechBtn_clicked()
 
 void MainWindow::on_emailBtn_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->stackedWidget->setCurrentIndex(4);
 }
 
 void MainWindow::on_EnvBtn_clicked()
 {
-    // ⚙️ Configuration du serveur SMTP Gmail
-    auto* smtp = new SimpleMail::Server(this);
-    smtp->setHostname("smtp.gmail.com");
-    smtp->setPort(587); // TLS (STARTTLS)
-    smtp->setConnectionType(SimpleMail::Server::TlsConnection);
+    qDebug() << "➡️ Début de l'envoi de l'email via cURL...";
 
-    // ✅ Remplace ici par ton adresse et ton mot de passe d'application
-    smtp->setUsername("ddahmeni2.dali@gmail.com");
-    smtp->setPassword("kbge ylvc ckpl ykmg"); // mot de passe d'application généré via https://myaccount.google.com/apppasswords
+    QString sender = "ddahmeni2.dali@gmail.com";
+    QString password = "kbge ylvc ckpl ykmg"; // Mot de passe d'application Gmail
+    QString recipient = ui->lineEdit_2->text();
+    QString subject = ui->lineEdit_3->text();
+    QString body = ui->textEdit->toPlainText();
 
-    // ✉️ Création de l'email
-    SimpleMail::MimeMessage message;
-    message.setSender(SimpleMail::EmailAddress("ddahmeni2.dali@gmail.com", "Dahmani"));
-    message.setToRecipients({ SimpleMail::EmailAddress(ui->lineEdit_2->text(), "Destinataire") });
-    message.setSubject(ui->lineEdit_3->text());
+    // Création du fichier email temporaire
+    QString emailFilePath = QCoreApplication::applicationDirPath() + "/email.txt";
+    QFile file(emailFilePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << "From: \"Smart Examination Center\" <" << sender << ">\n";
+        out << "To: <" << recipient << ">\n";
+        out << "Subject: " << subject << "\n\n";
+        out << body << "\n";
+        file.close();
+    } else {
+        QMessageBox::critical(this, "Erreur", "Impossible de créer le fichier email.");
+        return;
+    }
 
-    auto text = std::make_shared<SimpleMail::MimeText>();
-    text->setText(ui->textEdit->toPlainText());
-    message.addPart(text);
+    // Préparation de la commande curl
+    QStringList arguments;
+    arguments << "--url" << "smtps://smtp.gmail.com:465"
+              << "--ssl-reqd"
+              << "--mail-from" << sender
+              << "--mail-rcpt" << recipient
+              << "--user" << sender + ":" + password
+              << "--upload-file" << emailFilePath;
 
-    // 📤 Envoi de l'email
-    auto reply = smtp->sendMail(message);
+    QProcess *curl = new QProcess(this);
+    curl->start("curl", arguments);
 
-    // 🔁 Suivi de la réponse
-    connect(reply, &SimpleMail::ServerReply::finished, this, [reply]() {
-        if (!reply->error()) {
-            QMessageBox::information(nullptr, "Succès", "📧 Email envoyé avec succès !");
-        } else {
-            QMessageBox::critical(nullptr, "Erreur SMTP",
-                                  "Code : " + QString::number(reply->responseCode()) +
-                                      "\nMessage : " + reply->responseText());
-        }
-        reply->deleteLater();
+    connect(curl, &QProcess::readyReadStandardOutput, [=]() {
+        qDebug() << "📤 Réponse curl :" << curl->readAllStandardOutput();
     });
 
-    // ⚠️ Gestion des erreurs SMTP
-    connect(smtp, &SimpleMail::Server::smtpError, this,
-            [](SimpleMail::Server::SmtpError err, const QString& text) {
-                QMessageBox::critical(nullptr, "Erreur SMTP",
-                                      "Erreur SMTP : " + QString::number(static_cast<int>(err)) +
-                                          "\nDétail : " + text);
-            });
+    connect(curl, &QProcess::readyReadStandardError, [=]() {
+        qDebug() << "⚠️ Erreur curl :" << curl->readAllStandardError();
+    });
 
-    // 🔒 Gestion des erreurs SSL
-    connect(smtp, &SimpleMail::Server::sslErrors, this,
-            [](const QList<QSslError>& errors) {
-                QString allErrors;
-                for (const QSslError& err : errors) {
-                    allErrors += err.errorString() + "\n";
+    connect(curl, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            [=](int exitCode, QProcess::ExitStatus status) {
+                if (exitCode == 0) {
+                    QMessageBox::information(this, "Succès", "📧 Email envoyé avec succès ");
+                    // 🔸 Enregistrement dans la table EMAILS après envoi réussi
+                    QSqlQuery insertQuery;
+                    insertQuery.prepare("INSERT INTO EMAILS (DESTINATAIRE, SUJET, CONTENU) "
+                                        "VALUES (:destinataire, :sujet, :contenu)");
+
+                    insertQuery.bindValue(":destinataire", ui->lineEdit_2->text());
+                    insertQuery.bindValue(":sujet", ui->lineEdit_3->text());
+                    insertQuery.bindValue(":contenu", ui->textEdit->toPlainText());
+
+                    if (!insertQuery.exec()) {
+                        qDebug() << "❌ Échec insertion Oracle : " << insertQuery.lastError().text();
+                    } else {
+                        qDebug() << "✅ Email enregistré dans la table EMAILS.";
+                    }
+
+
+
+
+
+                } else {
+                    QMessageBox::critical(this, "Erreur", "Échec de l'envoi de l'email . Code: " + QString::number(exitCode));
                 }
-                QMessageBox::critical(nullptr, "Erreurs SSL", allErrors);
+                curl->deleteLater();
             });
+
 }
-
-
-
-
 
 
 
@@ -579,21 +605,48 @@ void MainWindow::on_pdfBtn_clicked() {
 
     QPdfWriter writer(fileName);
     writer.setPageSize(QPageSize(QPageSize::A4));
-    writer.setResolution(300);  // meilleure qualité
+    writer.setResolution(300);  // haute qualité
 
     QTextDocument doc;
-    QString html = "<h2 align='center'>Liste des fournisseurs</h2>";
 
-    html += "<style>"
-            "table { border-collapse: collapse; font-size: 14pt; margin-left: auto; margin-right: auto; }"
-            "th, td { border: 1px solid black; padding: 6px; text-align: center; }"
-            "th { background-color: #f0f0f0; font-weight: bold; }"
-            "</style>";
+    QString html;
 
+    // Logo centré
+    html += "<div align='center'><img src=':/img/logo.png' width='120'/></div>";
+
+    // Titre
+    html += "<h1 align='center' style='color:#2C3E50;'>Liste des Fournisseurs</h1>";
+
+    // CSS stylé pour grandir les éléments
+    html += R"(
+    <style>
+        table {
+            width: 95%;
+            border-collapse: collapse;
+            font-size: 18px;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #dfeaf5;
+            color: #2C3E50;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+    </style>
+    )";
+
+    // En-tête du tableau
     html += "<table>";
-    html += "<tr><th style='width:60px;'>ID</th><th style='width:120px;'>Nom</th><th style='width:120px;'>Téléphone</th>"
-            "<th style='width:200px;'>Email</th><th style='width:200px;'>Adresse</th><th style='width:120px;'>Type de service</th></tr>";
+    html += "<tr><th>ID</th><th>Nom</th><th>Téléphone</th><th>Email</th><th>Adresse</th><th>Type de service</th></tr>";
 
+    // Contenu
     for (int row = 0; row < ui->tableFourn->model()->rowCount(); ++row) {
         html += "<tr>";
         for (int col = 0; col < ui->tableFourn->model()->columnCount(); ++col) {
@@ -605,95 +658,153 @@ void MainWindow::on_pdfBtn_clicked() {
     html += "</table>";
 
     doc.setHtml(html);
-
-    // Fixe la largeur du document pour remplir l'A4 (~210mm => 793 px à 96 DPI)
-    doc.setPageSize(QSizeF(793, 1122));  // A4 portrait en pixels @ 96 DPI
+    doc.setPageSize(QSizeF(writer.width(), writer.height()));  // adapte à la page
 
     QPainter painter(&writer);
     doc.drawContents(&painter);
     painter.end();
 
     QMessageBox::information(this, "PDF", "✅ Le fichier PDF a été généré avec succès !");
-
-
     QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
-
 }
 
-void MainWindow::showStatistiques() {
-    qDebug() << "📊 Mise à jour des statistiques des fournisseurs par type de service...";
 
-    // Si le widget n'a pas de layout, on en crée un
-    if (!ui->chartContainerType->layout()) {
-        QVBoxLayout *layout = new QVBoxLayout(ui->chartContainerType);
+
+void MainWindow::showStatistiques() {
+    qDebug() << ":bar_chart: Updating Fournisseur Type Statistics...";
+
+    if (!ui->chartContainerType) {
+        qDebug() << ":x: ERROR: chartContainerType is NULL!";
+        return;
+    }
+
+    // Nettoyage ancien contenu
+    if (ui->chartContainerType->layout()) {
+        QLayout *layout = ui->chartContainerType->layout();
+        while (QLayoutItem *item = layout->takeAt(0)) {
+            if (QWidget *widget = item->widget()) {
+                widget->deleteLater();
+            }
+            delete item;
+        }
+    } else {
+        QVBoxLayout *layout = new QVBoxLayout();
         layout->setContentsMargins(0, 0, 0, 0);
         ui->chartContainerType->setLayout(layout);
     }
 
-    // 🔁 Nettoyer le contenu précédent du layout
-    QLayout *layout = ui->chartContainerType->layout();
-    while (QLayoutItem *item = layout->takeAt(0)) {
-        if (item->widget()) {
-            item->widget()->deleteLater();
-        }
-        delete item;
-    }
+    // 📊 Choix des statistiques (Type de Service ou Adresse)
+    QString critere = ui->comboBoxStatType->currentText(); // ex: "Type de Service" ou "Adresse"
 
-    // 📈 Préparer les données SQL (compter le nombre de fournisseurs par type)
-    QSqlQuery query;
-    QMap<QString, int> typeCounts;
+    Fournisseur f;
+    QMap<QString, int> stats;
 
-    if (query.exec("SELECT TYPESERVICE, COUNT(*) FROM FOURNISSEURS GROUP BY TYPESERVICE")) {
-        while (query.next()) {
-            QString type = query.value(0).toString();
-            int count = query.value(1).toInt();
-            typeCounts[type] = count;
-        }
+    if (critere == "Type de Service") {
+        stats = f.getStatistiquesParTypeService();
+    } else if (critere == "Adresse") {
+        stats = f.getStatistiquesParAdresse();
     } else {
-        QMessageBox::critical(this, "Erreur SQL", "Impossible de récupérer les statistiques.\n" + query.lastError().text());
+        qDebug() << "❌ Critère non reconnu :" << critere;
         return;
     }
 
-    // 🧩 Construction du camembert
-    QPieSeries *series = new QPieSeries();
+    QPieSeries *pieSeries = new QPieSeries();
     int total = 0;
-
-    for (auto it = typeCounts.begin(); it != typeCounts.end(); ++it) {
+    for (auto it = stats.begin(); it != stats.end(); ++it) {
         total += it.value();
     }
 
-    for (auto it = typeCounts.begin(); it != typeCounts.end(); ++it) {
-        double pourcentage = (total > 0) ? (it.value() * 100.0 / total) : 0;
-        QPieSlice *slice = series->append(it.key(), it.value());
-        slice->setLabel(QString("%1: %2%").arg(it.key()).arg(pourcentage, 0, 'f', 1));
+    for (auto it = stats.begin(); it != stats.end(); ++it) {
+        double percentage = (total > 0) ? (it.value() * 100.0 / total) : 0;
+        QPieSlice *slice = pieSeries->append(it.key(), it.value());
+        slice->setLabel(QString("%1: %2%").arg(it.key()).arg(percentage, 0, 'f', 1));
         slice->setLabelVisible(true);
-
-        // effet de zoom au survol
         connect(slice, &QPieSlice::hovered, [slice](bool hovered) {
             slice->setExploded(hovered);
             slice->setLabelFont(QFont("Arial", hovered ? 12 : 10, hovered ? QFont::Bold : QFont::Normal));
         });
     }
 
-    // 🖼️ Création du graphique
-    QChart *chart = new QChart();
-    chart->addSeries(series);
-    chart->setTitle("Répartition des fournisseurs par type de service");
-    chart->legend()->setAlignment(Qt::AlignRight);
-    chart->setAnimationOptions(QChart::AllAnimations);
+    QChart *pieChart = new QChart();
+    pieChart->addSeries(pieSeries);
 
-    // 📄 Affichage
-    QChartView *chartView = new QChartView(chart);
+
+    QChartView *chartView = new QChartView(pieChart);
     chartView->setRenderHint(QPainter::Antialiasing);
     ui->chartContainerType->layout()->addWidget(chartView);
 
-    qDebug() << "✅ Statistiques affichées avec succès.";
+    qDebug() << ":white_check_mark: Fournisseur " << critere << " Statistics Updated Successfully!";
 }
 
 
-
-void MainWindow::on_statButton_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(7); // Page des statistiques
+void MainWindow::on_statButton_clicked() {
+    ui->stackedWidget->setCurrentIndex(5); // Page des statistiques
     showStatistiques();
 }
+
+
+void MainWindow::on_chatbotBtn_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+void MainWindow::on_sendChatBtn_clicked() {
+    QString userMessage = ui->chatInput->text().trimmed();
+    if (userMessage.isEmpty()) return;
+
+    ui->chatDisplay->append("👤: " + userMessage);
+    ui->chatInput->clear();
+
+    QUrl apiUrl("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1");
+    QNetworkRequest request(apiUrl);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("Authorization", "Bearer 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");
+
+    QJsonObject json;
+    json["inputs"] = QString("### Instruction:\n%1\n\n### Response:").arg(userMessage);
+
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    QNetworkReply* reply = manager->post(request, QJsonDocument(json).toJson());
+
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray response = reply->readAll();
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(response);
+            QString replyText;
+            if (doc.isArray()) {
+                replyText = doc.array().first().toObject().value("generated_text").toString();
+            }
+
+            if (replyText.isEmpty()) replyText = "(Réponse vide)";
+            ui->chatDisplay->append("🤖: " + replyText);
+        } else {
+            ui->chatDisplay->append("❌ Erreur : " + reply->errorString());
+            ui->chatDisplay->append("🧾 Réponse brute :\n" + QString::fromUtf8(response));
+        }
+        reply->deleteLater();
+    });
+}
+
+
+void MainWindow::on_historiqueBtn_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(10); // index de la page d'historique
+
+    QSqlQueryModel *model = new QSqlQueryModel(this);
+    model->setQuery("SELECT ID, DESTINATAIRE, SUJET, CONTENU, TO_CHAR(DATE_ENVOI, 'YYYY-MM-DD HH24:MI:SS') AS DATE_ENVOI FROM EMAILS ORDER BY DATE_ENVOI DESC");
+
+    if (model->lastError().isValid()) {
+        qDebug() << "❌ Erreur lors de la récupération des emails :" << model->lastError().text();
+    }
+
+    ui->emailHistoryTable->setModel(model);
+    ui->emailHistoryTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->emailHistoryTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+}
+
+
+
+
+
+

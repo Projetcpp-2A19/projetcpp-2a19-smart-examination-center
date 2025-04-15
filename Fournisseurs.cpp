@@ -1,6 +1,7 @@
 #include "fournisseurs.h"
 #include <QDebug>
 
+
 // 🔹 Constructeur par défaut
 Fournisseur::Fournisseur() : id_fourn(""), nom_fourn(""), adresse(""),
     email(""), numTel(0), typeService("") {}
@@ -153,3 +154,29 @@ QString Fournisseur::afficherDetails() const {
            "Numéro de Téléphone: " + QString::number(numTel) + "\n" +  // ✅ Convertir int en QString
            "Type de Service: " + typeService;
 }
+QMap<QString, int> Fournisseur::getStatistiquesParTypeService() {
+    QMap<QString, int> stats;
+    QSqlQuery query("SELECT TYPESERVICE_FOURNISSEUR, COUNT(*) FROM FOURNISSEURS GROUP BY TYPESERVICE_FOURNISSEUR");
+
+    while (query.next()) {
+        QString type = query.value(0).toString();
+        int count = query.value(1).toInt();
+        stats[type] = count;
+    }
+
+    return stats;
+}
+QMap<QString, int> Fournisseur::getStatistiquesParAdresse() {
+    QMap<QString, int> stats;
+    QSqlQuery query("SELECT ADRESSE_FOURNISSEUR, COUNT(*) FROM FOURNISSEURS GROUP BY ADRESSE_FOURNISSEUR");
+
+    while (query.next()) {
+        QString adresse = query.value(0).toString();
+        int count = query.value(1).toInt();
+        stats[adresse] = count;
+    }
+
+    return stats;
+}
+
+

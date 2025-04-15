@@ -107,7 +107,14 @@ private slots:
 
     void on_statButton_clicked();
 
-private:
+    void on_chatbotBtn_clicked();
+     void on_sendChatBtn_clicked();
+
+    void on_historiqueBtn_clicked();
+
+     void on_label_25_linkActivated(const QString &link);
+
+ private:
     QSqlQueryModel *model;  // Modèle pour stocker les données des fournisseurs
 
 //public:

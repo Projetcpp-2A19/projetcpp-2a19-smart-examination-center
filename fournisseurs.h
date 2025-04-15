@@ -5,6 +5,8 @@
 #include <QSqlQueryModel>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QMap>
+
 
 class Fournisseur {
 private:
@@ -36,6 +38,9 @@ public:
     QString getEmail() const;
     int getNumTel() const;
     QString getTypeService() const;
+    QMap<QString, int>getStatistiquesParTypeService();
+    QMap<QString, int> getStatistiquesParAdresse();
+        //stat
 
     // 🔹 Setters
     void setIdFourn(const QString& id);  // Ajout du setter pour l'ID
