@@ -155,9 +155,14 @@ private slots:
     void processUpdateCommand(const QStringList &parts);
     void showHelp();
     void refreshTableView();
+    void processPreUpdateCommand(const QStringList &parts); // Pré-remplissage des champs à modifier
+    //void processFlexibleUpdateCommand(const QStringList &parts); // mise à jour avec id=... nom=...
+    void processFlexibleUpdateCommand(const QStringList &parts);
+
 
 private:
     void addToChat(const QString &message, bool isUser = false);
+
 
 
 

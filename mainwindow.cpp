@@ -704,13 +704,19 @@ void MainWindow::on_pdfSuperbtn_clicked()
 
 //sms
 void MainWindow::envoyerRappelExamenSuperviseur() {
+    qDebug() << "[DEBUG] Début de la fonction envoyerRappelExamenSuperviseur";
+
     QSqlQuery query;
-    query.prepare("SELECT s.numtel_superviseur, e.date_examen, e.duree_examen, et.nom_etablissement "
+    QString sql = "SELECT s.numtel_superviseur, e.date_examen, e.duree_examen, et.nom_etablissement "
                   "FROM EXAMENS e, ETABLISSEMENTS et, SUPERVISEURS s, AFFECTER a, SUPERVISE sp "
                   "WHERE e.id_examen = sp.id_examen AND s.id_superviseur = sp.id_superviseur "
-                  "AND s.id_superviseur = a.id_superviseur AND et.ID_ETABLISSEMENT = a.ID_ETABLISSEMENT");
+                  "AND s.id_superviseur = a.id_superviseur AND et.ID_ETABLISSEMENT = a.ID_ETABLISSEMENT";
+
+    query.prepare(sql);
+    qDebug() << "[DEBUG] Requête SQL préparée : " << sql;
 
     if (!query.exec()) {
+        qDebug() << "[ERREUR SQL] Échec de récupération des examens : " << query.lastError().text();
         QMessageBox::warning(this, "Erreur", "Échec de récupération des examens : " + query.lastError().text());
         return;
     }
@@ -719,19 +725,33 @@ void MainWindow::envoyerRappelExamenSuperviseur() {
     QString authToken = "7dc4cd519b4021756e199c08ade5ec88";
     QString twilioNumber = "+12202153672";
 
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    int smsEnvoyes = 0;
+    int totalSuperviseurs = 0;
+
     while (query.next()) {
+        totalSuperviseurs++;
         QString phoneNumber = query.value(0).toString().trimmed();
-        QString dateExamen = query.value(1).toDate().toString("dd/MM/yyyy");
-        QString dureeExamen = query.value(2).toString();
+        QString dateExam = query.value(1).toDate().toString("dd/MM/yyyy");
+        QString dureeExam = query.value(2).toString();
         QString nomEtablissement = query.value(3).toString();
 
+        qDebug() << "[DEBUG] Superviseur #" << totalSuperviseurs
+                 << " - Téléphone:" << phoneNumber
+                 << ", Date examen:" << dateExam
+                 << ", Durée:" << dureeExam
+                 << ", Établissement:" << nomEtablissement;
+
         if (phoneNumber.length() != 8) {
-            qDebug() << "Numéro de téléphone invalide : " << phoneNumber;
+            qDebug() << "[AVERTISSEMENT] Numéro de téléphone invalide ignoré : " << phoneNumber;
             continue;
         }
 
-        QString message = "Rappel : Vous avez un examen le " + dateExamen +
-                          " à l’établissement " + nomEtablissement + ". Durée : " + dureeExamen + "h.";
+        QString message = "Rappel : Vous avez un examen le " + dateExam +
+                          " d'une durée de " + dureeExam +
+                          " à l'établissement " + nomEtablissement + ".";
+
+        qDebug() << "[DEBUG] Message à envoyer : " << message;
 
         QNetworkRequest request(QUrl("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json"));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -742,33 +762,37 @@ void MainWindow::envoyerRappelExamenSuperviseur() {
         params.addQueryItem("Body", message);
 
         QByteArray postData = params.query().toUtf8();
-        request.setRawHeader("Authorization", "Basic " +
-                                                  QByteArray(QString(accountSID + ":" + authToken).toUtf8()).toBase64());
+        request.setRawHeader("Authorization", "Basic " + QByteArray(QString(accountSID + ":" + authToken).toUtf8()).toBase64());
 
-        QNetworkReply *reply = networkManager->post(request, postData);
+        QNetworkReply *reply = manager->post(request, postData);
 
-        connect(reply, &QNetworkReply::finished, this, [reply]() {
+        connect(reply, &QNetworkReply::finished, [reply, &smsEnvoyes]() {
             if (reply->error() == QNetworkReply::NoError) {
-                qDebug() << "SMS envoyé avec succès !" << reply->readAll();
+                qDebug() << "[SUCCÈS] SMS envoyé avec succès.";
+                smsEnvoyes++;
             } else {
-                qDebug() << "Erreur d'envoi du SMS :" << reply->errorString();
+                qDebug() << "[ERREUR TWILIO] Échec d'envoi du SMS : " << reply->errorString();
+                qDebug() << "[ERREUR TWILIO] Contenu brut de la réponse : " << reply->readAll();
             }
             reply->deleteLater();
         });
     }
+
+    qDebug() << "[DEBUG] Total superviseurs trouvés : " << totalSuperviseurs;
+    qDebug() << "[DEBUG] Fonction envoyerRappelExamenSuperviseur terminée.";
 }
-
-
 
 void MainWindow::on_btnEnvoyerSMS_clicked() {
     envoyerRappelExamenSuperviseur();
 }
 
 
-// Implémentation du slot on_sendChat_clicked()
+//ChatBot
 
 void MainWindow::handleChatCommand() {
     QString command = ui->chatInput->text().trimmed();
+    if (command.isEmpty()) return;
+
     addToChat(command, true);
     ui->chatInput->clear();
 
@@ -784,72 +808,192 @@ void MainWindow::handleChatCommand() {
         processDeleteCommand(parts);
     }
     else if (action == "modifier" || action == "update") {
-        processUpdateCommand(parts);
+        if (parts.size() == 2 && !parts[1].contains("=") && parts[1].toInt()) {
+            processPreUpdateCommand(parts); // Préremplissage
+        } else {
+            processFlexibleUpdateCommand(parts); // Modification ciblée
+        }
     }
     else if (action == "aide" || action == "help") {
         showHelp();
     }
     else {
-        addToChat("Commande non reconnue. Tapez 'aide' pour voir les commandes disponibles.");
+        addToChat("❓ Commande non reconnue. Tapez 'aide' pour voir les commandes disponibles.");
     }
 }
+
+void MainWindow::processPreUpdateCommand(const QStringList &parts) {
+    if (parts.size() < 2) {
+        addToChat("Format invalide. Utilisez : modifier [CIN]");
+        return;
+    }
+
+    bool ok;
+    int cin = parts[1].toInt(&ok);
+    if (!ok) {
+        addToChat("CIN invalide.");
+        return;
+    }
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM superviseur WHERE cin = :cin");
+    query.bindValue(":cin", cin);
+
+    if (query.exec() && query.next()) {
+        QString originalStatut = query.value("statut").toString();
+        QString originalPoste = query.value("post").toString();
+        QString originalPrenom = query.value("prenom").toString();
+        QString originalNom = query.value("nom").toString();
+        QString originalTel = query.value("tel").toString();
+        QString originalEmail = query.value("email").toString();
+        QString originalZone = query.value("zone").toString();
+
+        // Affichage dans les champs de l'interface
+        ui->CINLineEdit->setText(QString::number(cin));
+        ui->StatutlineEdit->setText(originalStatut);
+        ui->PostLineEdit->setText(originalPoste);
+        ui->PrenLineEdit->setText(originalPrenom);
+        ui->NomLineEdit->setText(originalNom);
+        ui->TlfLineEdit->setText(originalTel);
+        ui->EmailLineEdit->setText(originalEmail);
+        ui->ZoneLineEdit->setText(originalZone);
+
+        addToChat("Champs préremplis pour le superviseur CIN " + QString::number(cin));
+    } else {
+        addToChat("Aucun superviseur trouvé avec le CIN " + QString::number(cin));
+    }
+}
+
+void MainWindow::processFlexibleUpdateCommand(const QStringList &parts) {
+    if (parts.size() < 2) {
+        addToChat("❌ Syntaxe invalide. Utilisez : modifier cin=... champ1=... champ2=...");
+        return;
+    }
+
+    QString cinValue;
+    QMap<QString, QString> updates;
+
+    for (int i = 1; i < parts.size(); ++i) {
+        QStringList keyValue = parts[i].split("=");
+        if (keyValue.size() != 2) continue;
+
+        QString key = keyValue[0].trimmed();
+        QString value = keyValue[1].trimmed();
+
+        if (key.toLower() == "cin") {
+            cinValue = value;
+        } else {
+            updates[key] = value;
+        }
+    }
+
+    if (cinValue.isEmpty() || updates.isEmpty()) {
+        addToChat("❌ Veuillez fournir le CIN et au moins un champ à modifier.");
+        return;
+    }
+
+    // Affichage des valeurs pour débogage
+    qDebug() << "Mise à jour pour CIN : " << cinValue;
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
+        qDebug() << "Changement : " << it.key() << " = " << it.value();
+    }
+
+    // Construire la requête SQL pour mettre à jour les champs
+    QString queryStr = "UPDATE superviseur SET ";
+    QStringList setClauses;
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
+        setClauses << it.key() + " = :" + it.key();
+    }
+    queryStr += setClauses.join(", ");
+    queryStr += " WHERE cin = :cin";
+
+    QSqlQuery query;
+    query.prepare(queryStr);
+
+    // Lier les valeurs à la requête
+    query.bindValue(":cin", cinValue);
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
+        query.bindValue(":" + it.key(), it.value());
+    }
+
+    // Exécution de la requête
+    if (query.exec()) {
+        addToChat("✅ Superviseur mis à jour avec succès.");
+    } else {
+        addToChat("❌ Erreur lors de la mise à jour : " + query.lastError().text());
+    }
+}
+
 
 void MainWindow::processAddCommand(const QStringList &parts) {
-    if (parts.size() < 10) {
-        addToChat("Format incorrect. Usage: ajouter [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]");
+    QMap<QString, QString> data;
+
+    // Traitement de chaque couple clé=valeur
+    for (const QString &part : parts.mid(1)) {
+        QStringList kv = part.split("=");
+        if (kv.size() == 2) {
+            data[kv[0].trimmed().toLower()] = kv[1].trimmed();
+        }
+    }
+
+    // Champs requis
+    QStringList required = {"id", "cin", "statut", "poste", "prenom", "nom", "tel", "email", "zone"};
+    for (const QString &key : required) {
+        if (!data.contains(key)) {
+            addToChat("❌ Champ manquant : " + key);
+            return;
+        }
+    }
+
+    // Vérification que les champs numériques sont valides
+    bool ok;
+    int id = data["id"].toInt(&ok);
+    if (!ok) {
+        addToChat("❌ ID doit être un entier.");
         return;
     }
 
-    // Validation des données
-    QString id = parts[1];
-    QString cinStr = parts[2];
-    QString statut = parts[3];
-    QString poste = parts[4];
-    QString prenom = parts[5];
-    QString nom = parts[6];
-    QString numTelStr = parts[7];
-    QString email = parts[8];
-    QString zone = parts[9];
-
-    // Affichage de débogage pour vérifier les valeurs avant l'ajout
-    qDebug() << "Données à ajouter :"
-             << "\nID: " << id
-             << "\nCIN: " << cinStr
-             << "\nStatut: " << statut
-             << "\nPoste: " << poste
-             << "\nPrénom: " << prenom
-             << "\nNom: " << nom
-             << "\nTéléphone: " << numTelStr
-             << "\nEmail: " << email
-             << "\nZone: " << zone;
-
-    // Validation des champs CIN et Numéro de téléphone
-    QRegularExpression regex("\\d{6}");
-    if (!regex.match(cinStr).hasMatch() || !regex.match(numTelStr).hasMatch()) {
-        addToChat("Erreur: Le CIN et le téléphone doivent contenir 6 chiffres.");
+    int cin = data["cin"].toInt(&ok);
+    if (!ok || data["cin"].length() != 6) {
+        addToChat("❌ CIN doit être un entier de 6 chiffres.");
         return;
     }
 
-    // Validation de l'email
+    int tel = data["tel"].toInt(&ok);
+    if (!ok || data["tel"].length() != 6) {
+        addToChat("❌ Téléphone doit être un entier de 6 chiffres.");
+        return;
+    }
+
+    // Vérification email
     QRegularExpression emailRegex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
-    if (!emailRegex.match(email).hasMatch()) {
-        addToChat("Erreur: Email invalide.");
+    if (!emailRegex.match(data["email"]).hasMatch()) {
+        addToChat("❌ Email invalide.");
         return;
     }
 
-    // Convertir CIN et numéro de téléphone en entier
-    int cin = cinStr.toInt();
-    // Instanciation de l'objet Superviseur
-    Superviseur S(id, cin, statut, poste, prenom, nom, numTelStr, email, zone);
+    // Création et insertion
+    Superviseur S(
+        data["id"],
+        data["cin"].toInt(),
+        data["statut"],
+        data["poste"],
+        data["prenom"],
+        data["nom"],
+        data["tel"],
+        data["email"],
+        data["zone"]
+        );
 
-    // Tentative d'ajout
     if (S.ajouter()) {
-        addToChat("Superviseur ajouté avec succès !");
+        addToChat("✅ Superviseur ajouté avec succès !");
         refreshTableView();
     } else {
-        addToChat("Échec de l'ajout du superviseur.");
+        addToChat("❌ Échec de l'ajout.");
     }
 }
+
+
 void MainWindow::processDeleteCommand(const QStringList &parts) {
     if (parts.size() < 2) {
         addToChat("Format incorrect. Usage: supprimer [ID]");
@@ -884,13 +1028,15 @@ void MainWindow::processUpdateCommand(const QStringList &parts) {
 }
 
 void MainWindow::showHelp() {
-    QString helpText = "Commandes disponibles:\n"
-                       "- ajouter [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]\n"
+    QString helpText = "📘 Commandes disponibles :\n"
+                       "- ajouter id=... cin=... statut=... poste=... prenom=... nom=... tel=... email=... zone=...\n"
                        "- supprimer [ID]\n"
-                       "- modifier [ID] [CIN] [Statut] [Poste] [Prénom] [Nom] [Téléphone] [Email] [Zone]\n"
-                       "- aide : Affiche ce message";
+                       "- modifier [ID] → préremplit les champs depuis la base\n"
+                       "- modifier id=... champ1=... champ2=... (modification ciblée)\n"
+                       "- aide / help : Affiche cette aide";
     addToChat(helpText);
 }
+
 
 void MainWindow::refreshTableView() {
     ui->tableView1->setModel(S.afficher());

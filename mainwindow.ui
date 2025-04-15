@@ -652,19 +652,20 @@ QPushButton#EvalAssist :pressed {
         </property>
         <property name="styleSheet">
          <string notr="true">QLineEdit#lineEdit1 {
-    border: 2px solid #3498db;           /* Bordure bleu clair */
-    border-radius: 10px;                 /* Coins arrondis */
-    padding: 5px;                        /* Espacement interne */
-    font-size: 14px;                     /* Taille de la police */
+    border: 2px solid #3498db;     /* Bordure bleu clair */
+    border-radius: 10px;           /* Coins arrondis */
+    padding: 5px;                  /* Espacement interne */
+    font-size: 14px;               /* Taille de la police */
+    color: black;                  /* Texte saisi en noir */
 }
 
 QLineEdit#lineEdit1:focus {
-    border: 2px solid #2ecc71;           /* Bordure verte quand le champ est focus */
+    border: 2px solid #2ecc71;     /* Bordure verte quand le champ est focus */
 }
 
 QLineEdit#lineEdit1::placeholder {
-    color: #2C3E50;                         /* Couleur gris clair pour le texte d'indication */
-    font-style: italic;                  /* Texte en italique */
+    color: #2C3E50;                /* Couleur pour le texte d’indication */
+    font-style: italic;            /* Texte en italique */
 }
 </string>
         </property>
