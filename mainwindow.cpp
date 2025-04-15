@@ -5,19 +5,23 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QChart>
 #include <QtCharts/QPieSeries>
-#include <QPdfWriter>
-#include <QPainter>
-#include <QFileDialog>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QPageSize>
-#include <QPdfWriter>
 #include <QPainter>
 #include <QFileDialog>
 #include <QSqlQuery>
 #include <QMessageBox>
-
-
+#include <QSqlError>
+#include <QtWidgets/QMessageBox>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
+#include <QtWidgets/QFileDialog>
+#include <QPixmap>
+#include <QDate>
+#include <QDebug>
+#include <QPdfWriter>
+#include <QtQuick/QQuickImageProvider>
+#include <QStandardPaths>
+#include "../../Downloads/qrcodegen.hpp"
+using namespace qrcodegen;
 
 
 
@@ -198,26 +202,64 @@ void MainWindow::on_lineCode_textChanged(const QString &code)
 }
 void MainWindow::on_btnTrierNiveau_clicked()
 {
-    QString niveau = ui->comboTriNiveau->currentText();
-    Candidat c;
-    QSqlQuery query = c.trierParNiveauQuery(niveau);
+    // 1. Récupération du niveau sélectionné
+    QString niveau = ui->comboTriNiveau->currentText().trimmed();
 
-    // Vider le tableau actuel
+    // 2. Validation de l'entrée
+    if (niveau.isEmpty()) {
+        QMessageBox::warning(this, "Avertissement", "Veuillez sélectionner un niveau valide");
+        return;
+    }
+
+    // 3. Préparation du tableau
+    ui->tableView->setUpdatesEnabled(false); // Désactiver les mises à jour
     ui->tableView->clearContents();
     ui->tableView->setRowCount(0);
 
-    int row = 0;
-    while (query.next()) {
-        ui->tableView->insertRow(row);
-        for (int col = 0; col < 7; col++) {
-            ui->tableView->setItem(row, col, new QTableWidgetItem(query.value(col).toString()));
-        }
-        row++;
+    // 4. Requête SQL avec tri alphabétique
+    QSqlQuery query;
+    query.prepare(
+        "SELECT CODE_CANDIDAT, NOM_CANDIDAT, PRENOM_CANDIDAT, CIN_CANDIDAT, "
+        "ADRESSE_CANDIDAT, NUMTEL_CANDIDAT, NIVEAU_CANDIDAT "
+        "FROM CANDIDAT "
+        "WHERE NIVEAU_CANDIDAT = :niveau "
+        "ORDER BY NOM_CANDIDAT ASC, PRENOM_CANDIDAT ASC"
+        );
+    query.bindValue(":niveau", niveau);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Erreur",
+                              "Erreur lors de la requête :\n" + query.lastError().text());
+        ui->tableView->setUpdatesEnabled(true);
+        return;
     }
 
-    // Facultatif : redéfinir les entêtes
-    QStringList headers = {"Code", "Nom", "Prénom", "CIN", "Adresse", "NumTel", "Niveau"};
-    ui->tableView->setHorizontalHeaderLabels(headers);
+    // 5. Remplissage du tableau
+    while (query.next()) {
+        int row = ui->tableView->rowCount();
+        ui->tableView->insertRow(row);
+
+        for (int col = 0; col < 7; ++col) {
+            QTableWidgetItem *item = new QTableWidgetItem(query.value(col).toString());
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable); // Rend non éditable
+            ui->tableView->setItem(row, col, item);
+        }
+    }
+
+    // 6. Configuration finale
+    ui->tableView->setUpdatesEnabled(true);
+    ui->tableView->resizeColumnsToContents();
+
+    // 7. En-têtes si non déjà définis
+    if (ui->tableView->horizontalHeader()->count() == 0) {
+        QStringList headers = {"Code", "Nom", "Prénom", "CIN", "Adresse", "Téléphone", "Niveau"};
+        ui->tableView->setHorizontalHeaderLabels(headers);
+    }
+
+    // 8. Message de confirmation
+    QMessageBox::information(this, "Succès",
+                             QString("%1 candidats trouvés pour le niveau %2")
+                                 .arg(ui->tableView->rowCount()).arg(niveau));
 }
 void MainWindow::on_btnRechercher_clicked()
 {
@@ -283,64 +325,295 @@ void MainWindow::on_btnStats_clicked()
     ui->chartStats->setChart(chart);
     ui->chartStats->setRenderHint(QPainter::Antialiasing);
 }
-#include <QPdfWriter>
-#include <QPainter>
-#include <QFileDialog>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QPageSize> // important !
 
 void MainWindow::on_btnpdf_clicked()
 {
-    // 1. Choisir le fichier
-    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer en PDF", "", "*.pdf");
-    if (fileName.isEmpty())
-        return;
+    // 1. Configuration du fichier
+    QString filePath = QFileDialog::getSaveFileName(
+        this,
+        "Enregistrer la liste",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/liste_candidats.pdf",
+        "PDF Files (*.pdf)"
+        );
+    if (filePath.isEmpty()) return;
 
-    if (!fileName.endsWith(".pdf"))
-        fileName += ".pdf";
-
-    // 2. Préparer le PDF
-    QPdfWriter pdfWriter(fileName);
+    // 2. Initialisation PDF
+    QPdfWriter pdfWriter(filePath);
     pdfWriter.setPageSize(QPageSize(QPageSize::A4));
+    pdfWriter.setResolution(300);
+
     QPainter painter(&pdfWriter);
+    if (!painter.isActive()) {
+        QMessageBox::critical(this, "Erreur", "Échec de création du PDF");
+        return;
+    }
 
-    int y = 100; // Position verticale
+    // 3. Paramètres de mise en page
+    const int margin = 40;
+    const int pageWidth = pdfWriter.width() - 2*margin;
+    int yPos = margin;
+    const int rowHeight = 30;
+    const int headerHeight = 35;
 
-    // 3. Titre
-    painter.setFont(QFont("Arial", 16, QFont::Bold));
-    painter.drawText(200, y, "Liste des candidats");
-    y += 50;
+    // Configuration des colonnes
+    struct Column {
+        QString title;
+        double width;
+        Qt::Alignment alignment;
+    };
 
-    // 4. En-têtes
-    painter.setFont(QFont("Arial", 10, QFont::Bold));
-    painter.drawText(50, y, "Code");
-    painter.drawText(150, y, "Nom");
-    painter.drawText(300, y, "Prénom");
-    painter.drawText(450, y, "CIN");
-    painter.drawText(600, y, "Téléphone");
-    painter.drawText(750, y, "Niveau");
-    y += 30;
+    QVector<Column> columns = {
+        {"Code", 0.15, Qt::AlignCenter},
+        {"Nom", 0.25, Qt::AlignLeft},
+        {"Prénom", 0.25, Qt::AlignLeft},
+        {"CIN", 0.15, Qt::AlignRight},
+        {"Téléphone", 0.10, Qt::AlignRight},
+        {"Niveau", 0.10, Qt::AlignCenter}
+    };
 
-    // 5. Parcours de la liste des candidats (depuis base de données par exemple)
-    QSqlQuery query("SELECT code, nom, prenom, cin, numTel, niveau FROM candidat");
+    // 4. En-tête principal
+    painter.setFont(QFont("Arial", 18, QFont::Bold));
+    painter.drawText(0, yPos, pdfWriter.width(), 50, Qt::AlignCenter, "LISTE DES CANDIDATS");
+    yPos += 60;
 
-    painter.setFont(QFont("Arial", 10));
-    while (query.next()) {
-        painter.drawText(50, y, query.value(0).toString());   // code
-        painter.drawText(150, y, query.value(1).toString());  // nom
-        painter.drawText(300, y, query.value(2).toString());  // prénom
-        painter.drawText(450, y, query.value(3).toString());  // CIN
-        painter.drawText(600, y, query.value(4).toString());  // téléphone
-        painter.drawText(750, y, query.value(5).toString());  // niveau
+    // 5. Fonction pour dessiner les en-têtes
+    auto drawHeaders = [&]() {
+        painter.setFont(QFont("Arial", 10, QFont::Bold));
+        painter.setBrush(QColor(70, 130, 180)); // SteelBlue
+        painter.setPen(Qt::white);
 
-        y += 30;
-        if (y > 800) {  // Si on atteint le bas de la page
-            pdfWriter.newPage();
-            y = 100;
+        int x = margin;
+        for (const Column &col : columns) {
+            int width = pageWidth * col.width;
+            painter.drawRect(x, yPos, width, headerHeight);
+            painter.drawText(x, yPos, width, headerHeight,
+                             Qt::AlignCenter, col.title);
+            x += width;
         }
+        yPos += headerHeight;
+    };
+
+    // 6. Récupération des données
+    QSqlQuery query("SELECT CODE_CANDIDAT, NOM_CANDIDAT, PRENOM_CANDIDAT, "
+                    "CIN_CANDIDAT, NUMTEL_CANDIDAT, NIVEAU_CANDIDAT "
+                    "FROM CANDIDAT ORDER BY NOM_CANDIDAT, PRENOM_CANDIDAT");
+
+    // 7. Remplissage des données
+    bool alternateRow = false;
+    drawHeaders();
+    painter.setFont(QFont("Arial", 9));
+    painter.setPen(Qt::black);
+
+    while (query.next()) {
+        // Nouvelle page si nécessaire
+        if (yPos > pdfWriter.height() - 100) {
+            pdfWriter.newPage();
+            yPos = margin;
+            drawHeaders();
+            alternateRow = false;
+        }
+
+        // Couleur alternative
+        painter.setBrush(alternateRow ? QColor(240, 248, 255) : Qt::white); // AliceBlue alterné
+        alternateRow = !alternateRow;
+
+        // Dessin des cellules
+        int x = margin;
+        for (int i = 0; i < columns.size(); ++i) {
+            int width = pageWidth * columns[i].width;
+            painter.drawRect(x, yPos, width, rowHeight);
+
+            // Texte avec padding et alignement spécifique
+            painter.drawText(x + 5, yPos, width - 10, rowHeight,
+                             columns[i].alignment | Qt::AlignVCenter,
+                             query.value(i).toString());
+            x += width;
+        }
+        yPos += rowHeight;
     }
 
     painter.end();
-    QMessageBox::information(this, "Succès", "Liste exportée en PDF avec succès !");
+    QMessageBox::information(this, "Succès", "PDF généré avec succès");
 }
+void MainWindow::on_btnConvocation_clicked()
+{
+    QString code = ui->lineCode->text();
+
+    if (code.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer un code candidat.");
+        ui->lineCode->setFocus();
+        return;
+    }
+
+    genererConvocationPDF(code);
+}
+QImage MainWindow::genererQRCodeImage(const QString& data, int pixelParModule) {
+    QrCode qr = QrCode::encodeText(data.toUtf8().constData(), QrCode::Ecc::LOW);
+    int size = qr.getSize();
+    QImage image(size * pixelParModule, size * pixelParModule, QImage::Format_RGB32);
+    image.fill(Qt::white);
+
+    QPainter painter(&image);
+    painter.setBrush(Qt::black);
+    painter.setPen(Qt::NoPen);
+
+    for (int y = 0; y < size; ++y) {
+        for (int x = 0; x < size; ++x) {
+            if (qr.getModule(x, y)) {
+                painter.drawRect(x * pixelParModule, y * pixelParModule,
+                                 pixelParModule, pixelParModule);
+            }
+        }
+    }
+
+    return image;
+}
+bool MainWindow::genererConvocationPDF(const QString& codeCandidat)
+{
+    // 1. Récupération des données du candidat
+    QSqlQuery query;
+    query.prepare("SELECT NOM_CANDIDAT, PRENOM_CANDIDAT, CIN_CANDIDAT, "
+                  "ADRESSE_CANDIDAT, PHOTO_CANDIDAT FROM CANDIDAT "
+                  "WHERE CODE_CANDIDAT = ?");
+    query.addBindValue(codeCandidat);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Erreur BD",
+                              "Erreur lors de la requête :\n" + query.lastError().text());
+        return false;
+    }
+
+    if (!query.next()) {
+        QMessageBox::warning(this, "Non trouvé",
+                             "Aucun candidat trouvé avec ce code.");
+        return false;
+    }
+
+    // 2. Préparation des données
+    QString nom = query.value("NOM_CANDIDAT").toString();
+    QString prenom = query.value("PRENOM_CANDIDAT").toString();
+    QString cin = query.value("CIN_CANDIDAT").toString();
+    QString adresse = query.value("ADRESSE_CANDIDAT").toString();
+    QByteArray photoData = query.value("PHOTO_CANDIDAT").toByteArray();
+    QString date = QDate::currentDate().toString("dd/MM/yyyy");
+
+    // 3. Sélection du fichier de sortie
+    QString defaultName = QString("Convocation_%1_%2.pdf").arg(nom, prenom).replace(" ", "_");
+    QString filePath = QFileDialog::getSaveFileName(this,
+                                                    "Enregistrer la convocation",
+                                                    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/" + defaultName,
+                                                    "Fichiers PDF (*.pdf)");
+
+    if (filePath.isEmpty()) return false;
+    if (!filePath.endsWith(".pdf", Qt::CaseInsensitive)) {
+        filePath += ".pdf";
+    }
+
+    // 4. Création du PDF
+    QPdfWriter pdf(filePath);
+    pdf.setPageSize(QPageSize(QPageSize::A4));
+    pdf.setResolution(120);
+    pdf.setTitle(QString("Convocation %1 %2").arg(prenom, nom));
+
+    QPainter painter(&pdf);
+    if (!painter.isActive()) {
+        QMessageBox::critical(this, "Erreur", "Impossible de créer le fichier PDF");
+        return false;
+    }
+
+    const int margin = 40;
+    const int pageWidth = pdf.width();
+    const int contentWidth = pageWidth - 2 * margin;
+    int yPos = 0;
+
+    // En-tête
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor(31, 97, 141));
+    painter.drawRect(0, yPos, pageWidth, 60);
+    painter.setPen(Qt::white);
+    painter.setFont(QFont("Arial", 12, QFont::Bold));
+    painter.drawText(margin, yPos + 30, "République Tunisienne");
+    painter.drawText(margin, yPos + 50, "Ministère de l'Éducation");
+    yPos += 80;
+
+    // Titre
+    painter.setPen(Qt::black);
+    painter.setFont(QFont("Arial", 16, QFont::Bold));
+    painter.drawText(0, yPos, pageWidth, 30, Qt::AlignCenter, "CONVOCATION OFFICIELLE");
+    yPos += 40;
+
+    // Informations
+    painter.setFont(QFont("Arial", 10));
+    QRect cadre(margin, yPos, contentWidth, 200);
+    painter.setPen(QPen(Qt::black, 1));
+    painter.drawRect(cadre);
+
+    const int lineHeight = 30;
+    const int labelWidth = 120;
+    QStringList labels = {"Nom :", "Prénom :", "CIN :", "Adresse :", "Date d'émission :"};
+    QStringList values = {nom, prenom, cin, adresse, date};
+
+    for (int i = 0; i < labels.size(); ++i) {
+        int currentY = yPos + 20 + (i * lineHeight);
+        painter.setFont(QFont("Arial", 10, QFont::Bold));
+        painter.drawText(margin + 10, currentY, labelWidth, lineHeight,
+                         Qt::AlignLeft | Qt::AlignVCenter, labels[i]);
+        painter.setFont(QFont("Arial", 10));
+        painter.drawText(margin + labelWidth + 20, currentY,
+                         contentWidth - labelWidth - 30, lineHeight,
+                         Qt::AlignLeft | Qt::AlignVCenter, values[i]);
+    }
+
+    // Photo
+    QRect photoRect(pageWidth - margin - 90, yPos + 20, 80, 100);
+    painter.setPen(QPen(Qt::gray, 1));
+    painter.drawRect(photoRect);
+
+    if (!photoData.isEmpty()) {
+        QPixmap photo;
+        if (photo.loadFromData(photoData)) {
+            QPixmap scaled = photo.scaled(photoRect.width() - 4, photoRect.height() - 4,
+                                          Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            painter.drawPixmap(photoRect.x() + 2, photoRect.y() + 2, scaled);
+        } else {
+            painter.drawText(photoRect, Qt::AlignCenter, "Photo\ncorrompue");
+        }
+    } else {
+        painter.drawText(photoRect, Qt::AlignCenter, "Photo\nabsente");
+    }
+
+    yPos += 220;
+
+    // Signature
+    painter.setFont(QFont("Arial", 10));
+    painter.drawText(margin, yPos, 200, 20,
+                     Qt::AlignLeft | Qt::AlignVCenter, "Le Responsable :");
+    painter.drawLine(margin + 150, yPos + 10, margin + 350, yPos + 10);
+    painter.drawText(pageWidth - margin - 100, yPos, 100, 20,
+                     Qt::AlignRight | Qt::AlignVCenter, "Cachet");
+
+    yPos += 60;
+
+    // ✅ QR Code
+    QString contenuQR = QString("Candidat: %1 %2\nCIN: %3\nCode: %4\nExamen: Mathématique Centre 61 - 12/06/2025")
+                            .arg(nom, prenom, cin, codeCandidat);
+
+    QImage qrImage = genererQRCodeImage(contenuQR, 5); // 5 pixels/module
+
+    if (!qrImage.isNull()) {
+        int qrSize = 100;
+        int qrX = margin;
+        int qrY = yPos;
+
+        painter.drawImage(QRect(qrX, qrY, qrSize, qrSize), qrImage);
+        painter.setFont(QFont("Arial", 9));
+        painter.drawText(qrX, qrY + qrSize + 5, qrSize + 20, 20,
+                         Qt::AlignLeft, "Scanner pour infos examen");
+    }
+
+    painter.end();
+
+    return true;
+}
+
+

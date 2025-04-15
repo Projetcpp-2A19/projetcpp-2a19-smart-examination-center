@@ -28,6 +28,9 @@ private slots:
     void on_btnRechercher_clicked();
     void on_btnStats_clicked();
     void on_btnpdf_clicked();
+    void on_btnConvocation_clicked();
+    bool genererConvocationPDF(const QString& codeCandidat);
+
 
 
 
@@ -36,6 +39,10 @@ private slots:
 private:
     Ui::MainWindow *ui;
     bool verifierSaisie(QString code, QString prenom, int cin, QString adresse, QString nom, int numTel);
+    QImage genererQRCodeImage(const QString& data, int pixelParModule = 4);
+
+
+
 
 };
 

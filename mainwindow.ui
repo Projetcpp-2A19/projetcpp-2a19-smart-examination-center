@@ -487,63 +487,6 @@ background-color: rgb(74, 144, 226);
       <string>Examens</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>520</y>
-       <width>161</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton#pushButton_5 {
-    background-color: #4A90E2;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 111px 10px 20px; /* Increase right padding */
-    border-radius: 20px;
-    border: 2px solid #4A90E2;
-    text-align: left; /* Align text to the left */
- 
-}
-
-QPushButton#pushButton_5:hover {
-    background-color: #5A9BD5; /* Bleu plus clair au survol */
-    border: 2px solid #F9F9F9; /* Bordure plus claire */
-    color: #F9F9F9; /* Texte plus clair */
-}
-
-QPushButton#pushButton_5:pressed {
-    background-color: #C74C4C; /* Rouge brique au clic */
-    border: 2px solid #C74C4C;
-}
-</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_10">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>530</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(3, 3, 3);
-    font-size: 13px;
-    font-weight: bold;
-background-color: rgb(74, 144, 226);</string>
-     </property>
-     <property name="text">
-      <string>Statistiques</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
@@ -672,8 +615,6 @@ background-color: rgb(74, 144, 226);</string>
     <zorder>label_8</zorder>
     <zorder>label_9</zorder>
     <zorder>label_4</zorder>
-    <zorder>pushButton_5</zorder>
-    <zorder>label_10</zorder>
     <zorder>label</zorder>
     <zorder>label_50</zorder>
     <zorder>label_51</zorder>
@@ -693,8 +634,8 @@ background-color: rgb(74, 144, 226);</string>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="geometry">
       <rect>
-       <x>-20</x>
-       <y>0</y>
+       <x>0</x>
+       <y>-10</y>
        <width>1021</width>
        <height>781</height>
       </rect>
@@ -2978,7 +2919,7 @@ QPushButton#ModButton_4 :pressed {
          <x>370</x>
          <y>20</y>
          <width>231</width>
-         <height>31</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
@@ -2995,38 +2936,26 @@ QPushButton#ModButton_4 :pressed {
         <string>Gestion Des Candidats</string>
        </property>
       </widget>
-      <widget class="QListWidget" name="listWidget_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>140</y>
-         <width>441</width>
-         <height>471</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QListWidget {
-    border: 2px solid blue;    /* Bordure bleue */
-    border-radius: 10px;        /* Coins arrondis */
-    padding: 5px;               /* Un peu d'espace à l'intérieur */
-}
-</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="lineNom">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>240</y>
-         <width>113</width>
-         <height>26</height>
+         <y>225</y>
+         <width>141</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="tabletTracking">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">#lineEdit_4 {
+        <string notr="true">#lineNom {
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -3036,7 +2965,7 @@ QPushButton#ModButton_4 :pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
-#lineEdit_4:focus {
+#lineNom:focus {
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -3050,17 +2979,23 @@ QPushButton#ModButton_4 :pressed {
       <widget class="QLineEdit" name="lineCIN">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>490</y>
-         <width>113</width>
-         <height>26</height>
+         <x>32</x>
+         <y>485</y>
+         <width>141</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="tabletTracking">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">#lineEdit_5 {
+        <string notr="true">#lineCIN {
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -3070,7 +3005,7 @@ QPushButton#ModButton_4 :pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
-#lineEdit_5:focus {
+#lineCIN:focus {
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -3085,16 +3020,22 @@ QPushButton#ModButton_4 :pressed {
        <property name="geometry">
         <rect>
          <x>280</x>
-         <y>240</y>
-         <width>113</width>
-         <height>26</height>
+         <y>225</y>
+         <width>131</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="tabletTracking">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">#lineEdit_7 {
+        <string notr="true">#linePrenom {
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -3104,7 +3045,7 @@ QPushButton#ModButton_4 :pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
-#lineEdit_7:focus {
+#linePrenom:focus {
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -3120,15 +3061,21 @@ QPushButton#ModButton_4 :pressed {
         <rect>
          <x>30</x>
          <y>390</y>
-         <width>113</width>
-         <height>26</height>
+         <width>141</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="tabletTracking">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">#lineEdit_8 {
+        <string notr="true">#lineAdresse {
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -3138,7 +3085,7 @@ QPushButton#ModButton_4 :pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
-#lineEdit_8:focus {
+#lineAdresse:focus {
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -3154,15 +3101,21 @@ QPushButton#ModButton_4 :pressed {
         <rect>
          <x>270</x>
          <y>480</y>
-         <width>113</width>
-         <height>26</height>
+         <width>141</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="tabletTracking">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">#lineEdit_9 {
+        <string notr="true">#lineNumTel {
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -3172,7 +3125,7 @@ QPushButton#ModButton_4 :pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
-#lineEdit_9:focus {
+#lineNumTel:focus {
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -3198,6 +3151,9 @@ QPushButton#ModButton_4 :pressed {
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
+       </property>
        <property name="text">
         <string>Nom :</string>
        </property>
@@ -3216,6 +3172,9 @@ QPushButton#ModButton_4 :pressed {
          <pointsize>11</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
        </property>
        <property name="text">
         <string>Prénom :</string>
@@ -3236,6 +3195,9 @@ QPushButton#ModButton_4 :pressed {
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
+       </property>
        <property name="text">
         <string>Numéro Tel :</string>
        </property>
@@ -3254,6 +3216,9 @@ QPushButton#ModButton_4 :pressed {
          <pointsize>11</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
        </property>
        <property name="text">
         <string>CIN :</string>
@@ -3274,6 +3239,9 @@ QPushButton#ModButton_4 :pressed {
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
+       </property>
        <property name="text">
         <string>Niveau :</string>
        </property>
@@ -3292,6 +3260,9 @@ QPushButton#ModButton_4 :pressed {
          <pointsize>11</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
        </property>
        <property name="text">
         <string>Adresse :</string>
@@ -3375,10 +3346,10 @@ QPushButton#ModButton_4 :pressed {
       <widget class="QLabel" name="label_36">
        <property name="geometry">
         <rect>
-         <x>160</x>
+         <x>150</x>
          <y>150</y>
-         <width>211</width>
-         <height>31</height>
+         <width>221</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
@@ -3386,6 +3357,9 @@ QPushButton#ModButton_4 :pressed {
          <pointsize>12</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
        </property>
        <property name="text">
         <string>Ajouter un candidat</string>
@@ -3396,15 +3370,21 @@ QPushButton#ModButton_4 :pressed {
         <rect>
          <x>30</x>
          <y>310</y>
-         <width>113</width>
-         <height>26</height>
+         <width>141</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="tabletTracking">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">#lineEdit_10 {
+        <string notr="true">#lineCode {
     background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
     border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
     border-radius: 20px; /* Coins arrondis */
@@ -3414,7 +3394,7 @@ QPushButton#ModButton_4 :pressed {
     selection-background-color: #A0B9D9; /* Couleur de sélection */
 }
 
-#lineEdit_10:focus {
+#lineCode:focus {
     border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
     background-color: #F0F4F8; /* Légère variation pour effet moderne */
 }
@@ -3440,6 +3420,10 @@ QPushButton#ModButton_4 :pressed {
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);
+</string>
+       </property>
        <property name="text">
         <string>Code :</string>
        </property>
@@ -3447,14 +3431,14 @@ QPushButton#ModButton_4 :pressed {
       <widget class="QTableWidget" name="tableView">
        <property name="geometry">
         <rect>
-         <x>490</x>
-         <y>180</y>
+         <x>450</x>
+         <y>160</y>
          <width>501</width>
          <height>211</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">#tableWidget2_2 {
+        <string notr="true">#tableView {
     border: 2px solid #4A90E2; /* Bordure bleue */
     border-radius: 10px; /* Coins arrondis */
     background-color: #F0F4F8; /* Fond légèrement gris-bleu */
@@ -3463,17 +3447,17 @@ QPushButton#ModButton_4 :pressed {
     selection-color: white; /* Texte blanc lors de la sélection */
 }
 
-#tableWidget2_2::item {
+#tableView::item {
     padding: 8px; /* Espacement entre le texte et la cellule */
     color: #2C3E50; /* Texte bleu foncé */
 }
 
-#tableWidget2::item:selected {
+#tableView::item:selected {
     background-color: #4A90E2; /* Fond bleu lors de la sélection */
     color: white; /* Texte blanc */
 }
 
-#tableWidget2_2 QHeaderView::section {
+#tableView QHeaderView::section {
     background-color: #A0B9D9; /* En-tête avec une teinte bleu-gris */
     color: #2C3E50; /* Texte des en-têtes en bleu foncé */
     padding: 6px;
@@ -3481,7 +3465,7 @@ QPushButton#ModButton_4 :pressed {
     font-weight: bold;
 }
 
-#tableWidget2_2 QTableCornerButton::section {
+#tableView QTableCornerButton::section {
     background-color: #4A90E2; /* Coin supérieur gauche */
     border: 1px solid #4A90E2;
 }
@@ -3529,8 +3513,8 @@ QPushButton#ModButton_4 :pressed {
       <widget class="QPushButton" name="btnSupprimer">
        <property name="geometry">
         <rect>
-         <x>800</x>
-         <y>410</y>
+         <x>780</x>
+         <y>390</y>
          <width>121</width>
          <height>41</height>
         </rect>
@@ -3567,8 +3551,8 @@ QPushButton#btnSupprimer :pressed {
       <widget class="QPushButton" name="ModButton_5">
        <property name="geometry">
         <rect>
-         <x>560</x>
-         <y>410</y>
+         <x>510</x>
+         <y>390</y>
          <width>121</width>
          <height>41</height>
         </rect>
@@ -3602,23 +3586,6 @@ QPushButton#ModButton_5 :pressed {
         <iconset theme="QIcon::ThemeIcon::ListRemove"/>
        </property>
       </widget>
-      <widget class="QLabel" name="BinLabel_2">
-       <property name="geometry">
-        <rect>
-         <x>940</x>
-         <y>440</y>
-         <width>51</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-image: url(:/new/prefix1/img/supprimer.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_38">
        <property name="geometry">
         <rect>
@@ -3640,8 +3607,14 @@ image: url(:/new/prefix1/img/supprimer.png);</string>
        <property name="acceptDrops">
         <bool>false</bool>
        </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(12, 12, 12);</string>
+       </property>
        <property name="text">
         <string>Tri Selon Niveau :</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::TextFormat::PlainText</enum>
        </property>
       </widget>
       <widget class="QPushButton" name="btnTrierNiveau">
@@ -3654,7 +3627,7 @@ image: url(:/new/prefix1/img/supprimer.png);</string>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">#pushButton_2 { 
+        <string notr="true">#btnTrierNiveau { 
     background-color: #3A7BD5; /* Bleu plus profond et élégant */
      border: 2px dashed #2E5FA2; /* Bordure bleu foncé */
     border-radius: 10px; /* Coins arrondis */
@@ -3664,12 +3637,12 @@ image: url(:/new/prefix1/img/supprimer.png);</string>
     color: white; /* Texte blanc */
 }
 
-#Ajbtn_2:hover { 
+#btnTrierNiveau:hover { 
     background-color: #5294E2; /* Bleu légèrement plus clair au survol */
     border: 2px solid #3A7BD5;
 }
 
-#pushButton_2:pressed { 
+#btnTrierNiveau:pressed { 
     background-color: #A8D5BA; /* Vert pastel au clic */
     border: 2px solid #86C79A; /* Bordure verte pastel */
     color: #2C3E50; /* Texte bleu foncé */
@@ -3688,6 +3661,30 @@ image: url(:/new/prefix1/img/supprimer.png);</string>
          <width>141</width>
          <height>81</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#comboNiveau {
+    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #A0B9D9; /* Couleur de sélection */
+}
+
+#comboNiveau:focus {
+    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
+    background-color: #F0F4F8; /* Légère variation pour effet moderne */
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -3713,6 +3710,12 @@ image: url(:/new/prefix1/img/supprimer.png);</string>
          <width>131</width>
          <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">QLineEdit {
@@ -3835,49 +3838,13 @@ QLineEdit:focus {
         <string>Rechercher par ID</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="btnStats">
-       <property name="geometry">
-        <rect>
-         <x>510</x>
-         <y>470</y>
-         <width>191</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">#btnStats { 
-    background-color: #3A7BD5; /* Bleu plus profond et élégant */
-     border: 2px dashed #2E5FA2; /* Bordure bleu foncé */
-    border-radius: 10px; /* Coins arrondis */
-    padding: 8px 16px; /* Espacement interne */
-    font-size: 14px; /* Taille du texte */
-    font-weight: bold; /* Texte en gras */
-    color: white; /* Texte blanc */
-}
-
-#btnStats:hover { 
-    background-color: #5294E2; /* Bleu légèrement plus clair au survol */
-    border: 2px solid #3A7BD5;
-}
-
-#btnStats:pressed { 
-    background-color: #A8D5BA; /* Vert pastel au clic */
-    border: 2px solid #86C79A; /* Bordure verte pastel */
-    color: #2C3E50; /* Texte bleu foncé */
-}
-</string>
-       </property>
-       <property name="text">
-        <string>Afficher Statistiques</string>
-       </property>
-      </widget>
       <widget class="QChartView" name="chartStats" native="true">
        <property name="geometry">
         <rect>
-         <x>500</x>
-         <y>520</y>
-         <width>431</width>
-         <height>171</height>
+         <x>470</x>
+         <y>530</y>
+         <width>511</width>
+         <height>231</height>
         </rect>
        </property>
        <property name="autoFillBackground">
@@ -3894,7 +3861,7 @@ QLineEdit:focus {
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">#PDF { 
+        <string notr="true">#btnpdf { 
     background-color: #3A7BD5; /* Bleu plus profond et élégant */
      border: 2px dashed #2E5FA2; /* Bordure bleu foncé */
     border-radius: 10px; /* Coins arrondis */
@@ -3904,12 +3871,12 @@ QLineEdit:focus {
     color: white; /* Texte blanc */
 }
 
-#PDF:hover { 
+#btnpdf:hover { 
     background-color: #5294E2; /* Bleu légèrement plus clair au survol */
     border: 2px solid #3A7BD5;
 }
 
-#PDF:pressed { 
+#btnpdf:pressed { 
     background-color: #A8D5BA; /* Vert pastel au clic */
     border: 2px solid #86C79A; /* Bordure verte pastel */
     color: #2C3E50; /* Texte bleu foncé */
@@ -3918,6 +3885,78 @@ QLineEdit:focus {
        </property>
        <property name="text">
         <string>Exporter la liste des candidats PDF</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnStats">
+       <property name="geometry">
+        <rect>
+         <x>470</x>
+         <y>460</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#btnStats { 
+    background-color: #3A7BD5; /* Bleu plus profond et élégant */
+     border: 2px dashed #2E5FA2; /* Bordure bleu foncé */
+    border-radius: 10px; /* Coins arrondis */
+    padding: 8px 16px; /* Espacement interne */
+    font-size: 14px; /* Taille du texte */
+    font-weight: bold; /* Texte en gras */
+    color: white; /* Texte blanc */
+}
+
+#btnpdf:hover { 
+    background-color: #5294E2; /* Bleu légèrement plus clair au survol */
+    border: 2px solid #3A7BD5;
+}
+
+#btnStats:pressed { 
+    background-color: #A8D5BA; /* Vert pastel au clic */
+    border: 2px solid #86C79A; /* Bordure verte pastel */
+    color: #2C3E50; /* Texte bleu foncé */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Statistiques</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnConvocation">
+       <property name="geometry">
+        <rect>
+         <x>740</x>
+         <y>460</y>
+         <width>191</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#btnConvocation { 
+    background-color: #3A7BD5; /* Bleu plus profond et élégant */
+     border: 2px dashed #2E5FA2; /* Bordure bleu foncé */
+    border-radius: 10px; /* Coins arrondis */
+    padding: 8px 16px; /* Espacement interne */
+    font-size: 14px; /* Taille du texte */
+    font-weight: bold; /* Texte en gras */
+    color: white; /* Texte blanc */
+}
+
+#btnConvocation:hover { 
+    background-color: #5294E2; /* Bleu légèrement plus clair au survol */
+    border: 2px solid #3A7BD5;
+}
+
+#btnConvocation:pressed { 
+    background-color: #A8D5BA; /* Vert pastel au clic */
+    border: 2px solid #86C79A; /* Bordure verte pastel */
+    color: #2C3E50; /* Texte bleu foncé */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Generer Convocation</string>
        </property>
       </widget>
      </widget>
