@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->chatInput->setPlaceholderText("Pose ta question ici...");
+    ui->chatInput->setPlaceholderText("Poser une question ici...");
     ui->lineEdit_2->setPlaceholderText("Entrez l'adresse e-mail du destinataire");
     ui->lineEdit_3->setPlaceholderText("Entrez l'objet de l'email");
     ui->textEdit->setPlaceholderText("Écrivez ici le contenu de votre message...");
@@ -759,7 +759,7 @@ void MainWindow::on_sendChatBtn_clicked() {
     QUrl apiUrl("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1");
     QNetworkRequest request(apiUrl);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", "Bearer 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");
+    request.setRawHeader("Authorization", "Bearer ");
 
     QJsonObject json;
     json["inputs"] = QString("### Instruction:\n%1\n\n### Response:").arg(userMessage);
