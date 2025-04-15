@@ -22,15 +22,24 @@
         <file>img/parametres.png</file>
         <file>img/profil.png</file>
         <file>img/chatBot.png</file>
-<<<<<<< HEAD
         <file>img/statistiques.png</file>
-        <file>img/carte-3d.png</file>
     </qresource>
     <qresource prefix="/">
         <file>img/statistiques.png</file>
         <file>img/marker.png</file>
         <file>map.qml</file>
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+        <file>etablissements/ecole1.jpg</file>
+        <file>etablissements/ecole2.jpg</file>
+        <file>etablissements/360.jpg</file>
+        <file>etablissements/sss_360.jpg</file>
+        <file>etablissements/ss_360.jpg</file>
+        <file>etablissements/f_360.jpeg</file>
+        <file>etablissements/dd_360.jpeg</file>
+        <file>etablissements/q_360.jpg</file>
+        <file>etablissements/02-TUTO-PHOTO-360-VENISE.jpg</file>
+        <file>etablissements/aze_360.jpg</file>
+        <file>etablissements/benarous_360.jpg</file>
+        <file>etablissements/manar_360.jpg</file>
+        <file>etablissements/technique_360.jpg</file>
     </qresource>
 </RCC>

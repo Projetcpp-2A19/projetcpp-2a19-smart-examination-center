@@ -3,6 +3,7 @@
 
 #include <QSqlQueryModel>
 #include <QString>
+#include <QImage>
 
 class Etablissement {
 private:
@@ -13,20 +14,26 @@ private:
     QString nom_etablissement;
     int nombreSalle_etablissement;
     QString ville_etablissement;
-<<<<<<< HEAD
     QString adresse_etablissement;
+    QString imagePath;
 
 
 public:
     Etablissement();
-    Etablissement(QString id, QString gouvernorat, QString type, QString directeur, QString nom, int nombreSalle, QString ville ,QString adresse);
-=======
+    Etablissement(QString id, QString gouvernorat, QString type, QString directeur, QString nom, int nombreSalle, QString ville ,QString adresse ,QString imagePath = "");
+    bool isPanoramic() const {
+        if (imagePath.isEmpty()) return false;
 
-public:
-    Etablissement();
-    Etablissement(QString id, QString gouvernorat, QString type, QString directeur, QString nom, int nombreSalle, QString ville);
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+        QImage img(imagePath);
+        if (img.isNull()) return false;
 
+        // Ratio caractéristique des images 360° (au moins 2:1)
+        float ratio = static_cast<float>(img.width()) / img.height();
+
+        return imagePath.contains("_panoramic.", Qt::CaseInsensitive) ||
+               imagePath.contains("_360.", Qt::CaseInsensitive) ||
+               (ratio >= 2.0f); // Ratio largeur/hauteur ≥ 2
+    }
     QString getId() const;
     QString getGouvernorat() const;
     QString getType() const;
@@ -34,10 +41,8 @@ public:
     QString getNom() const;
     int getNombreSalle() const;
     QString getVille() const;
-<<<<<<< HEAD
     QString getAdresse() const;
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+    QString getImagePath() const;
 
     void setId(QString id);
     void setGouvernorat(QString gouvernorat);
@@ -46,13 +51,9 @@ public:
     void setNom(QString nom);
     void setNombreSalle(int nombreSalle);
     void setVille(QString ville);
-<<<<<<< HEAD
     void setAdresse(QString adresse);
+    void setImagePath(QString path);
 
-
-=======
-
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     bool ajouter();
     QSqlQueryModel* afficher();
     bool supprimer(QString id);

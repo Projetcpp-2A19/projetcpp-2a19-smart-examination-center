@@ -12,28 +12,23 @@
 #include <QSqlError>  // Ajoute cette ligne pour inclure QSqlError
 #include <QInputDialog>
 #include <QTimer>
-<<<<<<< HEAD
 #include <QSqlQuery>
 #include <QFileDialog>       // Pour QFileDialog
 #include <QStandardPaths>    // Pour QStandardPaths
 #include <QPrinter>          // Pour QPrinter
 #include <QPainter>          // Pour QPainter
 #include <QDate>
+#include <QDirIterator>
+#include "panoramicviewer.h"
 
 
-
-
-=======
-
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 // Constructeur
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-<<<<<<< HEAD
+    setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
     // Initialisations existantes...
     ui->tableView1->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);     // Connexions existantes...
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
@@ -56,19 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->statsButton, &QPushButton::clicked,
             this, &MainWindow::on_statsButton_clicked);
 
+    connect(ui->tableView1, &QTableView::clicked, this, &MainWindow::on_tableView1_clicked);
+
     // Initialiser les stats
     setupGovernorateStats();
-=======
-    // Initialiser le modèle pour afficher les établissements
-    ui->tableView1->setModel(E.afficher());
-
-    // Configurer le placeholder pour la recherche
-    ui->lineEdit->setPlaceholderText("Rechercher...");
-
-    // Connexion des boutons
-    connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
-    connect(ui->BinSuperbtn, &QPushButton::clicked, this, &MainWindow::on_BinSuperbtn_clicked);
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 }
 
 // Destructeur
@@ -90,31 +76,20 @@ void MainWindow::on_Ajbtn_clicked()
     // Récupérer les valeurs des champs de saisie
     QString id = ui->idEtablissementLineEdit->text();
     QString gouvernorat = ui->gouvernoratLineEdit->text();
-<<<<<<< HEAD
     QString type = ui->typeLineEdit->currentText();
-=======
-    QString type = ui->typeLineEdit->text();
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     QString directeur = ui->directeurLineEdit->text();
     QString nom = ui->nomLineEdit->text();
     int nombreSalle = ui->nombreSalleLineEdit->text().toInt();
     QString ville = ui->villeLineEdit->text();
-<<<<<<< HEAD
     QString adresse = ui->adresseLineEdit->text(); // Nouveau champ
 
 
     // Vérifier que tous les champs sont remplis
     if (id.isEmpty() || gouvernorat.isEmpty() || type.isEmpty() || directeur.isEmpty() || nom.isEmpty() || ville.isEmpty() || adresse.isEmpty())
-=======
-
-    // Vérifier que tous les champs sont remplis
-    if (id.isEmpty() || gouvernorat.isEmpty() || type.isEmpty() || directeur.isEmpty() || nom.isEmpty() || ville.isEmpty())
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     {
         QMessageBox::warning(this, "Erreur", "Tous les champs doivent être remplis.");
         return;
     }
-<<<<<<< HEAD
     if (nombreSalle <= 0)
     {
         QMessageBox::warning(this, "Erreur", "Le nombre de salles doit être supérieur à 0.");
@@ -123,12 +98,7 @@ void MainWindow::on_Ajbtn_clicked()
     }
 
     // Créer un objet Etablissement
-    Etablissement E(id, gouvernorat, type, directeur, nom, nombreSalle, ville, adresse);
-=======
-
-    // Créer un objet Etablissement
-    Etablissement E(id, gouvernorat, type, directeur, nom, nombreSalle, ville);
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+    Etablissement E(id, gouvernorat, type, directeur, nom, nombreSalle, ville, adresse , selectedImagePath);
 
     // Ajouter l'établissement à la base de données
     if (E.ajouter())
@@ -169,10 +139,7 @@ void MainWindow::on_BinSuperbtn_clicked()
 }
 
 // Modifier un établissement
-<<<<<<< HEAD
 // Modifier un établissement
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 void MainWindow::on_Modbtn_clicked()
 {
     // Récupérer l'index de la ligne sélectionnée dans le tableau
@@ -183,7 +150,6 @@ void MainWindow::on_Modbtn_clicked()
         return;
     }
 
-<<<<<<< HEAD
     // Récupérer toutes les données de la ligne sélectionnée
     QSqlQueryModel *model = qobject_cast<QSqlQueryModel*>(ui->tableView1->model());
     if (!model) return;
@@ -220,41 +186,18 @@ void MainWindow::on_Modbtn_clicked()
     ui->adresseLineEdit->setText(adresse);
 
 }
-=======
-    // Récupérer l'ID de l'établissement sélectionné
-    QString id = ui->tableView1->model()->data(index).toString();
-
-    // Remplir les champs de saisie avec les données de l'établissement sélectionné
-    E.setId(id);
-    ui->idEtablissementLineEdit->setText(id);
-    ui->gouvernoratLineEdit->setText(E.getGouvernorat());
-    ui->typeLineEdit->setText(E.getType());
-    ui->directeurLineEdit->setText(E.getDirecteur());
-    ui->nomLineEdit->setText(E.getNom());
-    ui->nombreSalleLineEdit->setText(QString::number(E.getNombreSalle()));
-    ui->villeLineEdit->setText(E.getVille());
-}
-
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 // Sauvegarder les modifications
 void MainWindow::on_SaveMod_clicked()
 {
     // Récupérer les nouvelles valeurs des champs de saisie
     QString id = ui->idEtablissementLineEdit->text();
     QString gouvernorat = ui->gouvernoratLineEdit->text();
-<<<<<<< HEAD
     QString type = ui->typeLineEdit->currentText();
-=======
-    QString type = ui->typeLineEdit->text();
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     QString directeur = ui->directeurLineEdit->text();
     QString nom = ui->nomLineEdit->text();
     int nombreSalle = ui->nombreSalleLineEdit->text().toInt();
     QString ville = ui->villeLineEdit->text();
-<<<<<<< HEAD
     QString adresse = ui->adresseLineEdit->text();
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
     // Vérifier que tous les champs sont remplis
     if (id.isEmpty() || gouvernorat.isEmpty() || type.isEmpty() || directeur.isEmpty() || nom.isEmpty() || ville.isEmpty())
@@ -262,16 +205,12 @@ void MainWindow::on_SaveMod_clicked()
         QMessageBox::warning(this, "Erreur", "Tous les champs doivent être remplis.");
         return;
     }
-<<<<<<< HEAD
     if (nombreSalle <= 0)
     {
         QMessageBox::warning(this, "Erreur", "Le nombre de salles doit être supérieur à 0.");
         ui->nombreSalleLineEdit->setFocus();
         return;
     }
-=======
-
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     // Mettre à jour les données de l'établissement
     E.setId(id);
     E.setGouvernorat(gouvernorat);
@@ -280,11 +219,8 @@ void MainWindow::on_SaveMod_clicked()
     E.setNom(nom);
     E.setNombreSalle(nombreSalle);
     E.setVille(ville);
-<<<<<<< HEAD
     E.setAdresse(adresse);
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
-
+    E.setImagePath(selectedImagePath);
     // Modifier l'établissement dans la base de données
     if (E.modifier())
     {
@@ -296,7 +232,6 @@ void MainWindow::on_SaveMod_clicked()
         QMessageBox::critical(this, "Erreur", "Échec de la modification.");
     }
 }
-<<<<<<< HEAD
 void MainWindow::on_newBtn_clicked()
 {
     // Vider tous les champs de saisie
@@ -311,6 +246,7 @@ void MainWindow::on_newBtn_clicked()
     ui->adresseLineEdit->clear();
 
 
+
     // Réinitialiser l'objet E (optionnel mais recommandé)
     E = Etablissement();
 
@@ -321,6 +257,53 @@ void MainWindow::on_newBtn_clicked()
     // ui->titleLabel->setText("Ajouter un nouvel établissement");
     // ui->Ajbtn->setEnabled(true);
     // ui->SaveMod->setEnabled(false);
+}
+
+// Dans le constructeur, ajoutez cette connexion :
+
+// Nouvelle méthode pour gérer les clics sur le tableau
+void MainWindow::on_tableView1_clicked(const QModelIndex &index)
+{
+    // Vérifier si on a cliqué sur la colonne de l'image (colonne 8)
+    if (index.column() == 8) {
+        QString imagePath = ui->tableView1->model()->data(index).toString();
+        if (!imagePath.isEmpty()) {
+            displayImage(imagePath);
+        }
+    }
+}
+
+// Méthode pour afficher l'image
+void MainWindow::displayImage(const QString &imagePath)
+{
+    if (imagePath.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Aucune image sélectionnée");
+        return;
+    }
+
+    Etablissement temp;
+    temp.setImagePath(imagePath);
+
+    if (temp.isPanoramic()) {
+        PanoramicViewer viewer(imagePath, this);
+        viewer.exec();
+    } else {
+        QDialog dialog(this);
+        dialog.setWindowTitle("Image de l'établissement");
+        QLabel label(&dialog);
+
+        QPixmap pix(imagePath);
+        if (pix.isNull()) {
+            label.setText("Impossible de charger l'image");
+        } else {
+            label.setPixmap(pix.scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        }
+
+        QVBoxLayout layout(&dialog);
+        layout.addWidget(&label);
+        dialog.setLayout(&layout);
+        dialog.exec();
+    }
 }
 void MainWindow::on_searchDirector_textChanged(const QString &text)
 {
@@ -435,7 +418,7 @@ void MainWindow::on_exportPdfBtn_clicked()
 
 void MainWindow::setupGovernorateStats()
 {
-    // Requête pour compter les établissements par gouvernorat
+
     QSqlQuery query;
     query.prepare("SELECT GOUVERNORAT_ETABLISSEMENT, COUNT(*) FROM ETABLISSEMENT GROUP BY GOUVERNORAT_ETABLISSEMENT");
 
@@ -549,9 +532,120 @@ void MainWindow::on_mapsButton_clicked()
     mapView->show();
 }
 
+void MainWindow::on_selectImageBtn_clicked() {
+    showImageSelectionDialog();
+}
 
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+// Méthode pour afficher la boîte de dialogue de sélection d'image :
+void MainWindow::showImageSelectionDialog() {
+    QDialog dialog(this);
+    dialog.setWindowTitle("Sélectionner une image");
+    dialog.setFixedSize(600, 400);
+
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    // Liste des images disponibles dans les ressources
+    QStringList imagePaths;
+    QDirIterator it(":/etablissements/", {"*.jpg", "*.png", "*.jpeg"}, QDir::Files);
+    while (it.hasNext()) {
+        imagePaths << it.next();
+    }
+
+    QListWidget *imageList = new QListWidget(&dialog);
+    imageList->setViewMode(QListWidget::IconMode);
+    imageList->setIconSize(QSize(100, 100));
+    imageList->setResizeMode(QListWidget::Adjust);
+
+    for (const QString &path : imagePaths) {
+        QListWidgetItem *item = new QListWidgetItem(QIcon(path), QFileInfo(path).fileName());
+        item->setData(Qt::UserRole, path);
+        imageList->addItem(item);
+    }
+
+    layout->addWidget(imageList);
+
+    QPushButton *selectButton = new QPushButton("Sélectionner", &dialog);
+    connect(selectButton, &QPushButton::clicked, [&]() {
+        QListWidgetItem *selectedItem = imageList->currentItem();
+        if (selectedItem) {
+            selectedImagePath = selectedItem->data(Qt::UserRole).toString();
+            qDebug() << "Image sélectionnée :" << selectedImagePath;
+        }
+        dialog.close();
+    });
+
+    layout->addWidget(selectButton);
+    dialog.exec();
+}
+
+
+void MainWindow::afficherImage(const QString &cheminImage)
+{
+    if(cheminImage.contains("_360")) {
+        // Fenêtre 360°
+        QDialog fenetre360(this);
+        fenetre360.setWindowTitle("Vue 360°");
+        fenetre360.resize(800, 400);
+
+        QLabel *label = new QLabel(&fenetre360);
+        QPixmap pixmap(cheminImage);
+        if(pixmap.isNull()) {
+            label->setText("Image non trouvée");
+            fenetre360.exec();
+            return;
+        }
+
+        // Variables pour le défilement
+        int positionX = 0;
+        QPoint dernierPoint;
+
+        // Fonction de mise à jour
+        auto updateImage = [&]() {
+            QPixmap partie = pixmap.copy(positionX, 0, 800, 400);
+            label->setPixmap(partie.scaled(fenetre360.width(), fenetre360.height(),
+                                           Qt::KeepAspectRatioByExpanding));
+        };
+
+        // Configuration initiale
+        updateImage();
+
+        // Gestion des événements simplifiée
+        label->setMouseTracking(true);
+        label->installEventFilter(this);
+
+        fenetre360.exec();
+    } else {
+        // Image normale
+        QDialog fenetreNormale(this);
+        fenetreNormale.setWindowTitle("Image");
+        QLabel *label = new QLabel(&fenetreNormale);
+        QPixmap pix(cheminImage);
+        label->setPixmap(pix.scaled(600, 600, Qt::KeepAspectRatio));
+        fenetreNormale.exec();
+    }
+}
+
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseMove) {
+        if (QLabel *label = qobject_cast<QLabel*>(obj)) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            static QPoint lastPos;
+            int dx = mouseEvent->pos().x() - lastPos.x();
+            lastPos = mouseEvent->pos();
+
+            m_positionX = (m_positionX + dx) % m_currentPixmap.width();
+            if(m_positionX < 0) m_positionX += m_currentPixmap.width();
+
+            QPixmap visiblePart = m_currentPixmap.copy(m_positionX, 0, 800, 400);
+            label->setPixmap(visiblePart.scaled(label->width(), label->height(),
+                                                Qt::KeepAspectRatioByExpanding));
+            return true;
+        }
+    }
+    return QMainWindow::eventFilter(obj, event);
+}
 
 // Navigation dans l'interface
 void MainWindow::on_examButton_clicked() { ui->stackedWidget->setCurrentIndex(1); }

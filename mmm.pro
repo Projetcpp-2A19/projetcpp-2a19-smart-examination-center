@@ -1,4 +1,12 @@
 QT       += core gui sql
+QT += printsupport
+CONFIG -= qtquickcompiler
+QT += 3dcore 3drender 3dextras widgets
+
+QT += charts sql
+QT += quickwidgets location positioning  # Modules essentiels
+CONFIG += c++11  # Nécessaire pour QtLocation
+QT += quick
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,12 +20,14 @@ SOURCES += \
     Etablissement.cpp \
     connection.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    panoramicviewer.cpp
 
 HEADERS += \
     Etablissement.h \
     connection.h \
-    mainwindow.h
+    mainwindow.h \
+    panoramicviewer.h
 
 FORMS += \
     mainwindow.ui

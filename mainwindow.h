@@ -4,14 +4,11 @@
 #include <QMainWindow>
 #include <QSqlTableModel>
 #include "Etablissement.h"  // Inclure la classe Etablissement
-<<<<<<< HEAD
 #include <QChartView>
 #include <QPieSeries>
 #include <QPieSlice>
 #include <QQmlApplicationEngine>
 #include <QQuickView>
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -44,7 +41,6 @@ private slots:
     void on_BinSuperbtn_clicked();  // Supprimer un établissement
     void on_Modbtn_clicked();  // Modifier un établissement
     void on_SaveMod_clicked();  // Sauvegarder les modifications
-<<<<<<< HEAD
     void on_newBtn_clicked();
     // Slots pour les notifications et autres fonctionnalités
     void on_notifBtn_clicked();
@@ -54,35 +50,31 @@ private slots:
     void on_exportPdfBtn_clicked();
     void on_statsButton_clicked();
     void on_mapsButton_clicked();
-=======
-
-    // Slots pour les notifications et autres fonctionnalités
-    void on_notifBtn_clicked();
-    void on_EvalAssist_clicked();
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+    void on_selectImageBtn_clicked();
+    void on_tableView1_clicked(const QModelIndex &index);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     Ui::MainWindow *ui;  // Interface utilisateur générée par Qt
     Etablissement E;  // Objet pour gérer les établissements
-<<<<<<< HEAD
     QQuickView *mapView = nullptr;
-=======
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
     QSqlTableModel *model;  // Modèle pour afficher les données dans le tableau
-
+    void afficherImage(const QString &cheminImage);
     // Variables pour stocker les données en cours de modification
     QString currentId;
     QString currentVille;
     QString currentType;
     QString currentDirecteur;
     QString currentNom;
-<<<<<<< HEAD
     QString currentAdresse;
+
+    QString selectedImagePath; // Chemin de l'image sélectionnée
+    void showImageSelectionDialog(); // Méthode pour afficher la boîte de dialogue
+    void displayImage(const QString &imagePath);
     int currentNbS;
     void setupGovernorateStats();
-=======
-    int currentNbS;
->>>>>>> c72197f8b0853cd878fb0a1821205a90fddb9313
+    int m_positionX = 0;
+    QPixmap m_currentPixmap;
 };
 
 #endif // MAINWINDOW_H
