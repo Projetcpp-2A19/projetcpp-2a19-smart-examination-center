@@ -202,21 +202,21 @@ void MainWindow::on_lineCode_textChanged(const QString &code)
 }
 void MainWindow::on_btnTrierNiveau_clicked()
 {
-    // 1. Récupération du niveau sélectionné
+    // 1. Récupération du niveau sélectionné depuis la comboBox
     QString niveau = ui->comboTriNiveau->currentText().trimmed();
 
-    // 2. Validation de l'entrée
+    // 2. Vérifie si un niveau est sélectionné
     if (niveau.isEmpty()) {
         QMessageBox::warning(this, "Avertissement", "Veuillez sélectionner un niveau valide");
-        return;
+        return; // Arrête la fonction si rien n'est sélectionné
     }
 
-    // 3. Préparation du tableau
-    ui->tableView->setUpdatesEnabled(false); // Désactiver les mises à jour
-    ui->tableView->clearContents();
-    ui->tableView->setRowCount(0);
+    // 3. Prépare le tableau pour l'affichage (vide les anciennes données)
+    ui->tableView->setUpdatesEnabled(false); // Empêche les rafraîchissements visuels pendant la mise à jour
+    ui->tableView->clearContents();          // Supprime les anciennes cellules
+    ui->tableView->setRowCount(0);           // Remet le nombre de lignes à zéro
 
-    // 4. Requête SQL avec tri alphabétique
+    // 4. Préparation de la requête SQL avec tri par nom et prénom
     QSqlQuery query;
     query.prepare(
         "SELECT CODE_CANDIDAT, NOM_CANDIDAT, PRENOM_CANDIDAT, CIN_CANDIDAT, "
@@ -225,105 +225,134 @@ void MainWindow::on_btnTrierNiveau_clicked()
         "WHERE NIVEAU_CANDIDAT = :niveau "
         "ORDER BY NOM_CANDIDAT ASC, PRENOM_CANDIDAT ASC"
         );
-    query.bindValue(":niveau", niveau);
+    query.bindValue(":niveau", niveau); // Lie la valeur du niveau à la requête
 
+    // Vérifie si la requête SQL s'exécute correctement
     if (!query.exec()) {
         QMessageBox::critical(this, "Erreur",
                               "Erreur lors de la requête :\n" + query.lastError().text());
-        ui->tableView->setUpdatesEnabled(true);
-        return;
+        ui->tableView->setUpdatesEnabled(true); // Réactive les mises à jour visuelles
+        return; // Arrête la fonction
     }
 
-    // 5. Remplissage du tableau
+    // 5. Parcourt les résultats de la requête et les ajoute au tableau
     while (query.next()) {
-        int row = ui->tableView->rowCount();
-        ui->tableView->insertRow(row);
+        int row = ui->tableView->rowCount();   // Numéro de la nouvelle ligne
+        ui->tableView->insertRow(row);         // Insère une nouvelle ligne
 
+        // Insère chaque champ (colonne) dans le tableau
         for (int col = 0; col < 7; ++col) {
             QTableWidgetItem *item = new QTableWidgetItem(query.value(col).toString());
-            item->setFlags(item->flags() & ~Qt::ItemIsEditable); // Rend non éditable
-            ui->tableView->setItem(row, col, item);
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable); // Rend les cellules non éditables
+            ui->tableView->setItem(row, col, item);              // Place l'élément dans la cellule
         }
     }
 
-    // 6. Configuration finale
+    // 6. Réactive les mises à jour visuelles et ajuste la taille des colonnes
     ui->tableView->setUpdatesEnabled(true);
     ui->tableView->resizeColumnsToContents();
 
-    // 7. En-têtes si non déjà définis
+    // 7. Définit les en-têtes du tableau si ce n'est pas encore fait
     if (ui->tableView->horizontalHeader()->count() == 0) {
         QStringList headers = {"Code", "Nom", "Prénom", "CIN", "Adresse", "Téléphone", "Niveau"};
         ui->tableView->setHorizontalHeaderLabels(headers);
     }
 
-    // 8. Message de confirmation
+    // 8. Affiche un message avec le nombre de candidats trouvés
     QMessageBox::information(this, "Succès",
                              QString("%1 candidats trouvés pour le niveau %2")
                                  .arg(ui->tableView->rowCount()).arg(niveau));
 }
+
 void MainWindow::on_btnRechercher_clicked()
 {
+    // 1. Récupération du code entré dans le champ de texte
     QString code = ui->lineCODE->text();
+
+    // 2. Vérifie si le champ est vide
     if (code.isEmpty()) {
         QMessageBox::warning(this, "Champ vide", "Veuillez entrer un code.");
-        return;
+        return; // Arrête la fonction si le champ est vide
     }
 
+    // 3. Création d’un objet Candidat et exécution de la recherche dans la base
     Candidat c;
-    QSqlQuery query = c.chercherParCodeDansTable(code);
+    QSqlQuery query = c.chercherParCodeDansTable(code); // Méthode qui retourne un QSqlQuery
 
-    // Effacer le contenu actuel du tableau
-    ui->tableView->clearContents();
-    ui->tableView->setRowCount(0);
+    // 4. Nettoyage du tableau avant d’afficher les résultats
+    ui->tableView->clearContents(); // Vide les cellules
+    ui->tableView->setRowCount(0);  // Réinitialise le nombre de lignes
 
-    int row = 0;
+    // 5. Parcourt les résultats et remplit le tableau
+    int row = 0; // Compteur de lignes
     while (query.next()) {
-        ui->tableView->insertRow(row);
+        ui->tableView->insertRow(row); // Insère une nouvelle ligne
         for (int col = 0; col < 7; col++) {
+            // Crée un nouvel item avec la valeur de la colonne et l’ajoute à la cellule
             ui->tableView->setItem(row, col, new QTableWidgetItem(query.value(col).toString()));
         }
-        row++;
+        row++; // Passe à la ligne suivante
     }
 
+    // 6. Si aucun résultat trouvé, affiche un message
     if (row == 0) {
         QMessageBox::information(this, "Introuvable", "Aucun candidat trouvé avec ce code.");
     }
 }
+
 void MainWindow::on_btnStats_clicked()
 {
+    // 1. Création d’un objet Candidat
     Candidat c;
-    QSqlQuery query = c.statistiquesParNiveau(); // cette requête retourne (niveau, count)
 
+    // 2. Récupération des statistiques depuis la base de données
+    // Cette méthode retourne une requête avec (niveau, nombre de candidats)
+    QSqlQuery query = c.statistiquesParNiveau();
+
+    // 3. Création d'une série pour le graphique en camembert
     QPieSeries *series = new QPieSeries();
 
+    // 4. Variables pour stocker les données et calculer le total
     int total = 0;
-    QList<QPair<QString, int>> data; // stocker pour traitement
+    QList<QPair<QString, int>> data; // Liste pour stocker les niveaux et leurs comptes
 
+    // 5. Remplir la liste 'data' avec les résultats de la requête
     while (query.next()) {
-        QString niveau = query.value(0).toString();
-        int nombre = query.value(1).toInt();
-        data.append(qMakePair(niveau, nombre));
-        total += nombre;
+        QString niveau = query.value(0).toString();  // Le niveau (ex : Bac, 9ème…)
+        int nombre = query.value(1).toInt();         // Le nombre de candidats pour ce niveau
+        data.append(qMakePair(niveau, nombre));      // Ajoute à la liste
+        total += nombre;                             // Incrémente le total des candidats
     }
 
+    // 6. Création des tranches du graphique avec les pourcentages
     for (const QPair<QString, int> &entry : data) {
         QString niveau = entry.first;
         int nombre = entry.second;
+
+        // Calcul du pourcentage pour ce niveau
         qreal pourcentage = (double)nombre / total * 100;
+
+        // Création du label (ex: "Bac: 35.0%")
         QString label = QString("%1: %2%").arg(niveau).arg(QString::number(pourcentage, 'f', 1));
 
+        // Création d'une tranche avec le label et la valeur
         QPieSlice *slice = new QPieSlice(label, nombre);
-        slice->setLabelVisible(true);
-        series->append(slice);
+        slice->setLabelVisible(true); // Affiche le texte sur le graphique
+
+        series->append(slice); // Ajoute la tranche à la série
     }
 
+    // 7. Création du graphique et ajout de la série
     QChart *chart = new QChart();
     chart->addSeries(series);
-    chart->setTitle("Répartition des candidats par niveau (%)");
-    chart->legend()->setAlignment(Qt::AlignRight);
 
+    // 8. Configuration du titre et de la légende
+    chart->setTitle("Répartition des candidats par niveau (%)");
+    chart->legend()->setAlignment(Qt::AlignRight); // Légende à droite
+
+    // 9. Affichage du graphique dans le widget prévu (chartStats)
     ui->chartStats->setChart(chart);
-    ui->chartStats->setRenderHint(QPainter::Antialiasing);
+    ui->chartStats->setRenderHint(QPainter::Antialiasing); // Pour des bords lisses
 }
 
 void MainWindow::on_btnpdf_clicked()
@@ -595,7 +624,7 @@ bool MainWindow::genererConvocationPDF(const QString& codeCandidat)
     yPos += 60;
 
     // ✅ QR Code
-    QString contenuQR = QString("Candidat: %1 %2\nCIN: %3\nCode: %4\nExamen: Mathématique Centre 61 - 12/06/2025")
+    QString contenuQR = QString("Candidat: %1 %2\nCIN: %3\nCode: %4\nExamen: Mathématique Centre  - 12/06/2025")
                             .arg(nom, prenom, cin, codeCandidat);
 
     QImage qrImage = genererQRCodeImage(contenuQR, 5); // 5 pixels/module
@@ -615,5 +644,141 @@ bool MainWindow::genererConvocationPDF(const QString& codeCandidat)
 
     return true;
 }
+#include <QBuffer>
+#include <QBuffer>
+#include <QImageWriter>
+#include <QPainter>
+#include "..\..\Downloads\qrcodegen.hpp"  // Important
+using qrcodegen::QrCode;
+using qrcodegen::QrSegment;
+QImage generateQrCodeImage(const QString &text, int size = 150) {
+    QrCode qr = QrCode::encodeText(text.toUtf8().constData(), QrCode::Ecc::LOW);
+    const int border = 2;
+    int scale = size / (qr.getSize() + border * 2);
+
+    QImage image((qr.getSize() + border * 2) * scale, (qr.getSize() + border * 2) * scale, QImage::Format_RGB32);
+    image.fill(Qt::white);
+    QPainter painter(&image);
+    painter.setBrush(Qt::black);
+    painter.setPen(Qt::NoPen);
+
+    for (int y = 0; y < qr.getSize(); y++) {
+        for (int x = 0; x < qr.getSize(); x++) {
+            if (qr.getModule(x, y)) {
+                QRect r((x + border) * scale, (y + border) * scale, scale, scale);
+                painter.drawRect(r);
+            }
+        }
+    }
+
+    return image;
+}
 
 
+
+void MainWindow::on_btnAfficherConvocation_clicked()
+{
+    QString code = ui->lineCodeCandidat->text().trimmed();
+    if (code.isEmpty()) {
+        QMessageBox::warning(this, "Champ vide", "Veuillez entrer un code candidat.");
+        return;
+    }
+
+    QSqlQuery query;
+    query.prepare("SELECT NOM_CANDIDAT, PRENOM_CANDIDAT, CIN_CANDIDAT, ADRESSE_CANDIDAT, NUMTEL_CANDIDAT, NIVEAU_CANDIDAT, PHOTO_CANDIDAT FROM CANDIDAT WHERE CODE_CANDIDAT = :code");
+    query.bindValue(":code", code);
+
+    if (!query.exec() || !query.next()) {
+        QMessageBox::warning(this, "Erreur", "Candidat non trouvé.");
+        return;
+    }
+
+    QString nom = query.value(0).toString();
+    QString prenom = query.value(1).toString();
+    QString cin = query.value(2).toString();
+    QString adresse = query.value(3).toString();
+    QString numtel = query.value(4).toString();
+    QString niveau = query.value(5).toString();
+    QByteArray photoData = query.value(6).toByteArray();
+
+    // --- Contenu QR ---
+    QString contenuQR = QString("Candidat: %1 %2\nCIN: %3\nCode: %4\nExamen: Mathématique Centre 51  - 12/06/2025 - 8h - Durée : 3 heures")
+                            .arg(nom, prenom, cin, code);
+
+    // --- Vrai QR image générée ---
+    QImage qrImage = generateQrCodeImage(contenuQR);  // ✅ Correction ici
+
+    // --- QR en base64 ---
+    QByteArray qrBa;
+    QBuffer qrBuffer(&qrBa);
+    qrBuffer.open(QIODevice::WriteOnly);
+    qrImage.save(&qrBuffer, "PNG");
+    QString qrBase64 = QString::fromLatin1(qrBa.toBase64());
+
+    // --- Photo candidat en base64 ---
+    QString photoBase64;
+    if (!photoData.isEmpty()) {
+        QImage image;
+        image.loadFromData(photoData);
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, "PNG");
+        photoBase64 = QString::fromLatin1(ba.toBase64());
+    }
+
+    // --- HTML final ---
+    QString convocation = QString(R"(
+    <div style='font-family:Arial; padding:30px; color:#1C1C1C; background-color:#fdfefe; border:2px solid #3498DB; border-radius:12px;'>
+
+        <!-- EN-TETE -->
+        <div style='text-align:center; margin-bottom:30px;'>
+            <h3 style='margin:0; color:#154360;'>République Tunisienne</h3>
+            <h3 style='margin:0; color:#154360;'>Ministère de l'Éducation</h3>
+            <h2 style='margin-top:15px; color:#21618C;'>Convocation Officielle à l'Examen</h2>
+        </div>
+
+        <hr style='border:none; border-top:1px solid #ccc; margin-bottom:20px;' />
+
+        <!-- INFORMATIONS -->
+        <table style='width:100%;'>
+            <tr>
+                <td style='vertical-align:top; width:60%; padding-right:15px;'>
+                    <p><strong style='color:#21618C;'>Nom :</strong> %1</p>
+                    <p><strong style='color:#21618C;'>Prénom :</strong> %2</p>
+                    <p><strong style='color:#21618C;'>CIN :</strong> %3</p>
+                    <p><strong style='color:#21618C;'>Adresse :</strong> %4</p>
+                    <p><strong style='color:#21618C;'>Téléphone :</strong> %5</p>
+                    <p><strong style='color:#21618C;'>Niveau :</strong> %6</p>
+                    <p style='color:#566573; font-style:italic;'>
+                        Veuillez vous présenter à l'heure prévue pour votre examen.
+                    </p>
+                </td>
+                <td style='text-align:center; vertical-align:top;'>
+                    %7<br/><br/>
+                    <img src='data:image/png;base64,%8' width='150' height='150' style='border:1px solid #999;' />
+                    <p style='font-size:11px; color:#888;'>QR Code d'identification</p>
+                </td>
+            </tr>
+        </table>
+
+        <hr style='border:none; border-top:1px solid #ccc; margin-top:30px;' />
+
+        <!-- MESSAGE ET CITATION EN BAS -->
+        <div style='text-align:center; margin-top:20px;'>
+            <p style='font-size:14px; color:#117864; font-weight:bold;'>Bonne chance à tous les candidats !</p>
+            <p style='color:#7D3C98; font-style:italic; font-size:13px; margin:10px 50px;'>
+                “Croyez en vos rêves et ils se réaliseront peut-être. Croyez en vous et ils se réaliseront sûrement.”<br/>
+                – <strong>Martin Luther King</strong>
+            </p>
+        </div>
+
+    </div>
+)").arg(nom, prenom, cin, adresse, numtel, niveau,
+                                   photoBase64.isEmpty()
+                                       ? ""
+                                       : QString("<img src='data:image/png;base64,%1' width='150' height='150' style='border-radius:8px; border:1px solid #bbb;' />").arg(photoBase64),
+                                   qrBase64);
+
+    ui->textBrowserConvocation->setHtml(convocation);
+}

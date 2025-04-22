@@ -30,6 +30,10 @@ private slots:
     void on_btnpdf_clicked();
     void on_btnConvocation_clicked();
     bool genererConvocationPDF(const QString& codeCandidat);
+    void on_btnAfficherConvocation_clicked();
+
+
+
 
 
 
