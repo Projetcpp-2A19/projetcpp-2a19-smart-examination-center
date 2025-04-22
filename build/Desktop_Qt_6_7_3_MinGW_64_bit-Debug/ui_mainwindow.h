@@ -112,7 +112,6 @@ public:
     QWidget *His;
     QTableView *emailHistoryTable;
     QLabel *label_29;
-    QWidget *widget;
     QPushButton *homeBtn;
 
     void setupUi(QMainWindow *MainWindow)
@@ -1051,7 +1050,7 @@ public:
         CHAT->setObjectName("CHAT");
         chatDisplay = new QTextEdit(CHAT);
         chatDisplay->setObjectName("chatDisplay");
-        chatDisplay->setGeometry(QRect(490, 30, 701, 491));
+        chatDisplay->setGeometry(QRect(130, 130, 1021, 491));
         chatDisplay->setStyleSheet(QString::fromUtf8("#chatDisplay { \n"
 "    font-size: 25px; /* Taille r\303\251duite du texte */\n"
 "    font-weight: bold; /* Texte en gras pour un effet titre */\n"
@@ -1064,7 +1063,7 @@ public:
 "}"));
         sendChatBtn = new QPushButton(CHAT);
         sendChatBtn->setObjectName("sendChatBtn");
-        sendChatBtn->setGeometry(QRect(790, 650, 131, 51));
+        sendChatBtn->setGeometry(QRect(1020, 640, 131, 51));
         sendChatBtn->setStyleSheet(QString::fromUtf8("#sendChatBtn { \n"
 "    background-color: #3A7BD5; /* Bleu plus profond et \303\251l\303\251gant */\n"
 "     border: 2px dashed #2E5FA2; /* Bordure bleu fonc\303\251 */\n"
@@ -1088,7 +1087,7 @@ public:
 ""));
         chatInput = new QLineEdit(CHAT);
         chatInput->setObjectName("chatInput");
-        chatInput->setGeometry(QRect(490, 560, 701, 61));
+        chatInput->setGeometry(QRect(130, 640, 881, 61));
         chatInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */\n"
 "    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */\n"
@@ -1106,7 +1105,7 @@ public:
 ""));
         label_30 = new QLabel(CHAT);
         label_30->setObjectName("label_30");
-        label_30->setGeometry(QRect(140, 30, 141, 51));
+        label_30->setGeometry(QRect(560, 20, 141, 51));
         label_30->setStyleSheet(QString::fromUtf8("#label_30 { \n"
 "    font-size: 25px; /* Taille r\303\251duite du texte */\n"
 "    font-weight: bold; /* Texte en gras pour un effet titre */\n"
@@ -1351,9 +1350,6 @@ public:
 "}\n"
 ""));
         stackedWidget->addWidget(His);
-        widget = new QWidget(centralwidget);
-        widget->setObjectName("widget");
-        widget->setGeometry(QRect(180, 50, 1021, 41));
         homeBtn = new QPushButton(centralwidget);
         homeBtn->setObjectName("homeBtn");
         homeBtn->setGeometry(QRect(1210, 10, 36, 36));
@@ -1390,7 +1386,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(5);
+        stackedWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

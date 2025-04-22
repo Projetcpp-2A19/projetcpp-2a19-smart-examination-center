@@ -1619,9 +1619,9 @@ QPushButton#chatbotBtn:pressed {
      <widget class="QTextEdit" name="chatDisplay">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>30</y>
-        <width>701</width>
+        <x>130</x>
+        <y>130</y>
+        <width>1021</width>
         <height>491</height>
        </rect>
       </property>
@@ -1641,8 +1641,8 @@ QPushButton#chatbotBtn:pressed {
      <widget class="QPushButton" name="sendChatBtn">
       <property name="geometry">
        <rect>
-        <x>790</x>
-        <y>650</y>
+        <x>1020</x>
+        <y>640</y>
         <width>131</width>
         <height>51</height>
        </rect>
@@ -1677,9 +1677,9 @@ QPushButton#chatbotBtn:pressed {
      <widget class="QLineEdit" name="chatInput">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>560</y>
-        <width>701</width>
+        <x>130</x>
+        <y>640</y>
+        <width>881</width>
         <height>61</height>
        </rect>
       </property>
@@ -1704,8 +1704,8 @@ QLineEdit:focus {
      <widget class="QLabel" name="label_30">
       <property name="geometry">
        <rect>
-        <x>140</x>
-        <y>30</y>
+        <x>560</x>
+        <y>20</y>
         <width>141</width>
         <height>51</height>
        </rect>
@@ -2129,16 +2129,6 @@ QTableView::item:selected {
       </property>
      </widget>
     </widget>
-   </widget>
-   <widget class="QWidget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>50</y>
-      <width>1021</width>
-      <height>41</height>
-     </rect>
-    </property>
    </widget>
    <widget class="QPushButton" name="homeBtn">
     <property name="geometry">

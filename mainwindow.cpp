@@ -456,7 +456,7 @@ void MainWindow::on_SaveMod_clicked() {
 
 void MainWindow::on_rechBtn_clicked()
 {
-    QString id = ui->lineEditRech->text().trimmed(); // lineEditRech = ton champ de saisie d’ID
+    QString id = ui->lineEditRech->text().trimmed();
 
     if (id.isEmpty()) {
         QMessageBox::warning(this, "Recherche", "Veuillez entrer un ID !");
@@ -465,7 +465,7 @@ void MainWindow::on_rechBtn_clicked()
 
     QSqlQueryModel *searchModel = new QSqlQueryModel();
     QSqlQuery query;
-    query.prepare("SELECT * FROM FOURNISSEURS WHERE ID_FOURNISSEUR = :id");  // remplace FOURNISSEURS par le nom réel de ta table
+    query.prepare("SELECT * FROM FOURNISSEURS WHERE ID_FOURNISSEUR = :id");
     query.bindValue(":id", id);
 
     if (!query.exec()) {
@@ -591,9 +591,9 @@ void MainWindow::on_btnTrierNom_clicked()
     }
 
     ui->tableFourn->setModel(triModel);
-    model = triModel;  // 🔄 On remplace le modèle actuel pour conserver la cohérence
+    model = triModel;
 
-    actualiserTableView(); // Ajuster les tailles des colonnes
+    actualiserTableView();
 }
 
 
@@ -756,10 +756,10 @@ void MainWindow::on_sendChatBtn_clicked() {
     ui->chatDisplay->append("👤: " + userMessage);
     ui->chatInput->clear();
 
-    QUrl apiUrl("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1");
+    QUrl apiUrl("https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta");
     QNetworkRequest request(apiUrl);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", "Bearer ");
+    request.setRawHeader("Authorization", "Bearer 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");
 
     QJsonObject json;
     json["inputs"] = QString("### Instruction:\n%1\n\n### Response:").arg(userMessage);
@@ -789,7 +789,7 @@ void MainWindow::on_sendChatBtn_clicked() {
 
 void MainWindow::on_historiqueBtn_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(10); // index de la page d'historique
+    ui->stackedWidget->setCurrentIndex(10);
 
     QSqlQueryModel *model = new QSqlQueryModel(this);
     model->setQuery("SELECT ID, DESTINATAIRE, SUJET, CONTENU, TO_CHAR(DATE_ENVOI, 'YYYY-MM-DD HH24:MI:SS') AS DATE_ENVOI FROM EMAILS ORDER BY DATE_ENVOI DESC");
