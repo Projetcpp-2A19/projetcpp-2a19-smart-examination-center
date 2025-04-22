@@ -866,63 +866,63 @@ void MainWindow::processPreUpdateCommand(const QStringList &parts) {
 
 void MainWindow::processFlexibleUpdateCommand(const QStringList &parts) {
     if (parts.size() < 2) {
-        addToChat("❌ Syntaxe invalide. Utilisez : modifier cin=... champ1=... champ2=...");
+        addToChat("❌ Utilisation : modifier cin=... champ1=... champ2=...");
         return;
     }
 
     QString cinValue;
     QMap<QString, QString> updates;
 
-    for (int i = 1; i < parts.size(); ++i) {
-        QStringList keyValue = parts[i].split("=");
+    // Extraction des champs clé=valeur
+    for (const QString &part : parts.mid(1)) {
+        auto keyValue = part.split("=");
         if (keyValue.size() != 2) continue;
 
-        QString key = keyValue[0].trimmed();
+        QString key = keyValue[0].trimmed().toLower();
         QString value = keyValue[1].trimmed();
 
-        if (key.toLower() == "cin") {
-            cinValue = value;
-        } else {
-            updates[key] = value;
-        }
+        if (key == "cin") cinValue = value;
+        else updates[key] = value;
     }
 
     if (cinValue.isEmpty() || updates.isEmpty()) {
-        addToChat("❌ Veuillez fournir le CIN et au moins un champ à modifier.");
+        addToChat("❌ CIN manquant ou aucun champ à modifier.");
         return;
     }
 
-    // Affichage des valeurs pour débogage
-    qDebug() << "Mise à jour pour CIN : " << cinValue;
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
-        qDebug() << "Changement : " << it.key() << " = " << it.value();
+    // Vérification du type du CIN (doit être numérique)
+    bool ok;
+    int cin = cinValue.toInt(&ok);
+    if (!ok) {
+        addToChat("❌ CIN invalide.");
+        return;
     }
 
-    // Construire la requête SQL pour mettre à jour les champs
-    QString queryStr = "UPDATE superviseur SET ";
-    QStringList setClauses;
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
-        setClauses << it.key() + " = :" + it.key();
+    // Construction dynamique de la requête SQL
+    QStringList setParts;
+    for (const QString &key : updates.keys()) {
+        setParts << key + " = :" + key;
     }
-    queryStr += setClauses.join(", ");
-    queryStr += " WHERE cin = :cin";
 
+    QString sql = "UPDATE superviseur SET " + setParts.join(", ") + " WHERE cin = :cin";
     QSqlQuery query;
-    query.prepare(queryStr);
+    query.prepare(sql);
+    query.bindValue(":cin", cin);
 
-    // Lier les valeurs à la requête
-    query.bindValue(":cin", cinValue);
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
+    for (auto it = updates.constBegin(); it != updates.constEnd(); ++it) {
         query.bindValue(":" + it.key(), it.value());
     }
 
-    // Exécution de la requête
+    qDebug() << "Exécution de la requête SQL : " << query.executedQuery(); // Debugging de la requête
+
     if (query.exec()) {
-        addToChat("✅ Superviseur mis à jour avec succès.");
+        addToChat("✅ Modification effectuée avec succès.");
+        refreshTableView();
     } else {
-        addToChat("❌ Erreur lors de la mise à jour : " + query.lastError().text());
+        addToChat("❌ Erreur SQL : " + query.lastError().text());
     }
 }
+
 
 
 void MainWindow::processAddCommand(const QStringList &parts) {
