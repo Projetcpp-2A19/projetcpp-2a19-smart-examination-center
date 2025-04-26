@@ -293,4 +293,16 @@ bool Superviseur::exporterVersPDF(const QString &fileName)
 
     painter.end();
     return true;
+
 }
+//Arduino
+QString Superviseur::getStatutByRFID(const QString& rfid_code) {
+    // Exemple statique — remplace par ton propre système de données
+    if (rfid_code == "ABCD1234") { // Remplace avec un vrai UID
+        return "occupé";
+    } else if (rfid_code == "1234ABCD") {
+        return "libre";
+    }
+    return "inconnu";
+}
+

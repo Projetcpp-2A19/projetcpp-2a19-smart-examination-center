@@ -1316,34 +1316,6 @@ QPushButton#Modbtn:pressed {
          <string/>
         </property>
        </widget>
-       <widget class="QLineEdit" name="StatutlineEdit">
-        <property name="geometry">
-         <rect>
-          <x>130</x>
-          <y>420</y>
-          <width>131</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#StatutlineEdit {
-    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
-    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
-    border-radius: 20px; /* Coins arrondis */
-    padding: 8px 12px; /* Espacement interne */
-    font-size: 16px; /* Taille de police agréable */
-    color: #2C3E50; /* Bleu foncé pour le texte */
-    selection-background-color: #A0B9D9; /* Couleur de sélection */
-}
-
-#PStatutlineEdit:focus {
-    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
-    background-color: #F0F4F8; /* Légère variation pour effet moderne */
-}
-
-</string>
-        </property>
-       </widget>
        <widget class="QPushButton" name="SaveMod">
         <property name="geometry">
          <rect>
@@ -1423,6 +1395,44 @@ QPushButton#SaveMod:pressed {
 </string>
         </property>
        </widget>
+       <widget class="QComboBox" name="StatutComboBox">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>420</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#StatutComboBox {
+    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #A0B9D9; /* Couleur de sélection */
+}
+
+#StatutComboBox:focus {
+    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
+    background-color: #F0F4F8; /* Légère variation pour effet moderne */
+}
+
+</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>occupé</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>valable</string>
+         </property>
+        </item>
+       </widget>
        <zorder>listWidget_2</zorder>
        <zorder>label_11</zorder>
        <zorder>IDLineEdit</zorder>
@@ -1441,9 +1451,9 @@ QPushButton#SaveMod:pressed {
        <zorder>label_25</zorder>
        <zorder>TlfLineEdit</zorder>
        <zorder>ZoneLineEdit</zorder>
-       <zorder>StatutlineEdit</zorder>
        <zorder>SaveMod</zorder>
        <zorder>label_26</zorder>
+       <zorder>StatutComboBox</zorder>
       </widget>
       <widget class="QPushButton" name="Ajbtn">
        <property name="geometry">

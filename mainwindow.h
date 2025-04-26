@@ -18,6 +18,7 @@
 #include <QStandardPaths>
 #include <QNetworkAccessManager>  // Ajout pour les requêtes HTTP
 #include <QNetworkReply>          // Pour gérer les réponses des requêtes
+#include "arduino.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -158,11 +159,15 @@ private slots:
     void processPreUpdateCommand(const QStringList &parts); // Pré-remplissage des champs à modifier
     //void processFlexibleUpdateCommand(const QStringList &parts); // mise à jour avec id=... nom=...
     void processFlexibleUpdateCommand(const QStringList &parts);
+    void updateSerialData(); // slot déclenché quand des données arrivent
 
 
 private:
     void addToChat(const QString &message, bool isUser = false);
-
+    Arduino A; // objet arduino
+    QString uid;
+    QString serialBuffer;
+    void verifierStatutSuperviseur(const QString& uid);
 
 
 

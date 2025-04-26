@@ -50,7 +50,7 @@ public:
     bool modifier(QString id);
 
     // Fonction de recherche
-
+    QString getStatutByRFID(const QString& rfid_code);
     QSqlQueryModel* rechercherParID(QString idRecherche);
     QSqlQueryModel* trierNoms(); // Méthode pour trier les noms des superviseurs de A à Z
     QMap<QString, int> getStatistiquesParZone(); //stat

@@ -35,6 +35,7 @@
 #include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include "arduino.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -65,6 +66,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::handleChatCommand);
     connect(ui->chatInput, &QLineEdit::returnPressed, this, &MainWindow::handleChatCommand);
+    int ret = A.connect_arduino();
+
+    switch (ret) {
+    case 0: qDebug() << "Arduino connecté."; break;
+    case 1: qDebug() << "Arduino détecté mais erreur ouverture."; break;
+    case -1: qDebug() << "Arduino non disponible."; break;
+    }
+
+    connect(A.getserial(), SIGNAL(readyRead()), this, SLOT(updateSerialData()));
 
 }
 
@@ -73,9 +83,48 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete model;
-
-
 }
+
+
+void MainWindow::updateSerialData()
+{
+    QByteArray rawData = A.read_from_arduino();
+    serialBuffer += QString::fromUtf8(rawData);
+
+    // Suppose qu'un UID complet arrive avec un saut de ligne
+    if (serialBuffer.contains('\n')) {
+        QStringList lines = serialBuffer.split('\n');
+        QString completeUID = lines.at(0).trimmed().toUpper(); // prend la première ligne complète
+        serialBuffer = lines.size() > 1 ? lines.at(1) : "";    // stocke le reste
+
+        qDebug() << "UID complet reçu: " << completeUID;
+        verifierStatutSuperviseur(completeUID);
+    }
+}
+
+void MainWindow::verifierStatutSuperviseur(const QString& uid)
+{
+    QSqlQuery query;
+    query.prepare("SELECT statut_superviseur FROM superviseurs WHERE LOWER(id_superviseur) = LOWER(:uid)");
+    query.bindValue(":uid", uid);
+
+    qDebug() << "UID utilisé: " << uid;
+
+    if (query.exec() && query.next()) {
+        QString statut = query.value(0).toString();
+        qDebug() << "Statut: " << statut;
+
+        if (statut == "occupé") {
+            A.write_to_arduino("1"); // LED verte
+        } else {
+            A.write_to_arduino("0"); // LED rouge
+        }
+    } else {
+        qDebug() << "Erreur SQL: " << query.lastError().text();
+        A.write_to_arduino("0"); // UID inconnu => LED rouge
+    }
+}
+
 
 void MainWindow::on_examButton_clicked()
 {
@@ -267,7 +316,8 @@ void MainWindow::on_Ajbtn_clicked()
 {
     QString id = ui->IDLineEdit->text().trimmed();
     QString cinStr = ui->CINLineEdit->text().trimmed();
-    QString statut = ui->StatutlineEdit->text().trimmed();
+    QString statut = ui->StatutComboBox->currentText().trimmed();
+
     QString poste = ui->PostLineEdit->text().trimmed();
     QString prenom = ui->PrenLineEdit->text().trimmed();
     QString nom = ui->NomLineEdit->text().trimmed();
@@ -387,7 +437,8 @@ void MainWindow::on_Modbtn_clicked() {
 
     // Afficher les valeurs dans les champs du formulaire
     ui->CINLineEdit->setText(QString::number(originalCin));
-    ui->StatutlineEdit->setText(originalStatut);
+    ui->StatutComboBox->setCurrentText(originalStatut);
+
     ui->PostLineEdit->setText(originalPoste);
     ui->PrenLineEdit->setText(originalPrenom);
     ui->NomLineEdit->setText(originalNom);
@@ -406,7 +457,8 @@ void MainWindow::on_SaveMod_clicked() {
 
     // Récupérer les nouvelles valeurs
     int newCin = ui->CINLineEdit->text().toInt();
-    QString newStatut = ui->StatutlineEdit->text();
+    QString newStatut = ui->StatutComboBox->currentText();
+
     QString newPoste = ui->PostLineEdit->text();
     QString newPrenom = ui->PrenLineEdit->text();
     QString newNom = ui->NomLineEdit->text();
@@ -850,7 +902,8 @@ void MainWindow::processPreUpdateCommand(const QStringList &parts) {
 
         // Affichage dans les champs de l'interface
         ui->CINLineEdit->setText(QString::number(cin));
-        ui->StatutlineEdit->setText(originalStatut);
+        ui->StatutComboBox->setCurrentText(originalStatut);
+
         ui->PostLineEdit->setText(originalPoste);
         ui->PrenLineEdit->setText(originalPrenom);
         ui->NomLineEdit->setText(originalNom);
@@ -1047,4 +1100,8 @@ void MainWindow::addToChat(const QString &message, bool isUser) {
     QString formatted = isUser ? "Vous: " + message : "Bot: " + message;
     ui->chatDisplay->append(formatted);
 }
+//Arduino
+
+
+
 
