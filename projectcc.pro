@@ -1,4 +1,4 @@
-QT       += core gui sql network widgets sql charts
+QT       += core gui sql network widgets sql charts serialport
 
 
 

@@ -3,6 +3,11 @@
 #include <QMessageBox>
 #include "connection.h"
 #include <QSslSocket>
+#include <QTextStream>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 int main(int argc, char *argv[])
 {
@@ -38,3 +43,5 @@ int main(int argc, char *argv[])
         return -1;
     }
 }
+
+

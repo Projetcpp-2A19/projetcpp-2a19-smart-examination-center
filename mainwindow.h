@@ -113,6 +113,7 @@ private slots:
     void on_historiqueBtn_clicked();
 
      void on_label_25_linkActivated(const QString &link);
+         void verifierEtEnvoyerCode();
 
  private:
     QSqlQueryModel *model;  // Modèle pour stocker les données des fournisseurs

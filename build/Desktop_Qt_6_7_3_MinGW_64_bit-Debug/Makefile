@@ -414,6 +414,7 @@ Makefile: ../../projectcc.pro ../../../QT/6.7.3/mingw_64/mkspecs/features/spec_p
 		../../../QT/6.7.3/mingw_64/lib/Qt6Gui.prl \
 		../../../QT/6.7.3/mingw_64/lib/Qt6Sql.prl \
 		../../../QT/6.7.3/mingw_64/lib/Qt6Network.prl \
+		../../../QT/6.7.3/mingw_64/lib/Qt6SerialPort.prl \
 		../../../QT/6.7.3/mingw_64/lib/Qt6Core.prl \
 		../../../QT/6.7.3/mingw_64/lib/Qt6EntryPoint.prl \
 		../../../QT/6.7.3/mingw_64/mkspecs/features/build_pass.prf
@@ -762,6 +763,7 @@ Makefile: ../../projectcc.pro ../../../QT/6.7.3/mingw_64/mkspecs/features/spec_p
 ../../../QT/6.7.3/mingw_64/lib/Qt6Gui.prl:
 ../../../QT/6.7.3/mingw_64/lib/Qt6Sql.prl:
 ../../../QT/6.7.3/mingw_64/lib/Qt6Network.prl:
+../../../QT/6.7.3/mingw_64/lib/Qt6SerialPort.prl:
 ../../../QT/6.7.3/mingw_64/lib/Qt6Core.prl:
 ../../../QT/6.7.3/mingw_64/lib/Qt6EntryPoint.prl:
 ../../../QT/6.7.3/mingw_64/mkspecs/features/build_pass.prf:

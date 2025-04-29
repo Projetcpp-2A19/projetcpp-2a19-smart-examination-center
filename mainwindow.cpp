@@ -23,13 +23,18 @@
 #include <QtCharts/QBarSet>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
-
+#include <QSerialPort>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
+#include <QTextStream>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
+#include <QSerialPortInfo>
 
 
 
@@ -53,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+     verifierEtEnvoyerCode();
+
     ui->chatInput->setPlaceholderText("Poser une question ici...");
     ui->lineEdit_2->setPlaceholderText("Entrez l'adresse e-mail du destinataire");
     ui->lineEdit_3->setPlaceholderText("Entrez l'objet de l'email");
@@ -802,9 +809,75 @@ void MainWindow::on_historiqueBtn_clicked()
     ui->emailHistoryTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->emailHistoryTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
+void MainWindow::verifierEtEnvoyerCode()
+{
+    QString code = QInputDialog::getText(this, "Code Candidat", "Entrez le code candidat (10 chiffres) :");
 
+    if (code.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "⚠️ Aucun code saisi.");
+        return;
+    }
 
+    // Vérifie que le code est exactement 10 chiffres
+    QRegularExpression regex("^\\d{10}$");
+    if (!regex.match(code).hasMatch()) {
+        QMessageBox::warning(this, "Erreur", "❌ Le code doit contenir exactement 10 chiffres.");
+        return;
+    }
 
+    QSqlQuery query;
+    query.prepare("SELECT nom_candidat, prenom_candidat FROM CANDIDAT WHERE code_candidat = :code");
+    query.bindValue(":code", code);
 
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Erreur SQL", query.lastError().text());
+        return;
+    }
 
+    QString message;
 
+    if (!query.next()) {
+        // Candidat introuvable ➔ envoyer INTROUVABLE propre
+        message = "INTROUVABLE;";
+    } else {
+        QString nom = query.value(0).toString().simplified();
+        QString prenom = query.value(1).toString().simplified();
+        message = nom + ";" + prenom;
+    }
+
+    // Vérifie que COM5 est disponible
+    bool portTrouve = false;
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        if (info.portName() == "COM5") {
+            portTrouve = true;
+            break;
+        }
+    }
+
+    if (!portTrouve) {
+        QMessageBox::critical(this, "Erreur", "❌ Arduino non détecté sur COM5.");
+        return;
+    }
+
+    // Envoi via port série
+    QSerialPort serial;
+    serial.setPortName("COM5");
+    serial.setBaudRate(QSerialPort::Baud9600);
+    serial.setDataBits(QSerialPort::Data8);
+    serial.setParity(QSerialPort::NoParity);
+    serial.setStopBits(QSerialPort::OneStop);
+    serial.setFlowControl(QSerialPort::NoFlowControl);
+
+    if (!serial.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, "Erreur Port", "❌ Impossible d’ouvrir COM5 : " + serial.errorString());
+        return;
+    }
+
+    // ✅ Nettoyage et envoi
+    message = message.trimmed();
+    serial.write(message.toUtf8() + '\n');
+    serial.flush();
+    serial.close();
+
+    QMessageBox::information(this, "Succès", "📤 Message envoyé à l’Arduino : " + message);
+}
