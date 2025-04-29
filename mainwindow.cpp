@@ -18,9 +18,8 @@
 #include <QPieSeries>
 #include <QVBoxLayout>
 
-
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), currentLineEdit(nullptr)
+    : QMainWindow(parent), ui(new Ui::MainWindow), codeBuffer(), currentLineEdit(nullptr)
 {
     ui->setupUi(this);
 
@@ -52,9 +51,26 @@ MainWindow::MainWindow(QWidget *parent)
         ui->stackedWidget_3->setCurrentWidget(ui->PageStatExam);
         loadExamStatistics();  // Load stats when button is clicked
     });
+
     if (!ui->ExamChartContainer->layout()) {
         ui->ExamChartContainer->setLayout(new QVBoxLayout());
     }
+    serial = new QSerialPort(this);
+    serial->setBaudRate(QSerialPort::Baud9600);
+
+    serial->setPortName("COM3");      // adjust COM port as needed
+    // 2. Try to open
+    if (!serial->open(QIODevice::ReadOnly)) {
+        qCritical() << "Failed to open serial port:" << serial->errorString();
+        return;
+    }
+    else
+        qCritical() << "connecta:" ;
+
+    // 3. Connect signal
+    connect(serial, &QSerialPort::readyRead, this, &MainWindow::onSerialData);
+
+
     //Recherche
     // Initialize the model
     Examen examen;
@@ -79,6 +95,8 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete speechToText;
+    if (serial->isOpen())
+        serial->close();
     delete ui;
 }
 
@@ -757,3 +775,47 @@ void MainWindow::showChartInPage(const QMap<QString, int>& statusCounts)
 
 
 
+void MainWindow::onSerialData() {
+    buffer.append(serial->readAll());
+    int idx;
+    while ((idx = buffer.indexOf('\n')) != -1) {
+        QByteArray line = buffer.left(idx).trimmed();
+        buffer.remove(0, idx + 1);
+
+        if (line.startsWith("NUM:")) {
+            // build up buffer, max length CODE_LENGTH
+            if (codeBuffer.length() < CODE_LENGTH) {
+                QString num = QString::fromUtf8(line.mid(4));
+                codeBuffer.append(num);
+                qDebug() << "Code:" << codeBuffer;
+            } else {
+                qDebug() << "Max length reached";
+            }
+        }
+        else if (line == "CLEARED") {
+            codeBuffer.clear();
+            qDebug() << "Entry cleared";
+        }
+        else if (line.startsWith("CODE:")) {
+            // '#' pressed: verify only if correct length
+            if (codeBuffer.length() == CODE_LENGTH) {
+                QSqlDatabase db = QSqlDatabase::database();
+                QSqlQuery query(db);
+                query.prepare("SELECT COUNT(*) FROM candidat WHERE code_candidat = :code");
+                query.bindValue(":code", codeBuffer);
+                if (!query.exec()) {
+                    qCritical() << "DB query error:" << query.lastError().text();
+                } else if (query.next() && query.value(0).toInt() > 0) {
+                    qDebug() << "Candidate verified";
+                } else {
+                    qDebug() << "Candidate doesn't exist";
+                }
+            } else {
+                qDebug() << "Enter exactly" << CODE_LENGTH << "digits before verify.";
+            }
+            // reset on verification or wrong length
+            codeBuffer.clear();
+        }
+        // ignore other messages or asterisks
+    }
+}

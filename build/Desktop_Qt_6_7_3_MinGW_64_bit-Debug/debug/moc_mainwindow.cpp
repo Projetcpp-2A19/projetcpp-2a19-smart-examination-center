@@ -48,6 +48,7 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_AjExamButton_clicked",
     "on_ModExamButton_clicked",
     "on_statButton_clicked",
+    "onSerialData",
     "on_AddExamConfirm_3_clicked",
     "onExamSelected",
     "QModelIndex",
@@ -83,7 +84,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      28,   14, // methods
+      29,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -91,34 +92,35 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  182,    2, 0x08,    1 /* Private */,
-       3,    0,  183,    2, 0x08,    2 /* Private */,
-       4,    0,  184,    2, 0x08,    3 /* Private */,
-       5,    0,  185,    2, 0x08,    4 /* Private */,
-       6,    0,  186,    2, 0x08,    5 /* Private */,
-       7,    0,  187,    2, 0x08,    6 /* Private */,
-       8,    0,  188,    2, 0x08,    7 /* Private */,
-       9,    0,  189,    2, 0x08,    8 /* Private */,
-      10,    0,  190,    2, 0x08,    9 /* Private */,
-      11,    0,  191,    2, 0x08,   10 /* Private */,
-      12,    0,  192,    2, 0x08,   11 /* Private */,
-      13,    1,  193,    2, 0x08,   12 /* Private */,
-      16,    0,  196,    2, 0x08,   14 /* Private */,
-      17,    0,  197,    2, 0x08,   15 /* Private */,
-      18,    0,  198,    2, 0x08,   16 /* Private */,
-      19,    0,  199,    2, 0x08,   17 /* Private */,
-      20,    0,  200,    2, 0x08,   18 /* Private */,
-      21,    0,  201,    2, 0x08,   19 /* Private */,
-      22,    0,  202,    2, 0x08,   20 /* Private */,
-      23,    0,  203,    2, 0x08,   21 /* Private */,
-      24,    1,  204,    2, 0x08,   22 /* Private */,
-      26,    0,  207,    2, 0x08,   24 /* Private */,
-      27,    0,  208,    2, 0x08,   25 /* Private */,
-      28,    0,  209,    2, 0x08,   26 /* Private */,
-      29,    0,  210,    2, 0x08,   27 /* Private */,
-      30,    0,  211,    2, 0x08,   28 /* Private */,
-      31,    1,  212,    2, 0x08,   29 /* Private */,
-      34,    0,  215,    2, 0x08,   31 /* Private */,
+       1,    0,  188,    2, 0x08,    1 /* Private */,
+       3,    0,  189,    2, 0x08,    2 /* Private */,
+       4,    0,  190,    2, 0x08,    3 /* Private */,
+       5,    0,  191,    2, 0x08,    4 /* Private */,
+       6,    0,  192,    2, 0x08,    5 /* Private */,
+       7,    0,  193,    2, 0x08,    6 /* Private */,
+       8,    0,  194,    2, 0x08,    7 /* Private */,
+       9,    0,  195,    2, 0x08,    8 /* Private */,
+      10,    0,  196,    2, 0x08,    9 /* Private */,
+      11,    0,  197,    2, 0x08,   10 /* Private */,
+      12,    0,  198,    2, 0x08,   11 /* Private */,
+      13,    0,  199,    2, 0x08,   12 /* Private */,
+      14,    1,  200,    2, 0x08,   13 /* Private */,
+      17,    0,  203,    2, 0x08,   15 /* Private */,
+      18,    0,  204,    2, 0x08,   16 /* Private */,
+      19,    0,  205,    2, 0x08,   17 /* Private */,
+      20,    0,  206,    2, 0x08,   18 /* Private */,
+      21,    0,  207,    2, 0x08,   19 /* Private */,
+      22,    0,  208,    2, 0x08,   20 /* Private */,
+      23,    0,  209,    2, 0x08,   21 /* Private */,
+      24,    0,  210,    2, 0x08,   22 /* Private */,
+      25,    1,  211,    2, 0x08,   23 /* Private */,
+      27,    0,  214,    2, 0x08,   25 /* Private */,
+      28,    0,  215,    2, 0x08,   26 /* Private */,
+      29,    0,  216,    2, 0x08,   27 /* Private */,
+      30,    0,  217,    2, 0x08,   28 /* Private */,
+      31,    0,  218,    2, 0x08,   29 /* Private */,
+      32,    1,  219,    2, 0x08,   30 /* Private */,
+      35,    0,  222,    2, 0x08,   32 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -132,7 +134,8 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 14,   15,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 15,   16,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -141,14 +144,14 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   25,
+    QMetaType::Void, QMetaType::QString,   26,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 32,   33,
-    0x80000000 | 32,
+    QMetaType::Void, 0x80000000 | 33,   34,
+    0x80000000 | 33,
 
        0        // eod
 };
@@ -181,6 +184,8 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'on_ModExamButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_statButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onSerialData'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_AddExamConfirm_3_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -241,24 +246,25 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->on_AjExamButton_clicked(); break;
         case 8: _t->on_ModExamButton_clicked(); break;
         case 9: _t->on_statButton_clicked(); break;
-        case 10: _t->on_AddExamConfirm_3_clicked(); break;
-        case 11: _t->onExamSelected((*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[1]))); break;
-        case 12: _t->on_pushButton_2_clicked(); break;
-        case 13: _t->onViewPdfButtonClicked(); break;
-        case 14: _t->handleInsertExamPdf(); break;
-        case 15: _t->handleSuppExam(); break;
-        case 16: _t->handleModifExamConfirm(); break;
-        case 17: _t->onMatiereSpeechClicked(); break;
-        case 18: _t->onNiveauSpeechClicked(); break;
-        case 19: _t->onDureeSpeechClicked(); break;
-        case 20: _t->onSpeechTextRecognized((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 21: _t->on_pdfExambtn_clicked(); break;
-        case 22: _t->on_examButton_2_clicked(); break;
-        case 23: _t->clearChartWidget(); break;
-        case 24: _t->loadExamStatistics(); break;
-        case 25: _t->on_supButton_2_clicked(); break;
-        case 26: _t->showChartInPage((*reinterpret_cast< std::add_pointer_t<QMap<QString,int>>>(_a[1]))); break;
-        case 27: { QMap<QString,int> _r = _t->getExamStatusCounts();
+        case 10: _t->onSerialData(); break;
+        case 11: _t->on_AddExamConfirm_3_clicked(); break;
+        case 12: _t->onExamSelected((*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[1]))); break;
+        case 13: _t->on_pushButton_2_clicked(); break;
+        case 14: _t->onViewPdfButtonClicked(); break;
+        case 15: _t->handleInsertExamPdf(); break;
+        case 16: _t->handleSuppExam(); break;
+        case 17: _t->handleModifExamConfirm(); break;
+        case 18: _t->onMatiereSpeechClicked(); break;
+        case 19: _t->onNiveauSpeechClicked(); break;
+        case 20: _t->onDureeSpeechClicked(); break;
+        case 21: _t->onSpeechTextRecognized((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 22: _t->on_pdfExambtn_clicked(); break;
+        case 23: _t->on_examButton_2_clicked(); break;
+        case 24: _t->clearChartWidget(); break;
+        case 25: _t->loadExamStatistics(); break;
+        case 26: _t->on_supButton_2_clicked(); break;
+        case 27: _t->showChartInPage((*reinterpret_cast< std::add_pointer_t<QMap<QString,int>>>(_a[1]))); break;
+        case 28: { QMap<QString,int> _r = _t->getExamStatusCounts();
             if (_a[0]) *reinterpret_cast< QMap<QString,int>*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -284,13 +290,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 28)
+        if (_id < 29)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 28;
+        _id -= 29;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 28)
+        if (_id < 29)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 28;
+        _id -= 29;
     }
     return _id;
 }

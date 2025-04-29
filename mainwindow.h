@@ -11,7 +11,11 @@
 #include <QSortFilterProxyModel>
 #include "examenfilterproxymodel.h"
 #include <QMap>
+#include <QtSql>
 #include <QString>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -41,6 +45,7 @@ private slots:
     void on_AjExamButton_clicked();  // Add exam
     void on_ModExamButton_clicked(); // Modify exam
     void on_statButton_clicked();    // Statistics
+    void onSerialData();      // slot to read incoming data
 
     void on_AddExamConfirm_3_clicked(); // Confirm adding exam
     void onExamSelected(const QModelIndex &index); // Updated slot signature
@@ -67,7 +72,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    Examen examen;                   // Examen object for CRUD operations
+    Examen examen;
+    QSerialPort *serial;
+    QByteArray buffer;
+    QString codeBuffer;       // holds up to 10 digits
+    QSqlDatabase db;          // database connection
+    const int CODE_LENGTH = 10;
     QByteArray pdfData;              // To store the PDF file data
     QString selectedExamId;
     void refreshExamenTable();       // Refresh the exam table
@@ -76,5 +86,6 @@ private:
     QLineEdit *currentLineEdit; // To track which field to populate
     QSqlQueryModel *yourExamModel;
     ExamenFilterProxyModel *proxyModel;
+
 };
 #endif // MAINWINDOW_H

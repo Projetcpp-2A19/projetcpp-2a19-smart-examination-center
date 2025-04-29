@@ -1,4 +1,4 @@
-QT       += core gui sql texttospeech printsupport network charts
+QT       += core gui sql texttospeech printsupport network charts serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
