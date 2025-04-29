@@ -22,6 +22,9 @@
 #include <QStandardPaths>
 #include "../../Downloads/qrcodegen.hpp"
 using namespace qrcodegen;
+#include "equipement.h"
+#include "arduino.h"
+
 
 
 
@@ -30,6 +33,28 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     afficherCandidats(); // Charger les candidats au démarrage
+
+
+    int ret = A.connect_arduino();
+    switch (ret) {
+    case 0:
+        qDebug() << "Arduino connected on port:" << A.getarduino_port_name();
+        break;
+    case 1:
+        qDebug() << "Arduino detected but not connected!";
+        break;
+    case -1:
+        qDebug() << "Arduino not available!";
+        break;
+    }
+
+    if (ret == 0) {
+        // Now check if we are properly connected to the Arduino
+        connect(A.getserial(), SIGNAL(readyRead()), this, SLOT(readSerialData()));
+    } else {
+        qDebug() << "Failed to connect Arduino, cannot proceed with reading data.";
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -782,3 +807,89 @@ void MainWindow::on_btnAfficherConvocation_clicked()
 
     ui->textBrowserConvocation->setHtml(convocation);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void MainWindow::readSerialData() {
+    // 1. Définir quantite manuellement
+    int quantite = 20;
+    qDebug() << "Quantité fixe (Qt):" << quantite;
+
+    // 2. Définir ID fixe à 6
+    int equipmentId = 6;
+    qDebug() << "ID Equipement fixe:" << equipmentId;
+
+    // 3. Définir quantityFromDB manuellement
+    int quantityFromDB = 3;
+    qDebug() << "Quantité fixe (DB simulée):" << quantityFromDB;
+
+    // 4. Faire la somme
+    int somme = quantite + quantityFromDB;
+    qDebug() << "Somme :" << somme;
+
+    // 5. Mettre à jour la base
+    QSqlQuery updateQuery;
+    updateQuery.prepare("UPDATE EQUIPEMENTS SET QUANTITE__EQUIPEMENT = :newQuantite WHERE ID_EQUIPEMENT = :id");
+    updateQuery.bindValue(":newQuantite", somme);
+    updateQuery.bindValue(":id", equipmentId);
+
+    if (updateQuery.exec()) {
+        qDebug() << "✅ Quantité mise à jour avec succès dans la base.";
+    } else {
+        qDebug() << "❌ Erreur lors du UPDATE:" << updateQuery.lastError();
+        return;
+    }
+
+    // 6. Envoyer la somme à Arduino
+    QByteArray dataToSend = "SOMME:" + QByteArray::number(somme) + "\n";
+    A.write_to_arduino(dataToSend);
+    qDebug() << "📤 Envoyé à Arduino:" << dataToSend;
+}
+
+
+
+
+
+
+
+
+
+

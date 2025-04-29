@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql serialport
 QT += charts
 QT += printsupport
 QT += core gui printsupport sql widgets pdf
@@ -16,15 +16,19 @@ CONFIG += c++17
 
 SOURCES += \
     ../../Downloads/qrcodegen.cpp \
+    arduino.cpp \
     candidat.cpp \
     connection.cpp \
+    equipement.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     ../../Downloads/qrcodegen.hpp \
+    arduino.h \
     candidat.h \
     connection.h \
+    equipement.h \
     mainwindow.h
 
 FORMS += \

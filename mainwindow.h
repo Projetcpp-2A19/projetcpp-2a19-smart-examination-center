@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "arduino.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,7 +34,12 @@ private slots:
     void on_btnAfficherConvocation_clicked();
 
 
+private slots:
+    void readSerialData();
 
+private :
+    QByteArray data;
+    Arduino A;
 
 
 
