@@ -22,5 +22,6 @@
         <file>img/rechercher-des-personnes.png</file>
         <file>img/settings.png</file>
         <file>img/supprimer.png</file>
+        <file>img/musical.png</file>
     </qresource>
 </RCC>

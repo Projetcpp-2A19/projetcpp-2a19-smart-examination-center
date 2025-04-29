@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "equipement.h"
+#include "arduino.h"
 #include <QDebug>
 //#include <QMouseEvent>
 #include <QMessageBox>
@@ -21,6 +22,15 @@
 #include <QLineSeries>
 #include <QPieSeries>
 #include <QChartView>
+#include <QProcess>
+#include <QDebug>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QByteArray>
+#include <QSqlQuery>
+#include <QMessageBox>
+#include <QByteArray>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -42,6 +52,26 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connexion du bouton pour afficher les notifications
      connect(ui->notifBtn, &QPushButton::clicked, this, &MainWindow::showNotifications);*/
+
+
+    int ret = A.connect_arduino();
+    switch (ret) {
+    case 0:
+        qDebug() << "Arduino connected on port:" << A.getarduino_port_name();
+        break;
+    case 1:
+        qDebug() << "Arduino detected but not connected!";
+        break;
+    case -1:
+        qDebug() << "Arduino not available!";
+        break;
+    }
+
+    if (ret == 0) {
+        // Now check if we are properly connected to the Arduino
+    } else {
+        qDebug() << "Failed to connect Arduino, cannot proceed with reading data.";
+    }
 }
 
 MainWindow::~MainWindow()
@@ -74,7 +104,8 @@ void MainWindow::on_linkActivated(const QString &link)
     LabelNotificationContent->setText("Détails de " + link);
     popupNotification->show();
 }*/
-//end showNotif
+
+
 void MainWindow::on_examBtn_clicked()
 {
     ui->stackedWidget->setCurrentIndex(1);
@@ -570,7 +601,7 @@ void MainWindow::on_pushButton_2_clicked()
     // Setting the headers
     ui->tableView->setHorizontalHeaderLabels({ "Nom", "Type", "Statut", "Quantité" });
 
-    // Manually populate the table with the model data
+    // Remplir le tableau avec les données de la base
     for (int i = 0; i < model->rowCount(); i++) {
         for (int j = 0; j < model->columnCount(); j++) {
             QString data = model->data(model->index(i, j)).toString();
@@ -578,7 +609,7 @@ void MainWindow::on_pushButton_2_clicked()
         }
     }
 
-    // Optionally resize columns
+    //  Ajuster automatiquement la largeur des colonnes
     ui->tableView->resizeColumnsToContents();
     ui->stackedWidget_2->setCurrentWidget(ui->page);
 }
@@ -746,3 +777,155 @@ void MainWindow::afficherStatistiquesEquipements()
 void MainWindow::on_ModButton_clicked(){
     afficherStatistiquesEquipements();
 }
+void MainWindow::rechercheVocale()
+{
+    QProcess process;
+
+    // Utilise un chemin correct avec des doubles antislashs ou des slashes normaux
+    QString pythonScript = "C:/Users/21628/Documents/new equipement branch/speech_to_text.py";
+
+    // Démarre le script Python
+    process.start("python", QStringList() << pythonScript);
+
+    if (!process.waitForStarted()) {
+        qDebug() << "Erreur : impossible de démarrer le script Python";
+        return;
+    }
+
+    // Attendre que le script termine
+    if (!process.waitForFinished()) {
+        qDebug() << "Erreur : le script Python ne s'est pas terminé correctement";
+        return;
+    }
+
+    // Lire la sortie standard (le texte détecté)
+    QString output = process.readAllStandardOutput().trimmed();
+    qDebug() << "Texte détecté :" << output;
+
+    // Mettre le texte dans le champ de recherche
+    ui->recherche->setText(output);
+
+    // Appeler la fonction de recherche
+    on_pushButton_clicked();
+}
+
+void MainWindow::on_btnRechercheVocale_clicked(){
+    rechercheVocale();
+}
+
+
+
+
+
+
+
+
+void MainWindow::on_Modbtn_2_clicked() {
+    connect(A.getserial(), SIGNAL(readyRead()), this, SLOT(readSerialData()));
+}
+
+void MainWindow::readSerialData() {
+    // Get the equipment ID from the QLineEdit (manual input)
+    bool ok;
+    QString input = ui->idInputLineEdit->text();  // Retrieve the text entered by the user
+    int equipmentId = input.toInt(&ok);  // Try converting the input to an integer
+
+    if (!ok || equipmentId <= 0) {
+        qDebug() << "Aucun ID saisi ou ID invalide.";
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer un ID valide.");
+        return;
+    }
+
+    qDebug() << "ID de l'équipement sélectionné : " << equipmentId;
+
+    // Fetch the quantity from the database
+    QSqlQuery query;
+    query.prepare("SELECT QUANTITE__EQUIPEMENT FROM EQUIPEMENTS WHERE ID_EQUIPEMENT = :id");
+    query.bindValue(":id", equipmentId);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de la récupération de la quantité de l'équipement:" << query.lastError();
+        return;
+    }
+
+    if (!query.next()) {
+        qDebug() << "Aucun équipement trouvé pour l'ID:" << equipmentId;
+        return;
+    }
+
+    int quantite = query.value(0).toInt();  // Database quantity
+    qDebug() << "Quantité de l'équipement ID" << equipmentId << "est :" << quantite;
+
+    // Read from Arduino
+    static QByteArray buffer;
+    buffer += A.read_from_arduino();  // Accumulate incoming data
+
+    // Process complete lines
+    int endIndex;
+    while ((endIndex = buffer.indexOf('\n')) != -1) {
+        QByteArray line = buffer.left(endIndex).trimmed();  // Extract one line
+        buffer.remove(0, endIndex + 1);  // Remove processed line
+
+        line = line.trimmed();  // Clean line (remove \r, \n, spaces)
+
+        QString text = QString::fromUtf8(line);
+        qDebug() << "📨 Donnée brute reçue :" << text;
+
+        if (text.startsWith("QUANTITE:")) {
+            QString quantityStr = text.mid(9);  // After "QUANTITE:"
+            bool ok;
+            int quantity = quantityStr.toInt(&ok);
+
+            if (ok) {
+                qDebug() << "✅ Received Quantity from Arduino:" << quantity;
+
+                int newQuantity = quantite + quantity;
+                qDebug() << "🔵 New Quantity to update:" << newQuantity;
+                ui->qtelabel->setText(QString::number(newQuantity));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            } else {
+                qDebug() << "❌ Failed to convert quantity!";
+            }
+        } else {
+            qDebug() << "❌ Format inattendu (pas de 'QUANTITE:') → " << text;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+/*QSqlQuery updateQuery;
+                updateQuery.prepare("UPDATE EQUIPEMENTS SET QUANTITE__EQUIPEMENT = :newQuantite WHERE ID_EQUIPEMENT = :id");
+                updateQuery.bindValue(":newQuantite", newQuantity);
+                updateQuery.bindValue(":id", equipmentId);
+
+                if (updateQuery.exec()) {
+                    qDebug() << "✅ Quantity updated successfully in the database.";
+                    // Send new quantity back to Arduino
+                    QByteArray dataToSend = "NOUVELLE_QUANTITE:" + QByteArray::number(newQuantity) + "\n";
+                    A.write_to_arduino(dataToSend);
+                    qDebug() << "📤 Envoyé à Arduino :" << dataToSend;
+                } else {
+                    qDebug() << "❌ Error updating quantity:" << updateQuery.lastError();
+                }*/

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include <QLabel>
 #include <QMainWindow>
+#include "arduino.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,15 +23,23 @@ public slots:
     void on_BinSuperbtn_clicked();
     void afficherEquipements();
     void on_Modbtn_clicked();
-  /*  void modifierEquipement();
-    void supprimerEquipement();:
+    /*void modifierEquipement();*/
+    /*void supprimerEquipement();*/
 
 
 
 private slots:
-    void showNotifications(); */ // Déclare ton slot ici
+    /*void showNotifications();  // Déclare ton slot ici*/
 private slots:
 
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
     void on_examBtn_clicked();
 
     void on_supBtn_clicked();
@@ -58,9 +67,6 @@ private slots:
 
     void on_homeBtn_clicked();
 
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_4_clicked();
 
     void on_AffButton_clicked();
 
@@ -96,13 +102,12 @@ private slots:
 
     void on_notifBtn_clicked();
 
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_clicked();
 
     void genererRapportPDF();
     void on_pdfSuperbtn_clicked();
     void afficherStatistiquesEquipements();
+    void rechercheVocale();
+    void on_btnRechercheVocale_clicked();
 
 /*protected:
     void mousePressEvent(QMouseEvent *event) override; // Détecter le clic en dehors*/
@@ -118,15 +123,23 @@ private slots:
 
 
 
-
-
     void on_EvalAssist_clicked();
 
-   // void on_Modbtn_clicked();
+   //void on_Modbtn_clicked();
 
     void on_Ajbtn_clicked();
 
+private slots:
+    void on_Modbtn_2_clicked();
+    void readSerialData();
+
+private :
+    QByteArray data;
+    Arduino A;
+
+
 private:
     Ui::MainWindow *ui;
+
 };
 #endif // MAINWINDOW_H

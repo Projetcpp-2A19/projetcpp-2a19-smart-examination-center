@@ -509,7 +509,7 @@ QPushButton#EvalAssist :pressed {
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>-10</y>
+       <y>0</y>
        <width>1091</width>
        <height>801</height>
       </rect>
@@ -562,6 +562,71 @@ QPushButton#EvalAssist :pressed {
         <string>Gestion Des Examens</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="on">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>180</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ON</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="off">
+       <property name="geometry">
+        <rect>
+         <x>520</x>
+         <y>190</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="plus">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>360</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="moins">
+       <property name="geometry">
+        <rect>
+         <x>510</x>
+         <y>360</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>270</y>
+         <width>271</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="AffSuperv">
       <widget class="QLabel" name="label_27">
@@ -593,7 +658,7 @@ QPushButton#EvalAssist :pressed {
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>460</y>
+         <y>510</y>
          <width>551</width>
          <height>171</height>
         </rect>
@@ -606,22 +671,6 @@ QPushButton#EvalAssist :pressed {
 }
 </string>
        </property>
-       <widget class="QLabel" name="PdfLabel">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>90</y>
-          <width>41</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">image: url(:/new/prefix1/img/pdf.png);</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
        <widget class="QPushButton" name="pdfSuperbtn">
         <property name="geometry">
          <rect>
@@ -684,7 +733,7 @@ QPushButton#pdfSuperbtn:pressed {
        <property name="geometry">
         <rect>
          <x>40</x>
-         <y>440</y>
+         <y>470</y>
          <width>181</width>
          <height>31</height>
         </rect>
@@ -1368,6 +1417,114 @@ QTableCornerButton::section {
        </widget>
        <widget class="QWidget" name="page_2"/>
       </widget>
+      <widget class="QPushButton" name="btnRechercheVocale">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>70</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/img/musical.png</normaloff>:/img/musical.png</iconset>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="Modbtn_2">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>360</y>
+         <width>51</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#Modbtn {
+    background-color: #3A7BD5; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px; /* Uniformiser le padding */
+    border-radius: 20px;
+    /*border: 2px dashed #3A7BD5;*/
+    text-align: center; /* Alignement horizontal */
+    qproperty-alignment: 'AlignCenter'; /* Alignement Qt */
+}
+
+QPushButton#Modbtn:hover {
+    background-color: #A0C4FF; 
+  
+    color: #F9F9F9; 
+}
+
+QPushButton#Modbtn:pressed {
+    background-color: #A8D5BA; 
+   
+}
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::MailMessageNew"/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="qtelabel">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>440</y>
+         <width>151</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="idInputLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>360</y>
+         <width>161</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#Nom {
+    background-color: #FFFFFF; /* Blanc pur pour un bon contraste */
+    border: 2px solid #A0B9D9; /* Bordure bleu-gris pastel */
+    border-radius: 20px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de police agréable */
+    color: #2C3E50; /* Bleu foncé pour le texte */
+    selection-background-color: #A0B9D9; /* Couleur de sélection */
+}
+
+#Nom:focus {
+    border: 2px solid #4A90E2; /* Bleu clair plus intense lors du focus */
+    background-color: #F0F4F8; /* Légère variation pour effet moderne */
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
       <zorder>widget</zorder>
       <zorder>label_27</zorder>
       <zorder>widget_9</zorder>
@@ -1379,6 +1536,10 @@ QTableCornerButton::section {
       <zorder>recherche</zorder>
       <zorder>pushButton_2</zorder>
       <zorder>stackedWidget_2</zorder>
+      <zorder>btnRechercheVocale</zorder>
+      <zorder>Modbtn_2</zorder>
+      <zorder>qtelabel</zorder>
+      <zorder>idInputLineEdit</zorder>
      </widget>
      <widget class="QWidget" name="notifSup">
       <widget class="QLabel" name="label_31">

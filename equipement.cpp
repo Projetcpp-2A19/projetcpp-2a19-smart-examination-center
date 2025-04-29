@@ -143,7 +143,7 @@ QSqlQueryModel* Equipement::rechercherParNom(const QString &nom) {
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
     query.prepare("SELECT * FROM EQUIPEMENTS WHERE ID_EQUIPEMENT LIKE :nom");
-    query.bindValue(":nom", "%" + nom + "%");
+    query.bindValue(":nom", nom);
     query.exec();
     model->setQuery(query);
     return model;
