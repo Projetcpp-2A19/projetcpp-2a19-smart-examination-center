@@ -55,24 +55,25 @@ MainWindow::MainWindow(QWidget *parent)
     if (!ui->ExamChartContainer->layout()) {
         ui->ExamChartContainer->setLayout(new QVBoxLayout());
     }
+
+    //arduino
     serial = new QSerialPort(this);
     serial->setBaudRate(QSerialPort::Baud9600);
 
-    serial->setPortName("COM3");      // adjust COM port as needed
-    // 2. Try to open
+    serial->setPortName("COM3");
+
     if (!serial->open(QIODevice::ReadOnly)) {
         qCritical() << "Failed to open serial port:" << serial->errorString();
         return;
     }
     else
-        qCritical() << "connecta:" ;
+        qCritical() << "connected:" ;
 
     // 3. Connect signal
     connect(serial, &QSerialPort::readyRead, this, &MainWindow::onSerialData);
 
 
     //Recherche
-    // Initialize the model
     Examen examen;
     yourExamModel = examen.afficher();
 
@@ -788,8 +789,6 @@ void MainWindow::onSerialData() {
                 QString num = QString::fromUtf8(line.mid(4));
                 codeBuffer.append(num);
                 qDebug() << "Code:" << codeBuffer;
-            } else {
-                qDebug() << "Max length reached";
             }
         }
         else if (line == "CLEARED") {
@@ -813,9 +812,7 @@ void MainWindow::onSerialData() {
             } else {
                 qDebug() << "Enter exactly" << CODE_LENGTH << "digits before verify.";
             }
-            // reset on verification or wrong length
             codeBuffer.clear();
         }
-        // ignore other messages or asterisks
     }
 }
