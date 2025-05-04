@@ -1,6 +1,6 @@
-#include "mainwindow.h"  // pour std::unique_ptr
+#include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <QMouseEvent>  // For detecting mouse events
+#include <QMouseEvent>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QWidget>
@@ -9,11 +9,10 @@
 #include <QSqlQueryModel>
 #include <QSqlTableModel>
 #include <QDebug>
-#include <QSqlError>  // Ajoute cette ligne pour inclure QSqlError
+#include <QSqlError>
 #include <QInputDialog>
 #include <QTimer>
 #include <QString>
-//#include <QMouseEvent>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QBarSet>
@@ -27,8 +26,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTextTable>
-#include <QSqlRecord> // Ajoutez cette inclusion
- //using namespace QtCharts;
+#include <QSqlRecord>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -37,26 +35,37 @@
 #include <QJsonObject>
 #include "arduino.h"
 
+#include "examen.h"
+#include <QFileDialog>
+#include <QFile>
+#include <QMessageBox>
+#include <QDebug>
+#include <QDesktopServices>
+#include <QLineEdit>
+#include <QStandardItemModel>
+#include <QSqlRecord>
+#include <QDate>
+#include <QPdfWriter>
+#include <QPainter>
+#include <QSqlQuery>
+#include <QtCharts>
+#include <QChartView>
+#include <QPieSeries>
+#include <QVBoxLayout>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) ,
-    networkManager(new QNetworkAccessManager(this))
+    networkManager(new QNetworkAccessManager(this)) , codeBuffer(), currentLineEdit(nullptr)
 
 {
     ui->setupUi(this);
-     // Pour éviter de préfixer avec QtCharts::
-
-    //ui->tableView1->setModel(Etmp.afficher()); // Remplace tableWidget1 par tableView
-    // Affichage direct du tableView1 au démarrage
-    //SSupprimer
     connect(ui->BinSuperbtn, &QPushButton::clicked, this, &MainWindow::on_BinSuperbtn_clicked);
     connect(ui->SaveMod, &QPushButton::clicked, this, &MainWindow::on_SaveMod_clicked);
-
-
-    ui->lineEdit1->setPlaceholderText("Rechercher...");
+    ui->RechSuperviseur->setPlaceholderText("Rechercher...");
+    ui->NumTelSup->setPlaceholderText("Numéro Téléphone...");
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
-    //ui->labelNotification1->setTextInteractionFlags(Qt::TextBrowserInteraction);
     // Connexion du bouton de recherche
     connect(ui->rechBtn_2, &QPushButton::clicked, this, &MainWindow::rechercherSuperviseur);
    // connect(ui->TriButton, &QPushButton::clicked, this, &MainWindow::onTriButtonClicked);
@@ -67,22 +76,85 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::handleChatCommand);
     connect(ui->chatInput, &QLineEdit::returnPressed, this, &MainWindow::handleChatCommand);
     int ret = A.connect_arduino();
-
     switch (ret) {
     case 0: qDebug() << "Arduino connecté."; break;
     case 1: qDebug() << "Arduino détecté mais erreur ouverture."; break;
     case -1: qDebug() << "Arduino non disponible."; break;
     }
-
     connect(A.getserial(), SIGNAL(readyRead()), this, SLOT(updateSerialData()));
 
+
+    //IMEN
+    // Set placeholder text for the subject input field
+    ui->SearchBarExamen->setPlaceholderText("math, physique...");
+
+    // Connect buttons to their respective slots
+    connect(ui->InsertExamPdf_3, &QPushButton::clicked, this, &MainWindow::handleInsertExamPdf);
+    connect(ui->SuppExamButton, &QPushButton::clicked, this, &MainWindow::handleSuppExam);
+    connect(ui->ModifExamConfirm, &QPushButton::clicked, this, &MainWindow::handleModifExamConfirm);
+    connect(ui->viewPdfButton, &QPushButton::clicked, this, &MainWindow::onViewPdfButtonClicked);
+
+    connect(ui->ListeExamensTab, &QTableView::clicked, this, &MainWindow::onExamSelected);
+    qDebug() << "Connected QTableView clicked signal.";
+
+    //speech to text
+    speechToText = new SpeechToText(this);
+    bool isConnected = connect(speechToText, &SpeechToText::textRecognized,
+                               this, &MainWindow::onSpeechTextRecognized);
+    qDebug() << "textRecognized connection:" << isConnected;
+
+    // Connect buttons to their respective slots
+    connect(ui->MatiereSpeech, &QPushButton::clicked, this, &MainWindow::onMatiereSpeechClicked);
+    connect(ui->NiveauSpeech, &QPushButton::clicked, this, &MainWindow::onNiveauSpeechClicked);
+    connect(ui->DureeSpeech, &QPushButton::clicked, this, &MainWindow::onDureeSpeechClicked);
+
+    connect(ui->examButton_2, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget_3->setCurrentWidget(ui->PageStatExam);
+        loadExamStatistics();  // Load stats when button is clicked
+    });
+
+    if (!ui->ExamChartContainer->layout()) {
+        ui->ExamChartContainer->setLayout(new QVBoxLayout());
+    }
+
+    //arduino
+    serial = new QSerialPort(this);
+    serial->setBaudRate(QSerialPort::Baud9600);
+    serial->setPortName("COM3");
+
+    if (!serial->open(QIODevice::ReadOnly)) {
+        qCritical() << "Failed to open serial port:" << serial->errorString();
+        return;
+    }
+    else
+        qCritical() << "connected:" ;
+
+    // 3. Connect signal
+    connect(serial, &QSerialPort::readyRead, this, &MainWindow::onSerialData);
+
+    m_proxyModel = new ExamenFilterProxyModel(this);
+    Examen examen;
+    m_examenDisplayModel = examen.afficherExamen();
+    m_proxyModel->setSourceModel(m_examenDisplayModel);
+    ui->ListeExamensTab->setModel(m_proxyModel);
+
+    // Connecte les filtres
+    connect(ui->SearchBarExamen, &QLineEdit::textChanged, m_proxyModel, &ExamenFilterProxyModel::setMatiereFilter);
+    connect(ui->filterExam, &QDateEdit::dateChanged, m_proxyModel, &ExamenFilterProxyModel::setDateFilter);
+    connect(ui->pdfExambtn, &QPushButton::clicked, this, &MainWindow::on_pdfExambtn_clicked);
+
+
+    // Configure table selection behavior
+    ui->ListeExamensTab->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->ListeExamensTab->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
-    delete model;
+    delete speechToText;
+    if (serial->isOpen())
+        serial->close();
 }
 
 
@@ -141,158 +213,32 @@ void MainWindow::on_supButton_clicked()
 
 void MainWindow::on_eqButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(5);
+    ui->stackedWidget->setCurrentIndex(4);
 }
 
 
 
 void MainWindow::on_FourButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(6);
+    ui->stackedWidget->setCurrentIndex(5);
 }
 
 
 void MainWindow::on_candButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(7);
+    ui->stackedWidget->setCurrentIndex(6);
 }
 
 
 void MainWindow::on_etaButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(8);
+    ui->stackedWidget->setCurrentIndex(7);
 }
-
-
-
-
 
 
 void MainWindow::on_homeBtn_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
-}
-
-
-void MainWindow::on_pushButton_3_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(7);
-}
-
-
-void MainWindow::on_pushButton_4_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(2);
-}
-
-
-void MainWindow::on_AffButton_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(2);
-}
-
-
-void MainWindow::on_AjButton_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(3);
-}
-
-
-/*void MainWindow::on_ModButton_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(4);
-}*/
-
-void MainWindow::on_SuppButton_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(5);
-}
-
-void MainWindow::on_AffButton_2_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(2);
-}
-
-
-void MainWindow::on_AjButton_2_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(3);
-}
-
-
-void MainWindow::on_ModButton_2_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(4);
-}
-
-
-void MainWindow::on_SuppButton_2_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(5);
-}
-
-
-
-void MainWindow::on_AffButton_3_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(2);
-}
-
-
-void MainWindow::on_AjButton_3_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(3);
-}
-
-
-void MainWindow::on_ModButton_3_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(4);
-}
-
-
-void MainWindow::on_SuppButton_3_clicked()
-{
-   ui->stackedWidget->setCurrentIndex(5);
-}
-
-
-void MainWindow::on_AffButton_4_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(2);
-}
-
-
-void MainWindow::on_AjButton_4_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(3);
-}
-
-
-void MainWindow::on_ModButton_4_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(4);
-}
-
-
-void MainWindow::on_SuppButton_4_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(5);
-}
-
-
-void MainWindow::on_notifBtn_clicked()
-{
-     ui->stackedWidget->setCurrentIndex(3);
-}
-
-
-
-
-
-void MainWindow::on_EvalAssist_clicked()
-{
-     ui->stackedWidget->setCurrentIndex(5);
 }
 
 void MainWindow::updateTableView()
@@ -516,7 +462,7 @@ void MainWindow::on_SaveMod_clicked() {
 // Fonction pour rechercher un superviseur par ID
 void MainWindow::rechercherSuperviseur()
 {
-    QString idRecherche = ui->lineEdit1->text();  // L'ID entré par l'utilisateur
+    QString idRecherche = ui->RechSuperviseur->text();  // L'ID entré par l'utilisateur
 
     if (idRecherche.isEmpty()) {
         // Si l'utilisateur n'a pas entré d'ID, afficher un avertissement
@@ -636,13 +582,12 @@ void MainWindow::showStatistiques() {
 }
 
 
-void MainWindow::on_ModButton_clicked()
+/*void MainWindow::on_StatButton_clicked()
 {
     showStatistiques();
-
     qDebug() << "Statistics loaded successfully!";
-    ui->stackedWidget->setCurrentIndex(4);
-}
+    ui->stackedWidget->setCurrentIndex(3);
+}*/
 //pdf
 void MainWindow::on_pdfSuperbtn_clicked()
 {
@@ -1100,8 +1045,782 @@ void MainWindow::addToChat(const QString &message, bool isUser) {
     QString formatted = isUser ? "Vous: " + message : "Bot: " + message;
     ui->chatDisplay->append(formatted);
 }
-//Arduino
 
 
 
+void MainWindow::on_examButton_2_clicked()
+{
+    ui->stackedWidget_3->setCurrentIndex(0);
+
+}
+
+
+void MainWindow::on_supButton_2_clicked()
+{
+    ui->stackedWidget_3->setCurrentIndex(1);
+
+}
+
+
+//IMEN:
+
+
+void MainWindow::handleInsertExamPdf()
+{
+    qDebug() << "handleInsertExamPdf() called";
+
+    // Open a file dialog to select a PDF file
+    QString filePath = QFileDialog::getOpenFileName(this, "Sélectionner un fichier PDF", "", "PDF Files (*.pdf)");
+
+    if (!filePath.isEmpty()) {
+        QFile file(filePath);
+
+        // Open the file in read-only mode
+        if (file.open(QIODevice::ReadOnly)) {
+            // Read the file data into the QByteArray member variable
+            pdfData = file.readAll();
+            file.close();
+
+            // Notify the user that the file was loaded successfully
+            QMessageBox::information(this, "Succès", "Fichier PDF chargé avec succès !");
+        } else {
+            // Notify the user if the file could not be opened
+            QMessageBox::critical(this, "Erreur", "Impossible d'ouvrir le fichier PDF.");
+        }
+    }
+}
+
+void MainWindow::handleSuppExam()
+{
+    qDebug() << "handleSuppExam() called";
+
+    // Check if an exam is selected
+    if (selectedExamId.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner un examen à supprimer !");
+        return;
+    }
+
+    // Ask for confirmation before deleting
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Confirmation", "Êtes-vous sûr de vouloir supprimer cet examen ?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        // Create an Examen object and call the supprimer method
+        Examen examen;
+        if (examen.supprimerExamen(selectedExamId)) {
+            QMessageBox::information(this, "Succès", "Examen supprimé avec succès !");
+            refreshExamenTable(); // Refresh the table to reflect the deletion
+            selectedExamId.clear(); // Clear the selected exam ID
+        } else {
+            QMessageBox::critical(this, "Erreur", "Échec de la suppression de l'examen.");
+        }
+    }
+}
+
+void MainWindow::handleModifExamConfirm()
+{
+    qDebug() << "handleModifExamConfirm() called";
+
+    // Read values from the input fields
+    QString matiere = ui->MatiereCase->text();
+    QString niveau = ui->NiveauCase->text();
+    QString duree = ui->DureeCase->text();
+    QString type = ui->TypeExamenChoix->currentText();
+    QString statut = ui->StatutExamenChoix->currentText();
+    QDate date = ui->dateExamenChoix->date();
+
+    // Validate the inputs
+    if (matiere.isEmpty() || niveau.isEmpty() || duree.isEmpty() || type.isEmpty() || statut.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez remplir tous les champs !");
+        return;
+    }
+
+    // Check if a PDF file was selected (only if the user wants to update it)
+    if (pdfData.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner un fichier PDF !");
+        return;
+    }
+
+    // Create an Examen object and set its properties
+    Examen e(type, statut, niveau, matiere, pdfData, duree, date);
+
+    // Modify the exam in the database
+    if (e.modifierExamen(selectedExamId)) {
+        QMessageBox::information(this, "Succès", "Examen modifié avec succès !");
+        refreshExamenTable(); // Refresh the exam table
+        clearForm();          // Clear the form
+        pdfData.clear();      // Clear the PDF data for the next exam
+    } else {
+        QMessageBox::critical(this, "Erreur", "Échec de la modification de l'examen.");
+    }
+}
+
+void MainWindow::onExamSelected(const QModelIndex &index)
+{
+    qDebug() << "onExamSelected slot triggered.";
+
+    if (!index.isValid()) {
+        qDebug() << "Invalid index!";
+        return;
+    }
+
+    // Get the proxy model
+    QSortFilterProxyModel *m_proxyModel = qobject_cast<QSortFilterProxyModel*>(ui->ListeExamensTab->model());
+    if (!m_proxyModel) {
+        qDebug() << "Proxy model is not valid!";
+        return;
+    }
+
+    // Get the source model (QSqlQueryModel)
+    QSqlQueryModel *sourceModel = qobject_cast<QSqlQueryModel*>(m_proxyModel->sourceModel());
+    if (!sourceModel) {
+        qDebug() << "Source model is not valid!";
+        return;
+    }
+
+    // Map the index to the source model
+    QModelIndex sourceIndex = m_proxyModel->mapToSource(index);
+    int row = sourceIndex.row();
+
+    // Retrieve data from the selected row
+    QString id = sourceModel->data(sourceModel->index(row, 0)).toString();          // ID
+    QString matiere = sourceModel->data(sourceModel->index(row, 1)).toString();    // Matiere
+    QString type = sourceModel->data(sourceModel->index(row, 2)).toString();        // Type
+    QString statut = sourceModel->data(sourceModel->index(row, 3)).toString();     // Statut
+    QString niveau = sourceModel->data(sourceModel->index(row, 4)).toString();     // Niveau
+    QString duree = sourceModel->data(sourceModel->index(row, 5)).toString();      // Duree
+    QDate date = sourceModel->data(sourceModel->index(row, 6)).toDate();           // Date
+
+    qDebug() << "Selected Exam Data:";
+    qDebug() << "ID:" << id;
+    qDebug() << "Matière:" << matiere;
+    qDebug() << "Type:" << type;
+    qDebug() << "Statut:" << statut;
+    qDebug() << "Niveau:" << niveau;
+    qDebug() << "Durée:" << duree;
+    qDebug() << "Date:" << date.toString("yyyy-MM-dd");
+
+    // Populate the modify inputs
+    ui->MatiereCase->setText(matiere);
+    ui->NiveauCase->setText(niveau);
+    ui->DureeCase->setText(duree);
+    ui->TypeExamenChoix->setCurrentText(type);
+    ui->StatutExamenChoix->setCurrentText(statut);
+    ui->dateExamenChoix->setDate(date);
+
+    // Retrieve the PDF data for the selected exam from the database
+    Examen examen;
+    pdfData = examen.getPdfDataById(id);
+    ui->stackedWidget_2->setCurrentIndex(1);
+
+    selectedExamId = id;
+}
+
+
+
+// Exam-related buttons
+void MainWindow::on_AjExamButton_clicked()
+{
+    ui->stackedWidget_2->setCurrentIndex(0);
+    clearForm();
+}
+
+void MainWindow::on_ModExamButton_clicked()
+{
+    ui->stackedWidget_2->setCurrentIndex(1);
+
+}
+
+
+void MainWindow::on_AddExamConfirm_3_clicked()
+{
+    // Read values from the input fields
+    QString matiere = ui->MatiereCase->text();
+    QString niveau = ui->NiveauCase->text();
+    QString duree = ui->DureeCase->text();
+    QString type = ui->TypeExamenChoix->currentText();
+    QString statut = ui->StatutExamenChoix->currentText();
+    QDate date = ui->dateExamenChoix->date();
+
+    // Validate the inputs
+    if (matiere.isEmpty() || niveau.isEmpty() || duree.isEmpty() || type.isEmpty() || statut.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez remplir tous les champs !");
+        return;
+    }
+
+    // Validate that 'matiere' contains only letters (including accented ones and spaces)
+    QRegularExpression regex("^[a-zA-ZÀ-ÿ\\s]+$");
+    if (!regex.match(matiere).hasMatch()) {
+        QMessageBox::warning(this, "Erreur", "Le champ 'Matière' ne doit contenir que des lettres.");
+        return;
+    }
+
+    // Check if a PDF file was selected
+    if (pdfData.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner un fichier PDF !");
+        return;
+    }
+
+    // Create an Examen object and set its properties
+    Examen e(type, statut, niveau, matiere, pdfData, duree, date);
+
+    // Add the exam to the database
+    if (e.ajouterExamen()) {
+        QMessageBox::information(this, "Succès", "Examen ajouté avec succès !");
+        refreshExamenTable(); // Refresh the exam table
+        clearForm();          // Clear the form
+        pdfData.clear();      // Clear the PDF data for the next exam
+    } else {
+        QMessageBox::critical(this, "Erreur", "Échec de l'ajout de l'examen.");
+    }
+}
+
+
+void MainWindow::refreshExamenTable()
+{
+    qDebug() << "=== Starting refreshExamenTable ===";
+
+    // 1. Check database connection
+    QSqlDatabase db = QSqlDatabase::database();
+    qDebug() << "Database connection:" << db.isOpen();
+    if (!db.isOpen()) {
+        qDebug() << "Database is not open!";
+        QMessageBox::warning(this, tr("Erreur"), tr("La connexion à la base de données est perdue."));
+        return;
+    }
+
+    // 2. Ensure proxy model exists
+    if (!m_proxyModel) {
+        qDebug() << "Recreating proxy model...";
+        m_proxyModel = new ExamenFilterProxyModel(this);
+
+        // Reconnect signals
+        connect(ui->SearchBarExamen, &QLineEdit::textChanged,
+                m_proxyModel, &ExamenFilterProxyModel::setMatiereFilter);
+        connect(ui->filterExam, &QDateEdit::dateChanged,
+                m_proxyModel, &ExamenFilterProxyModel::setDateFilter);
+    }
+
+    // 3. Create and populate model
+    qDebug() << "Creating Examen object...";
+    Examen examen;
+
+    qDebug() << "Calling afficherExamen()...";
+    QSqlQueryModel *m_examenDisplayModel = examen.afficherExamen();
+    qDebug() << "Model address:" << m_examenDisplayModel;
+
+    if (!m_examenDisplayModel) {
+        qDebug() << "Model is null!";
+        QMessageBox::warning(this, tr("Erreur"), tr("Impossible de charger les données des examens."));
+        return;
+    }
+
+    // 4. Verify proxy model
+    qDebug() << "Proxy model address:" << m_proxyModel;
+    if (!m_proxyModel) {
+        qDebug() << "Proxy model is null!";
+        return;
+    }
+
+    // 5. Set up models and view
+    qDebug() << "Setting source model...";
+    m_proxyModel->setSourceModel(m_examenDisplayModel);
+
+    qDebug() << "Setting table model...";
+    ui->ListeExamensTab->setModel(m_proxyModel);
+
+    // 6. Set proper header names (FIXED THIS PART)
+    qDebug() << "Setting header data...";
+    m_examenDisplayModel->setHeaderData(0, Qt::Horizontal, tr("ID Examen"));
+    m_examenDisplayModel->setHeaderData(1, Qt::Horizontal, tr("Matière Examen"));
+    m_examenDisplayModel->setHeaderData(2, Qt::Horizontal, tr("Type Examen"));
+    m_examenDisplayModel->setHeaderData(3, Qt::Horizontal, tr("Statut Examen"));
+    m_examenDisplayModel->setHeaderData(4, Qt::Horizontal, tr("Niveau Examen"));
+    m_examenDisplayModel->setHeaderData(5, Qt::Horizontal, tr("Durée Examen"));
+    m_examenDisplayModel->setHeaderData(6, Qt::Horizontal, tr("Date Examen"));
+
+    // 7. Configure table view
+    qDebug() << "Resizing columns...";
+    ui->ListeExamensTab->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    ui->ListeExamensTab->resizeColumnsToContents();
+    ui->ListeExamensTab->horizontalHeader()->setStretchLastSection(true);
+
+    qDebug() << "=== refreshExamenTable completed ===";
+}
+void MainWindow::clearForm()
+{
+    // Clear all input fields
+    ui->MatiereCase->clear();
+    ui->NiveauCase->clear();
+    ui->DureeCase->clear();
+    ui->TypeExamenChoix->setCurrentIndex(0);
+    ui->StatutExamenChoix->setCurrentIndex(0);
+    ui->dateExamenChoix->setDate(QDate::currentDate());
+}
+
+
+void MainWindow::onViewPdfButtonClicked()
+{
+    // Get the selected row
+    QModelIndexList selectedRows = ui->ListeExamensTab->selectionModel()->selectedRows();
+    if (selectedRows.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner un examen pour voir le PDF.");
+        return;
+    }
+
+    // Get the selected exam ID
+    int row = selectedRows.first().row();
+    QString id = ui->ListeExamensTab->model()->data(ui->ListeExamensTab->model()->index(row, 0)).toString();
+
+    // Fetch the PDF data
+    Examen examen;
+    QByteArray pdfData = examen.getPdfDataById(id);
+
+    if (pdfData.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Aucun PDF trouvé pour cet examen.");
+        return;
+    }
+
+    // Save the PDF data to a temporary file
+    QString tempFilePath = QDir::tempPath() + "/exam_" + id + ".pdf";
+    QFile tempFile(tempFilePath);
+    if (tempFile.open(QIODevice::WriteOnly)) {
+        tempFile.write(pdfData);
+        tempFile.close();
+    } else {
+        QMessageBox::critical(this, "Erreur", "Impossible de créer un fichier temporaire pour le PDF.");
+        return;
+    }
+
+    // Open the PDF file with the default viewer
+    QDesktopServices::openUrl(QUrl::fromLocalFile(tempFilePath));
+}
+
+void MainWindow::on_pdfExambtn_clicked()
+{
+    // Configuration initiale du PDF
+    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer le PDF", "", "Fichiers PDF (*.pdf)");
+    if (fileName.isEmpty()) return;
+
+    QPdfWriter pdfWriter(fileName);
+    pdfWriter.setPageSize(QPageSize::A4);
+    pdfWriter.setResolution(300);
+
+    QPainter painter(&pdfWriter);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::TextAntialiasing, true);
+
+    if (!painter.isActive()) {
+        QMessageBox::critical(this, "Erreur", "Impossible de créer le PDF !");
+        return;
+    }
+
+    // Paramètres de mise en page améliorés
+    const int margin = 50; // Marge légèrement augmentée
+    const int startX = margin;
+    int startY = 100;
+    const int rowHeight = 40; // Hauteur de ligne réduite
+    const int pageWidth = pdfWriter.width() - 2 * margin;
+
+    // Titre du document avec style amélioré
+    painter.setFont(QFont("Arial", 18, QFont::Bold));
+    painter.setPen(QColor(50, 50, 50)); // Couleur de texte plus douce
+    painter.drawText(startX, startY - 70, "Liste de Tous les Examens");
+
+    // Configuration des colonnes
+    QStringList headers = {"Matière", "Type", "Niveau", "Statut", "Durée", "Date"};
+    QVector<int> columnWidths = {
+        static_cast<int>(pageWidth * 0.25),
+        static_cast<int>(pageWidth * 0.15),
+        static_cast<int>(pageWidth * 0.12),
+        static_cast<int>(pageWidth * 0.13),
+        static_cast<int>(pageWidth * 0.15),
+        static_cast<int>(pageWidth * 0.15)
+    };
+
+    auto parseDate = [](const QVariant& dateValue) -> QString {
+        if (dateValue.isNull() || !dateValue.isValid()) return "N/A";
+
+        // 1. Si c'est déjà un QDateTime (contient date+heure)
+        if (dateValue.typeId() == QMetaType::QDateTime) {
+            return dateValue.toDateTime().date().toString("yyyy-MM-dd");
+        }
+
+        // 2. Si c'est un QDate (date seule)
+        if (dateValue.typeId() == QMetaType::QDate) {
+            return dateValue.toDate().toString("yyyy-MM-dd");
+        }
+
+        // 3. Si c'est un nombre (année seule)
+        if (dateValue.canConvert<int>()) {
+            int year = dateValue.toInt();
+            if (year > 1000 && year < 3000) {
+                return QString("%1-01-01").arg(year); // Format ISO avec jour/mois par défaut
+            }
+        }
+
+        // 4. Traitement des chaînes de caractères
+        QString dateStr = dateValue.toString().trimmed();
+
+        // Supprimer la partie heure si elle existe (format "2000-01-01 00:00:00")
+        dateStr = dateStr.split(" ").first();
+
+        // Liste des formats de date à essayer
+        QVector<QString> formats = {
+            "yyyy-MM-dd",    // Format ISO (2000-01-01)
+            "dd/MM/yyyy",    // Format français (01/01/2000)
+            "dd/MM/yy",      // Format court (01/01/00)
+            "MM/dd/yyyy",    // Format américain
+            "yyyy"           // Année seule
+        };
+
+        for (const QString& format : formats) {
+            QDate date = QDate::fromString(dateStr, format);
+            if (date.isValid()) {
+                // Correction pour les années sur 2 chiffres
+                if (format == "dd/MM/yy" && date.year() < 100) {
+                    date = date.addYears(2000 - (date.year() % 100));
+                }
+                return date.toString("yyyy-MM-dd");
+            }
+        }
+
+        // Si aucun format ne correspond, retourner la valeur originale (pour débogage)
+        return dateStr;
+    };
+
+    // Police plus lisible pour le tableau
+    QFont tableFont("Arial", 9); // Taille réduite à 9
+    QFont headerFont("Arial", 10, QFont::Bold); // En-têtes légèrement plus grands
+
+    // Première passe: calcul des largeurs de colonnes
+    QSqlQuery query;
+    if (query.exec("SELECT matiere_examen, type_examen, niveau_examen, statut_examen, duree_examen, date_examen FROM examens")) {
+        painter.setFont(tableFont);
+
+        while (query.next()) {
+            for (int col = 0; col < headers.size(); ++col) {
+                QString data = query.value(col).toString();
+                if (col == 5) data = parseDate(data);
+
+                int textWidth = painter.fontMetrics().horizontalAdvance(data) + 20; // Marge réduite
+                if (textWidth > columnWidths[col]) {
+                    columnWidths[col] = qMin(textWidth, static_cast<int>(pageWidth * 0.3));
+                }
+            }
+        }
+    } else {
+        qDebug() << "Erreur requête:" << query.lastError().text();
+        return;
+    }
+
+    // Calcul des positions des colonnes
+    QVector<int> columnPositions(headers.size());
+    columnPositions[0] = startX;
+    for (int i = 1; i < headers.size(); ++i) {
+        columnPositions[i] = columnPositions[i - 1] + columnWidths[i - 1];
+    }
+
+    // Dessin des en-têtes avec style amélioré
+    QColor headerColor(70, 130, 180); // Bleu plus doux
+    QColor headerTextColor = Qt::white;
+
+    painter.setFont(headerFont);
+    painter.setBrush(headerColor);
+    painter.setPen(QPen(headerColor.darker(120), 0.5));
+
+    for (int col = 0; col < headers.size(); ++col) {
+        QRect headerRect(columnPositions[col], startY, columnWidths[col], rowHeight);
+        painter.drawRect(headerRect);
+        painter.setPen(headerTextColor);
+        painter.drawText(headerRect, Qt::AlignCenter, headers[col]);
+        painter.setPen(QPen(headerColor.darker(120), 0.5));
+    }
+
+    startY += rowHeight;
+
+    // Dessin des données avec style amélioré
+    painter.setFont(tableFont);
+    if (!query.exec("SELECT matiere_examen, type_examen, niveau_examen, statut_examen, duree_examen, date_examen FROM examens")) {
+        qDebug() << "Erreur requête:" << query.lastError().text();
+        return;
+    }
+
+    int rowNum = 0;
+    while (query.next()) {
+        // Couleurs alternées plus subtiles
+        QColor rowColor = (rowNum % 2 == 0) ? QColor(248, 248, 248) : Qt::white;
+        QColor borderColor(220, 220, 220);
+
+        painter.setBrush(rowColor);
+        painter.setPen(QPen(borderColor, 0.5));
+
+        for (int col = 0; col < headers.size(); ++col) {
+            QString data = query.value(col).toString();
+            if (col == 5) data = parseDate(data);
+
+            QRect cellRect(columnPositions[col], startY, columnWidths[col], rowHeight);
+            painter.drawRect(cellRect);
+            painter.setPen(QColor(60, 60, 60)); // Texte plus doux
+            painter.drawText(cellRect.adjusted(8, 0, -8, 0),
+                             Qt::AlignLeft | Qt::AlignVCenter,
+                             painter.fontMetrics().elidedText(data, Qt::ElideRight, cellRect.width() - 16));
+            painter.setPen(QPen(borderColor, 0.5));
+        }
+
+        startY += rowHeight;
+        rowNum++;
+
+        // Gestion du saut de page avec réaffichage des en-têtes
+        if (startY > pdfWriter.height() - margin - rowHeight) {
+            pdfWriter.newPage();
+            startY = 100;
+
+            // Réafficher les en-têtes
+            painter.setFont(headerFont);
+            painter.setBrush(headerColor);
+            painter.setPen(QPen(headerColor.darker(120), 0.5));
+
+            for (int col = 0; col < headers.size(); ++col) {
+                QRect headerRect(columnPositions[col], startY - rowHeight, columnWidths[col], rowHeight);
+                painter.drawRect(headerRect);
+                painter.setPen(headerTextColor);
+                painter.drawText(headerRect, Qt::AlignCenter, headers[col]);
+                painter.setPen(QPen(headerColor.darker(120), 0.5));
+            }
+        }
+    }
+
+    painter.end();
+    QMessageBox::information(this, "Succès", "Le PDF a été généré avec succès !");
+}
+
+
+
+
+void MainWindow::loadExamStatistics()
+{
+    if (!ui->ExamChartContainer) {
+        qCritical() << "Chart container not initialized!";
+        return;
+    }
+
+    QMap<QString, int> statusCounts = getExamStatusCounts();
+    if (statusCounts.isEmpty()) {
+        QMessageBox::information(this, "Information", "Aucune donnée à afficher");
+        return;
+    }
+
+    showChartInPage(statusCounts);
+}
+
+// Helper function to get data
+QMap<QString, int> MainWindow::getExamStatusCounts()
+{
+    QMap<QString, int> counts;
+
+    QSqlQuery query("SELECT statut_examen, COUNT(*) as count FROM EXAMENS GROUP BY statut_examen");
+    while (query.next()) {
+        counts.insert(query.value("statut_examen").toString(),
+                      query.value("count").toInt());
+    }
+
+    if (counts.isEmpty()) {
+        QMessageBox::information(this, "Statistiques", "Aucun examen trouvé");
+    }
+
+    return counts;
+}
+
+void MainWindow::clearChartWidget()
+{
+    if (!ui->ExamChartContainer) {
+        qWarning() << "Chart container is null!";
+        return;
+    }
+
+    QLayout* layout = ui->ExamChartContainer->layout();
+    if (!layout) return;
+
+    while (QLayoutItem* item = layout->takeAt(0)) {
+        if (item->widget()) {
+            item->widget()->deleteLater();
+        }
+        delete item;
+    }
+}
+
+void MainWindow::showChartInPage(const QMap<QString, int>& statusCounts)
+{
+    clearChartWidget();
+
+    if (!ui->ExamChartContainer->layout()) {
+        ui->ExamChartContainer->setLayout(new QVBoxLayout());
+    }
+
+    // First calculate total sum of all exams
+    int totalExams = 0;
+    for (auto it = statusCounts.begin(); it != statusCounts.end(); ++it) {
+        totalExams += it.value();
+    }
+
+    // Only proceed if we have exams
+    if (totalExams == 0) {
+        QMessageBox::information(this, "Information", "Aucun examen trouvé");
+        return;
+    }
+
+    QPieSeries *series = new QPieSeries();
+
+    // Add data with correct percentages
+    for (auto it = statusCounts.begin(); it != statusCounts.end(); ++it) {
+        double percentage = (100.0 * it.value()) / totalExams;
+        QPieSlice *slice = series->append(it.key(), it.value());
+        slice->setLabel(QString("%1\n%2 examens\n%3%")
+                            .arg(it.key())
+                            .arg(it.value())
+                            .arg(percentage, 0, 'f', 1));
+        slice->setLabelVisible();
+    }
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Répartition des examens par statut");
+    chart->legend()->setAlignment(Qt::AlignRight);
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    ui->ExamChartContainer->layout()->addWidget(chartView);
+
+
+}
+
+
+
+void MainWindow::onSerialData() {
+    buffer.append(serial->readAll());
+    int idx;
+    while ((idx = buffer.indexOf('\n')) != -1) {
+        QByteArray line = buffer.left(idx).trimmed();
+        buffer.remove(0, idx + 1);
+
+        if (line.startsWith("NUM:")) {
+            // build up buffer, max length CODE_LENGTH
+            if (codeBuffer.length() < CODE_LENGTH) {
+                QString num = QString::fromUtf8(line.mid(4));
+                codeBuffer.append(num);
+                qDebug() << "Code:" << codeBuffer;
+            }
+        }
+        else if (line == "CLEARED") {
+            codeBuffer.clear();
+            qDebug() << "Entry cleared";
+        }
+        else if (line.startsWith("CODE:")) {
+            // '#' pressed: verify only if correct length
+            if (codeBuffer.length() == CODE_LENGTH) {
+                QSqlDatabase db = QSqlDatabase::database();
+                QSqlQuery query(db);
+                query.prepare("SELECT COUNT(*) FROM candidat WHERE code_candidat = :code");
+                query.bindValue(":code", codeBuffer);
+                if (!query.exec()) {
+                    qCritical() << "DB query error:" << query.lastError().text();
+                } else if (query.next() && query.value(0).toInt() > 0) {
+                    qDebug() << "Candidate verified";
+                } else {
+                    qDebug() << "Candidate doesn't exist";
+                }
+            } else {
+                qDebug() << "Enter exactly" << CODE_LENGTH << "digits before verify.";
+            }
+            codeBuffer.clear();
+        }
+    }
+}
+
+
+
+void MainWindow::onMatiereSpeechClicked()
+{
+    qDebug() << "=== Matiere Speech Button Clicked ===";
+    qDebug() << "Setting currentLineEdit to MatiereCase:" << ui->MatiereCase;
+    currentLineEdit = ui->MatiereCase;
+
+    qDebug() << "Starting speech recognition...";
+    speechToText->startListening();
+    qDebug() << "Speech recognition started for Matiere";
+}
+
+void MainWindow::onNiveauSpeechClicked()
+{
+    qDebug() << "=== Niveau Speech Button Clicked ===";
+    qDebug() << "Setting currentLineEdit to NiveauCase:" << ui->NiveauCase;
+    currentLineEdit = ui->NiveauCase;
+
+    qDebug() << "Starting speech recognition...";
+    speechToText->startListening();
+    qDebug() << "Speech recognition started for Niveau";
+}
+
+void MainWindow::onDureeSpeechClicked()
+{
+    qDebug() << "=== Duree Speech Button Clicked ===";
+    qDebug() << "Setting currentLineEdit to DureeCase:" << ui->DureeCase;
+    currentLineEdit = ui->DureeCase;
+
+    qDebug() << "Starting speech recognition...";
+    speechToText->startListening();
+    qDebug() << "Speech recognition started for Duree";
+}
+
+void MainWindow::onSpeechTextRecognized(const QString &text)
+{
+    qDebug() << "\n=== Speech Recognized ===";
+    qDebug() << "Raw text received:" << text;
+    qDebug() << "Current line edit pointer:" << currentLineEdit;
+    qDebug() << "Current line edit object name:" << (currentLineEdit ? currentLineEdit->objectName() : "NULL");
+
+    if (currentLineEdit) {
+        qDebug() << "Previous text in field:" << currentLineEdit->text();
+        qDebug() << "Setting new text:" << text;
+
+        currentLineEdit->setText(text);
+        qDebug() << "Text after setting:" << currentLineEdit->text();
+
+        // Force UI update
+        currentLineEdit->repaint();
+        qApp->processEvents();
+        qDebug() << "UI update forced";
+    } else {
+        qDebug() << "ERROR: currentLineEdit is null!";
+        qDebug() << "Available line edits:";
+        qDebug() << "MatiereCase:" << ui->MatiereCase;
+        qDebug() << "NiveauCase:" << ui->NiveauCase;
+        qDebug() << "DureeCase:" << ui->DureeCase;
+    }
+    qDebug() << "=== Recognition Handling Complete ===\n";
+}
+
+void MainWindow::on_listexamensbutton_clicked()
+{
+    qDebug() << "listexamensbutton clicked - starting refresh";
+    try {
+        refreshExamenTable();
+    } catch (const std::exception &e) {
+        qCritical() << "Exception:" << e.what();
+    } catch (...) {
+        qCritical() << "Unknown exception occurred";
+    }
+    qDebug() << "listexamensbutton click handling completed";
+}
+
+
+void MainWindow::on_statButton_clicked()
+{
+    showStatistiques();
+    qDebug() << "Statistics loaded successfully!";
+    ui->stackedWidget->setCurrentIndex(3);
+}
 

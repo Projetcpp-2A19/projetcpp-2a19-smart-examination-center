@@ -19,6 +19,19 @@
 #include <QNetworkAccessManager>  // Ajout pour les requêtes HTTP
 #include <QNetworkReply>          // Pour gérer les réponses des requêtes
 #include "arduino.h"
+#include "speechtotext.h"
+#include <QLineEdit>
+#include "examen.h"
+#include <QSqlQueryModel>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QDesktopServices>
+#include <QSortFilterProxyModel>
+#include "examenfilterproxymodel.h"
+#include <QMap>
+#include <QString>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,8 +46,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-/*private slots:
-    void showNotifications(); */ // Déclare ton slot ici
+
 private slots:
 
     void on_examButton_clicked();
@@ -49,46 +61,9 @@ private slots:
 
     void on_etaButton_clicked();
 
-
     void on_homeBtn_clicked();
 
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_4_clicked();
-
-    void on_AffButton_clicked();
-
-    void on_AjButton_clicked();
-
-    void on_ModButton_clicked();
-
-    void on_AffButton_2_clicked();
-
-    void on_AjButton_2_clicked();
-
-    void on_ModButton_2_clicked();
-
-    void on_SuppButton_2_clicked();
-
-    void on_SuppButton_clicked();
-
-    void on_AffButton_3_clicked();
-
-    void on_AjButton_3_clicked();
-
-    void on_ModButton_3_clicked();
-
-    void on_SuppButton_3_clicked();
-
-    void on_AffButton_4_clicked();
-
-    void on_AjButton_4_clicked();
-
-    void on_ModButton_4_clicked();
-
-    void on_SuppButton_4_clicked();
-
-    void on_notifBtn_clicked();
+    void on_StatButton_clicked();
 
     void on_BinSuperbtn_clicked();//supp
 
@@ -96,60 +71,14 @@ private slots:
 
     void on_SaveMod_clicked();
     void actualiserTableView();
-
-
-
-
-
-public :
-    void updateTableView();
-private:
-    Superviseur Etmp;
-
-
-    void on_EvalAssist_clicked();
-private slots:
     void on_Ajbtn_clicked();
-
-
-
-
-   // void onTableViewClicked(const QModelIndex &index);
-
-private:
-    Ui::MainWindow *ui;
-    QNetworkAccessManager *networkManager; // Gestionnaire de requêtes HTTP
-    Superviseur S;
-    QSqlTableModel *model;
-
-
-//Modifier
-    bool modificationInProgress = false; // Track if modification has started
-    // Fonction pour gérer les messages du chatbot
-    void appendMessage(const QString &message, bool isUser);
-    QString generateBotResponse(const QString &userMessage);
-private:
-    QString currentId;
-    int originalCin;
-    QString originalStatut;
-    QString originalPoste;
-    QString originalPrenom;
-    QString originalNom;
-    QString originalTel;
-    QString originalEmail;
-    QString originalZone;
-
-
-private slots:
     void rechercherSuperviseur(); // Fonction de recherche
-private slots:
     void onTriButtonClicked(); // Méthode appelée lors du clic sur le bouton
     void resetTableView(); // Fonction pour réinitialiser tableView1
     void showStatistiques();
     void on_pdfSuperbtn_clicked();//pdf
     void envoyerRappelExamenSuperviseur(); //sms
     void on_btnEnvoyerSMS_clicked(); //sms
-private slots:
     void handleChatCommand();
     void processAddCommand(const QStringList &parts);
     void processDeleteCommand(const QStringList &parts);
@@ -162,13 +91,87 @@ private slots:
     void updateSerialData(); // slot déclenché quand des données arrivent
 
 
+    // Exam-related buttons
+    void on_AjExamButton_clicked();  // Add exam
+    void on_ModExamButton_clicked(); // Modify exam
+    void onSerialData();      // slot to read incoming data
+
+    void on_AddExamConfirm_3_clicked(); // Confirm adding exam
+    void onExamSelected(const QModelIndex &index); // Updated slot signature
+    void on_pushButton_2_clicked();
+    void onViewPdfButtonClicked();
+    void handleInsertExamPdf();
+    void handleSuppExam();
+    void handleModifExamConfirm();
+    //speech to text
+    /*void onMatiereSpeechClicked();
+    void onNiveauSpeechClicked();
+    void onDureeSpeechClicked();
+    */
+    void onMatiereSpeechClicked();
+    void onNiveauSpeechClicked();
+    void onDureeSpeechClicked();
+
+    void onSpeechTextRecognized(const QString &text);
+    void on_pdfExambtn_clicked();  // slot pour le bouton PDF
+    //void showExamStatistics();
+    void on_examButton_2_clicked();
+    //void showChart(const QMap<QString, int>& statusCounts);
+    void clearChartWidget();
+    void loadExamStatistics();
+    void on_supButton_2_clicked();
+    void showChartInPage(const QMap<QString, int>& statusCounts);
+    QMap<QString, int> getExamStatusCounts();
+
+
+    void on_listexamensbutton_clicked();
+
+    void on_statButton_clicked();
+
+public :
+    void updateTableView();
+
+
 private:
+    Ui::MainWindow *ui;
+    QNetworkAccessManager *networkManager; // Gestionnaire de requêtes HTTP
+    Superviseur S;
+    QSqlTableModel *model;
+
+    bool modificationInProgress = false; // Track if modification has started
+    // Fonction pour gérer les messages du chatbot
+    void appendMessage(const QString &message, bool isUser);
+    QString generateBotResponse(const QString &userMessage);
+    QString currentId;
+    int originalCin;
+    QString originalStatut;
+    QString originalPoste;
+    QString originalPrenom;
+    QString originalNom;
+    QString originalTel;
+    QString originalEmail;
+    QString originalZone;
+    Superviseur Etmp;
+    void on_EvalAssist_clicked();
     void addToChat(const QString &message, bool isUser = false);
     Arduino A; // objet arduino
     QString uid;
     QString serialBuffer;
     void verifierStatutSuperviseur(const QString& uid);
-
+    Examen examen;
+    QSerialPort *serial;
+    QByteArray buffer;
+    QString codeBuffer;       // holds up to 10 digits
+    QSqlDatabase db;          // database connection
+    const int CODE_LENGTH = 10;
+    QByteArray pdfData;              // To store the PDF file data
+    QString selectedExamId;
+    void refreshExamenTable();       // Refresh the exam table
+    void clearForm();                // Clear the exam form
+    SpeechToText *speechToText;
+    QLineEdit *currentLineEdit; // To track which field to populate
+    ExamenFilterProxyModel *m_proxyModel = nullptr;
+    QSqlQueryModel *m_examenDisplayModel = nullptr;
 
 
 };

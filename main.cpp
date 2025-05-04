@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
 
         QSqlQueryModel * afficher();// Appeler afficher() immédiatement après show()
         w.updateTableView();
+
+
     }
     if(test)
     {

@@ -22,5 +22,9 @@
         <file>img/parametres.png</file>
         <file>img/profil.png</file>
         <file>img/chatBot.png</file>
+        <file>../BranchImenNhezoouMnhee/projetcpp-2a19-smart-examination-center/img/mic.png</file>
+        <file>../BranchImenNhezoouMnhee/projetcpp-2a19-smart-examination-center/img/statistics.png</file>
+        <file>../BranchImenNhezoouMnhee/projetcpp-2a19-smart-examination-center/img/valider.png</file>
+        <file>../BranchImenNhezoouMnhee/projetcpp-2a19-smart-examination-center/img/stat.png</file>
     </qresource>
 </RCC>
