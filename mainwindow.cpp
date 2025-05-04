@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "equipement.h"
 #include "arduino.h"
+#include "gcandidat.h"
 #include <QDebug>
 //#include <QMouseEvent>
 #include <QMessageBox>
@@ -30,6 +31,8 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include <QByteArray>
+#include "gcandidat.h"
+#include"mainwindow.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -42,6 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->closeBtn, &QPushButton::clicked, this, &MainWindow::close);
     ui->labelNotification1->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(ui->Modbtn, &QPushButton::clicked, this, &MainWindow::on_Modbtn_clicked);
+    connect(ui->candButton, &QPushButton::clicked, this, &MainWindow::on_candButton_clicked);
+
+
 
     /*ui->scrollArea->setVisible(false);
      ui->scrollArea->raise();
@@ -130,10 +136,7 @@ void MainWindow::on_fourBtn_clicked()
 }
 
 
-void MainWindow::on_candBtn_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(7);
-}
+
 
 void MainWindow::on_etaBtn_clicked()
 {
@@ -171,8 +174,11 @@ void MainWindow::on_FourButton_clicked()
 
 void MainWindow::on_candButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(7);
+    gcandidat *gcandidatWindow = new gcandidat(); // Ne pas passer `this` si tu veux éviter la fermeture liée au parent
+    gcandidatWindow->show();
+    this->hide(); // Optionnel : pour cacher la fenêtre actuelle
 }
+
 
 
 void MainWindow::on_etaButton_clicked()
@@ -825,36 +831,30 @@ void MainWindow::on_Modbtn_2_clicked() {
 }
 
 void MainWindow::readSerialData() {
-    // Get the equipment ID from the QLineEdit (manual input)
+    // Get the equipment ID from the QLineEdit (manual input),// Récupérer l'ID de l'équipement depuis le QLineEdit (saisie manuelle)
     bool ok;
     QString input = ui->idInputLineEdit->text();  // Retrieve the text entered by the user
     int equipmentId = input.toInt(&ok);  // Try converting the input to an integer
 
     if (!ok || equipmentId <= 0) {
-        qDebug() << "Aucun ID saisi ou ID invalide.";
         QMessageBox::warning(this, "Erreur", "Veuillez entrer un ID valide.");
         return;
     }
 
-    qDebug() << "ID de l'équipement sélectionné : " << equipmentId;
-
-    // Fetch the quantity from the database
+    // Fetch the quantity from the database,// Récupérer la quantité depuis la base de données
     QSqlQuery query;
     query.prepare("SELECT QUANTITE__EQUIPEMENT FROM EQUIPEMENTS WHERE ID_EQUIPEMENT = :id");
     query.bindValue(":id", equipmentId);
 
     if (!query.exec()) {
-        qDebug() << "Erreur lors de la récupération de la quantité de l'équipement:" << query.lastError();
         return;
     }
 
     if (!query.next()) {
-        qDebug() << "Aucun équipement trouvé pour l'ID:" << equipmentId;
         return;
     }
 
     int quantite = query.value(0).toInt();  // Database quantity
-    qDebug() << "Quantité de l'équipement ID" << equipmentId << "est :" << quantite;
 
     // Read from Arduino
     static QByteArray buffer;
@@ -869,41 +869,22 @@ void MainWindow::readSerialData() {
         line = line.trimmed();  // Clean line (remove \r, \n, spaces)
 
         QString text = QString::fromUtf8(line);
-        qDebug() << "📨 Donnée brute reçue :" << text;
 
         if (text.startsWith("QUANTITE:")) {
-            QString quantityStr = text.mid(9);  // After "QUANTITE:"
+            QString quantityStr = text.mid(9);  // Extract number after "QUANTITE:"
             bool ok;
-            int quantity = quantityStr.toInt(&ok);
+            int quantity = quantityStr.toInt(&ok);  // This can be negative or positive
 
             if (ok) {
-                qDebug() << "✅ Received Quantity from Arduino:" << quantity;
-
                 int newQuantity = quantite + quantity;
-                qDebug() << "🔵 New Quantity to update:" << newQuantity;
+                if (newQuantity < 0) {
+                    QMessageBox::warning(this, "Erreur", "La quantité ne peut pas être négative.");
+                    return;
+                }
                 ui->qtelabel->setText(QString::number(newQuantity));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            } else {
-                qDebug() << "❌ Failed to convert quantity!";
             }
-        } else {
-            qDebug() << "❌ Format inattendu (pas de 'QUANTITE:') → " << text;
         }
+
     }
 }
 

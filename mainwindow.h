@@ -3,6 +3,8 @@
 #include <QLabel>
 #include <QMainWindow>
 #include "arduino.h"
+#include "ui_mainwindow.h"
+#include "gcandidat.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,6 +27,8 @@ public slots:
     void on_Modbtn_clicked();
     /*void modifierEquipement();*/
     /*void supprimerEquipement();*/
+    void on_candBtn_clicked();
+
 
 
 
@@ -48,7 +52,6 @@ private slots:
 
     void on_fourBtn_clicked();
 
-    void on_candBtn_clicked();
 
     void on_etaBtn_clicked();
 
@@ -60,7 +63,7 @@ private slots:
 
     void on_FourButton_clicked();
 
-    void on_candButton_clicked();
+
 
     void on_etaButton_clicked();
 
@@ -132,6 +135,8 @@ private slots:
 private slots:
     void on_Modbtn_2_clicked();
     void readSerialData();
+
+    void on_candButton_clicked();
 
 private :
     QByteArray data;
