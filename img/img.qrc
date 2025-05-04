@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <RCC>
     <qresource prefix="/">
         <file>batiment-educatif.png</file>
@@ -19,3 +20,6 @@
         <file>../../../Downloads/stat.png</file>
     </qresource>
 </RCC>
+=======
+<RCC/>
+>>>>>>> b6702fb4186800406ca9e0726db1397b5b8a17b0

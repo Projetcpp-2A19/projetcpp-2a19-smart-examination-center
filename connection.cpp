@@ -2,6 +2,7 @@
 
 Connection::Connection()
 {
+<<<<<<< HEAD
     // Constructeur de la classe. La connexion sera initialisée ici.
 }
 
@@ -34,4 +35,24 @@ void Connection::closeConnection()
         db.close();  // Fermer la connexion
         qDebug() << "Connexion fermée.";
     }
+=======
+
+}
+
+bool Connection::createconnect()
+{bool test=false;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    db.setDatabaseName("Projet2A19");//inserer le nom de la source de données
+    db.setUserName("yasmine");//inserer nom de l'utilisateur
+    db.setPassword("esprit");//inserer mot de passe de cet utilisateur
+
+    if (db.open())
+        test=true;
+
+
+
+
+
+    return  test;
+>>>>>>> b6702fb4186800406ca9e0726db1397b5b8a17b0
 }
