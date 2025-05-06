@@ -15,4 +15,6 @@ debug/mimecontentformatter.o
 debug/quotedprintable.o
 debug/server.o
 debug/serverreply.o
+debug/qrc_Ressource.o
+debug/qrc_img.o
 debug/moc_mainwindow.o

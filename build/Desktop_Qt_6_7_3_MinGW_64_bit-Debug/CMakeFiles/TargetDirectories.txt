@@ -1,0 +1,9 @@
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/ProjetCC.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/install.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/ProjetCC_autogen_timestamp_deps.dir
+C:/Users/Yesmine/Downloads/wetransfer_projectcc_2025-05-02_2321/projectcc/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/ProjetCC_autogen.dir

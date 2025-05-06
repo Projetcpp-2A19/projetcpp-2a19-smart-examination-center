@@ -1,1 +1,10 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/">
+        <file>simple-mail/.clang-format</file>
+        <file>simple-mail/.gitignore</file>
+        <file>simple-mail/.pre-commit-config.yaml</file>
+        <file>simple-mail/CMakeLists.txt</file>
+        <file>simple-mail/LICENSE</file>
+        <file>simple-mail/README.md</file>
+    </qresource>
+</RCC>

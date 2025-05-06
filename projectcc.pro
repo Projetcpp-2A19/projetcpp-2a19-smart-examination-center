@@ -1,6 +1,4 @@
-QT       += core gui sql network widgets sql charts serialport
-
-
+QT += core gui sql network widgets charts serialport printsupport quick
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -10,10 +8,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
+    Etablissement.cpp \
     Fournisseurs.cpp \
     connection.cpp \
     main.cpp \
     mainwindow.cpp \
+    panoramicviewer.cpp \
     simple-mail/src/emailaddress.cpp \
     simple-mail/src/mimemessage.cpp \
     simple-mail/src/mimetext.cpp \
@@ -29,9 +29,11 @@ SOURCES += \
     simple-mail/src/serverreply.cpp
 
 HEADERS += \
+    Etablissement.h \
     fournisseurs.h \
     connection.h \
     mainwindow.h \
+    panoramicviewer.h \
     simple-mail/src/emailaddress.h \
     simple-mail/src/mimemessage.h \
     simple-mail/src/mimetext.h \
@@ -83,5 +85,6 @@ DISTFILES += \
     img/settings.png \
     img/supprimer.png
 
-RESOURCES +=
+RESOURCES += \
+    img.qrc
 

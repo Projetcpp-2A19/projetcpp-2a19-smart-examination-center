@@ -4,6 +4,13 @@
 #include <QMainWindow>
 #include <QSqlQueryModel>
 #include <QtCharts>
+#include <QQmlApplicationEngine>
+#include <QQuickView>
+#include "Etablissement.h"  // Inclure la classe Etablissement
+#include <QChartView>
+#include <QPieSeries>
+#include <QPieSlice>
+#include "fournisseurs.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -112,8 +119,26 @@ private slots:
 
     void on_historiqueBtn_clicked();
 
-     void on_label_25_linkActivated(const QString &link);
          void verifierEtEnvoyerCode();
+
+//crud etablissement
+
+         void on_Ajteta_clicked();  // Ajouter un établissement
+         void on_Binetabtn_clicked();  // Supprimer un établissement
+         void on_Modeta_clicked();  // Modifier un établissement
+         void on_Saveta_clicked();  // Sauvegarder les modifications
+         void on_neweta_clicked();
+         // Slots pour les notifications et autres fonctionnalités
+         void on_searchDirector_textChanged(const QString &text);
+         void on_sortGovernorate_clicked();
+         void on_exportPdfBtn_clicked();
+         void on_statsButton_clicked();
+         void on_mapsButton_clicked();
+         void on_selectImageBtn_clicked();
+         void on_tableView_Eta_clicked(const QModelIndex &index);
+         bool eventFilter(QObject *obj, QEvent *event) override;
+
+
 
  private:
     QSqlQueryModel *model;  // Modèle pour stocker les données des fournisseurs
@@ -128,6 +153,30 @@ private:
     Ui::MainWindow *ui;
     //modification
     bool modificationInProgress= false;
+    // etablissement
+    Etablissement E;  // Objet pour gérer les établissements
+    QQuickView *mapView = nullptr;
+    void afficherImage(const QString &cheminImage);
+    // Variables pour stocker les données en cours de modification
+    QString currentIdEta;
+    QString currentGouvernoratEta;
+    QString currentTypeEta;
+    QString currentDirecteurEta;
+    QString currentNomEta;
+    QString currentVilleEta;
+    QString currentAdresseEta;
+    QString currentIdSuperviseurEta;
+    QString currentIdEquipementEta;
+    int currentNbSEta;
+    // Métier , image panoramique
+    QString selectedImagePath; // Chemin de l'image sélectionnée
+    void showImageSelectionDialog(); // Méthode pour afficher la boîte de dialogue
+    void displayImage(const QString &imagePath);
+    void setupGovernorateStats();
+    int m_positionX = 0;
+    QPixmap m_currentPixmap;
+    void updatetableView_Eta();
+
 private :
     QString currentId;
     QString originalNom;

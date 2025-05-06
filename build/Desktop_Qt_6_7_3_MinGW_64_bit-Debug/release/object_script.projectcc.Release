@@ -15,4 +15,6 @@ release/mimecontentformatter.o
 release/quotedprintable.o
 release/server.o
 release/serverreply.o
+release/qrc_Ressource.o
+release/qrc_img.o
 release/moc_mainwindow.o
